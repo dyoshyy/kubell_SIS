@@ -12,7 +12,12 @@ export function ExampleLayout() {
 
   return (
     <>
-      <TextButton buttonType="primary" text="Open" onClick={openDialog} style={style} />
+      <TextButton
+        buttontype="primary"
+        text="Open"
+        onClick={openDialog}
+        style={style}
+      />
       <Dialog>
         <p>This is a dialog</p>
         <button onClick={closeDialog}>Close Dialog</button>

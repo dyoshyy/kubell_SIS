@@ -1,7 +1,7 @@
 import { useCallback, useRef } from "react";
 import styled from "styled-components";
-import { TextField } from "ui/TextField";
 import { TextButton } from "ui/TextButton";
+import { TextField } from "ui/TextField";
 
 interface Props {
   onPostMessage: (message: string) => void;
@@ -45,7 +45,7 @@ export const MessageForm = ({ onPostMessage }: Props) => {
         placeholder="メッセージを入力してください"
         onInput={handleInputText}
       />
-      <PostButton buttonType="primary" text="投稿" onClick={handleClickPost} />
+      <PostButton buttontype="primary" text="投稿" onClick={handleClickPost} />
     </Form>
   );
 };

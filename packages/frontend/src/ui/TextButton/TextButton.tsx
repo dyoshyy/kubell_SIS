@@ -6,11 +6,11 @@ import { FONTCOLOR_BLACK, FONTSIZE_PARAGRAPH } from "styles/typography";
 import { getStyleByType } from "./style";
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
-  buttonType: "primary" | "default" | "danger" | "none";
+  buttontype: "primary" | "default" | "danger" | "none";
   text: string;
 }
 
-const Button = styled.button<{ buttonType: Props["buttonType"] }>`
+const Button = styled.button<{ buttontype: Props["buttontype"] }>`
   border-style: solid;
   border-width: 1px;
   border-color: ${BLACK};
@@ -24,12 +24,12 @@ const Button = styled.button<{ buttonType: Props["buttonType"] }>`
     opacity: 0.9;
   }
 
-  ${props => getStyleByType[props.buttonType]}
+  ${(props) => getStyleByType[props.buttontype]}
 `;
 
-export function TextButton({ buttonType, text, ...props }: Props) {
+export function TextButton({ buttontype, text, ...props }: Props) {
   return (
-    <Button buttonType={buttonType} type="button" {...props}>
+    <Button buttontype={buttontype} type="button" {...props}>
       {text}
     </Button>
   );

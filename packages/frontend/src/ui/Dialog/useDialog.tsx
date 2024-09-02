@@ -1,9 +1,9 @@
-import type { BaseSyntheticEvent, ReactNode } from 'react';
-import { useCallback, useState } from 'react';
+import type { BaseSyntheticEvent, ReactNode } from "react";
+import { useCallback, useState } from "react";
 
-import { IconButton } from '../IconButton';
+import { IconButton } from "../IconButton";
 
-import { Overlay, Dialog } from './style';
+import { Dialog, Overlay } from "./style";
 
 interface Props {
   children?: ReactNode;
@@ -21,12 +21,15 @@ export function useDialog() {
     function DialogLayout({ children }: Props) {
       return (
         <Overlay
-          style={{ display: state ? 'flex' : 'none' }}
+          style={{ display: state ? "flex" : "none" }}
           onClick={closeDialog}
         >
-          <Dialog style={{width: '70%', height: '70%'}} onClick={stopPropagation}>
+          <Dialog
+            style={{ width: "70%", height: "70%" }}
+            onClick={stopPropagation}
+          >
             <IconButton
-              buttonType="danger"
+              buttontype="danger"
               icon="circle-cross"
               onClick={closeDialog}
             />
@@ -35,7 +38,7 @@ export function useDialog() {
         </Overlay>
       );
     },
-    [closeDialog, state],
+    [closeDialog, state]
   );
 
   return [MemoizedDialog, openDialog, closeDialog] as const;

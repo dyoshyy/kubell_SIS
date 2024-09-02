@@ -1,13 +1,13 @@
-import { useCallback, useMemo } from "react";
 import { useMutation } from "@apollo/client";
+import { useCallback, useMemo } from "react";
 
-import { useDialog } from "ui/Dialog";
-import { TextButton } from "ui/TextButton";
 import { useSignedInUser } from "local-service/auth/hooks";
 import { REGISTERED_USERS } from "mocks/dummy-user";
-import { CreateGroupChat } from "./components/CreateGroupChat";
-import { CreateGroupChatMutation } from "./apis/createGroupChat.command";
+import { useDialog } from "ui/Dialog";
+import { TextButton } from "ui/TextButton";
 import { AddMemberMutation } from "./apis/addMember.command";
+import { CreateGroupChatMutation } from "./apis/createGroupChat.command";
+import { CreateGroupChat } from "./components/CreateGroupChat";
 
 export const CreateGroupChatDialogContainer = () => {
   const [createGroupChat] = useMutation(CreateGroupChatMutation, {
@@ -18,11 +18,13 @@ export const CreateGroupChatDialogContainer = () => {
   });
 
   const [Dialog, openDialog, closeDialog] = useDialog();
-  const {id: myID} = useSignedInUser();
-
+  const { id: myID } = useSignedInUser();
 
   // idは一旦仮で固定、ログインユーザーを実装した時に対応する
-  const otherUsers = useMemo(() => REGISTERED_USERS.filter((user) => user.id !== myID), [myID]);
+  const otherUsers = useMemo(
+    () => REGISTERED_USERS.filter((user) => user.id !== myID),
+    [myID]
+  );
 
   const handleCreateGroupChat = useCallback(
     async (title: string, userIds: string[]) => {
@@ -35,7 +37,8 @@ export const CreateGroupChatDialogContainer = () => {
         },
       });
 
-      const newGroupChatId = createGroupChatResponse.data?.createGroupChat.groupChatId;
+      const newGroupChatId =
+        createGroupChatResponse.data?.createGroupChat.groupChatId;
       if (!newGroupChatId) {
         return;
       }
@@ -60,9 +63,17 @@ export const CreateGroupChatDialogContainer = () => {
 
   return (
     <>
-      <TextButton buttonType="primary" text="グループチャットを作成する" onClick={openDialog} />
+      <TextButton
+        buttontype="primary"
+        text="グループチャットを作成する"
+        onClick={openDialog}
+      />
       <Dialog>
-        <CreateGroupChat users={otherUsers} onCreate={handleCreateGroupChat} onClose={closeDialog} />
+        <CreateGroupChat
+          users={otherUsers}
+          onCreate={handleCreateGroupChat}
+          onClose={closeDialog}
+        />
       </Dialog>
     </>
   );
