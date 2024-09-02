@@ -1,1 +1,1 @@
-export { AuthenticateContainer } from './AuthenticateContainer';
+export { AuthenticateContainer } from "./AuthenticateContainer";

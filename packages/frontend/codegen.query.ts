@@ -1,19 +1,19 @@
-import { CodegenConfig } from '@graphql-codegen/cli';
+import { CodegenConfig } from "@graphql-codegen/cli";
 
 const config: CodegenConfig = {
-  schema: './graphql/query.schema.graphql',
-  documents: ['src/**/*.query.ts'],
+  schema: "./graphql/query.schema.graphql",
+  documents: ["src/**/*.query.ts"],
   generates: {
-    './src/__generated__/query/': {
-      preset: 'client',
+    "./src/__generated__/query/": {
+      preset: "client",
       plugins: [],
       presetConfig: {
-        gqlTagName: 'gql',
+        gqlTagName: "gql",
       },
       config: {
         strictScalars: true,
         scalars: {
-          DateTimeISO: 'string',
+          DateTimeISO: "string",
         },
       },
     },

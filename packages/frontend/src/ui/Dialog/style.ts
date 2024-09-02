@@ -1,5 +1,5 @@
-import styled from 'styled-components';
-import { LAYER_0, LAYER_RESET } from 'styles/color';
+import styled from "styled-components";
+import { LAYER_0, LAYER_RESET } from "styles/color";
 
 export const Overlay = styled.div`
   position: fixed;

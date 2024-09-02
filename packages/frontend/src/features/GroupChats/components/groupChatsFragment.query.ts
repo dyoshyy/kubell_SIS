@@ -7,4 +7,4 @@ export const GroupChatsFragment = gql(`
   }
 `);
 
-export type MaskedGroupChats = FragmentType<typeof GroupChatsFragment>
+export type MaskedGroupChats = FragmentType<typeof GroupChatsFragment>;

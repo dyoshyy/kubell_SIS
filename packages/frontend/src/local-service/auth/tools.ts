@@ -1,6 +1,6 @@
-import { REGISTERED_USERS } from 'mocks/dummy-user';
+import { REGISTERED_USERS } from "mocks/dummy-user";
 
-import type { User } from 'local-service/auth/models';
+import type { User } from "local-service/auth/models";
 
 export class UserNotRegisteredError extends Error {}
 

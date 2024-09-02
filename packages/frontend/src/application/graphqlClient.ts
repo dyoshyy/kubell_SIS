@@ -16,7 +16,7 @@ export const graphqlClient = new ApolloClient({
   link: ApolloLink.split(
     (operation) => operation.getContext()["clientName"] === "command",
     commandLink,
-    queryLink
+    queryLink,
   ),
   cache: new InMemoryCache(),
 });

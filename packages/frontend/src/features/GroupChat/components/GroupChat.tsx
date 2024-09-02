@@ -14,7 +14,6 @@ import type {
 import { MessageForm } from "./MessageForm";
 import { Message } from "./Message";
 
-
 interface Props {
   groupChatFragment: MaskedGroupChat;
   getMessagesFragment: MaskedGroupChatMessages[];
@@ -31,10 +30,10 @@ const GroupChatTitle = styled.h2`
   font-size: ${FONTSIZE_HEADER};
   font-weight: ${FONTWEIGHT_IMPORTANT};
   padding: ${gutterBy(3)} 0;
-`
+`;
 const MessagesContainer = styled.div`
   overflow-y: auto;
-`
+`;
 
 const MessageFormWrapper = styled.div`
   margin-top: auto;
@@ -47,12 +46,12 @@ const useGetMessagesFragment = (getMessagesFragment: MaskedGroupChatMessages) =>
 export const GroupChat = ({
   groupChatFragment,
   getMessagesFragment,
-  onPostMessage
+  onPostMessage,
 }: Props) => {
   const groupChat = useFragment(GroupChatFragment, groupChatFragment);
   const messages = useMemo(
     () => getMessagesFragment.map(useGetMessagesFragment),
-    [getMessagesFragment]
+    [getMessagesFragment],
   );
 
   return (
@@ -64,7 +63,7 @@ export const GroupChat = ({
         ))}
       </MessagesContainer>
       <MessageFormWrapper>
-        <MessageForm onPostMessage={onPostMessage}/>
+        <MessageForm onPostMessage={onPostMessage} />
       </MessageFormWrapper>
     </Container>
   );

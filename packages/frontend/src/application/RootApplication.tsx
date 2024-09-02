@@ -19,5 +19,5 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         </ThemeProvider>
       </ApolloRootApplication>
     </AuthProvider>
-  </StrictMode>
+  </StrictMode>,
 );

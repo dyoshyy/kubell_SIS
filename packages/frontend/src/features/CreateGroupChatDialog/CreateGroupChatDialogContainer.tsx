@@ -23,7 +23,7 @@ export const CreateGroupChatDialogContainer = () => {
   // idは一旦仮で固定、ログインユーザーを実装した時に対応する
   const otherUsers = useMemo(
     () => REGISTERED_USERS.filter((user) => user.id !== myID),
-    [myID]
+    [myID],
   );
 
   const handleCreateGroupChat = useCallback(
@@ -53,12 +53,12 @@ export const CreateGroupChatDialogContainer = () => {
               userAccountId: userID,
             },
           },
-        })
+        }),
       );
 
       await Promise.all(addMemberPromise);
     },
-    [addMember, createGroupChat, myID]
+    [addMember, createGroupChat, myID],
   );
 
   return (

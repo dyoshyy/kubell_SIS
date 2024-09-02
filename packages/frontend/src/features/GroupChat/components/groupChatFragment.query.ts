@@ -20,4 +20,6 @@ export const GroupChatMessagesFragment = gql(`
   }
 `);
 
-export type MaskedGroupChatMessages = FragmentType<typeof GroupChatMessagesFragment>;
+export type MaskedGroupChatMessages = FragmentType<
+  typeof GroupChatMessagesFragment
+>;

@@ -9,7 +9,7 @@ interface Props {
 }
 
 export const GroupChatsContainer = ({ handleChangeGroupChat }: Props) => {
-  const {id: myID} = useSignedInUser();
+  const { id: myID } = useSignedInUser();
 
   const { data, loading, error, refetch } = useQuery(GetGroupChatsQuery, {
     variables: { accountId: myID },

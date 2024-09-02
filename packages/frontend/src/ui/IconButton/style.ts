@@ -1,6 +1,6 @@
-import { css } from 'styled-components';
+import { css } from "styled-components";
 
-import { BLACK, GRAY, WHITE } from 'styles/color';
+import { BLACK, GRAY, WHITE } from "styles/color";
 
 export const primaryStyle = css`
   background-color: ${BLACK};

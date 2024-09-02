@@ -11,7 +11,7 @@ interface Props {
   groupChatId: string;
 }
 export const GroupChatContainer = ({ groupChatId }: Props) => {
-  const {id: myID} = useSignedInUser();
+  const { id: myID } = useSignedInUser();
 
   const { data, loading, refetch } = useQuery(GetGroupChatWithMessagesQuery, {
     variables: {
@@ -31,17 +31,20 @@ export const GroupChatContainer = ({ groupChatId }: Props) => {
     return () => globalThis.clearInterval(timer);
   }, [refetch]);
 
-  const handlePostMessage = useCallback((message: string) => {
-    postMessage({
-      variables: {
-        input: {
-          groupChatId,
-          executorId: myID,
-          content: message,
+  const handlePostMessage = useCallback(
+    (message: string) => {
+      postMessage({
+        variables: {
+          input: {
+            groupChatId,
+            executorId: myID,
+            content: message,
+          },
         },
-      },
-    });
-  }, [groupChatId, postMessage, myID]);
+      });
+    },
+    [groupChatId, postMessage, myID],
+  );
 
   if (groupChatId === "") return <EmptyGroupChat />;
   if (loading || data === undefined) return <></>;

@@ -5,7 +5,7 @@ import { CreateGroupChatDialogContainer } from "features/CreateGroupChatDialog";
 import { GroupChatsContainer } from "features/GroupChats";
 import { GroupChatContainer } from "features/GroupChat";
 import { AuthenticateContainer } from "features/Authenticate";
-import { AuthContext } from 'local-service/auth/AuthProvider';
+import { AuthContext } from "local-service/auth/AuthProvider";
 import { LAYER_1 } from "styles/color";
 import { gutterBy } from "styles/spaces";
 
@@ -35,17 +35,19 @@ export const Router = () => {
   const isSignedIn = signedInUser !== null;
   // MEMO: ページ遷移を工夫したい場合は、react-router-dom などの利用を検討まで
   if (!isSignedIn) {
-    return <AuthenticateContainer />
+    return <AuthenticateContainer />;
   }
 
   return (
     <RootContainer>
       <GroupChatControls>
         <CreateGroupChatDialogContainer />
-        <GroupChatsContainer handleChangeGroupChat={setSelectedGroupChatId}/>
+        <GroupChatsContainer handleChangeGroupChat={setSelectedGroupChatId} />
       </GroupChatControls>
 
-      <GroupChatWrapper><GroupChatContainer groupChatId={selectedGroupChatId}/></GroupChatWrapper>
+      <GroupChatWrapper>
+        <GroupChatContainer groupChatId={selectedGroupChatId} />
+      </GroupChatWrapper>
     </RootContainer>
   );
 };

@@ -19,7 +19,7 @@ export const mockSuccessGetGroupChatWithMessages = [
                 id: "GroupChat-01H42K4ABWQ5V2XQEP3A48VE0Z",
                 name: "Group Chat 1",
               },
-              GroupChatFragmentFragmentDoc
+              GroupChatFragmentFragmentDoc,
             ),
           },
           getMessages: [
@@ -34,7 +34,7 @@ export const mockSuccessGetGroupChatWithMessages = [
                   updatedAt: "2021-07-01T00:00:00Z",
                   userAccountId: "UserAccount-01H42K4ABWQ5V2XQEP3A48VE0Z",
                 },
-                GroupChatMessagesFragmentFragmentDoc
+                GroupChatMessagesFragmentFragmentDoc,
               ),
             },
             {
@@ -48,12 +48,12 @@ export const mockSuccessGetGroupChatWithMessages = [
                   updatedAt: "2021-07-01T00:00:00Z",
                   userAccountId: "UserAccount-01H42K4ABWQ5V2XQEP3A48VE0",
                 },
-                GroupChatMessagesFragmentFragmentDoc
+                GroupChatMessagesFragmentFragmentDoc,
               ),
             },
           ],
         },
       });
-    }
+    },
   ),
 ];

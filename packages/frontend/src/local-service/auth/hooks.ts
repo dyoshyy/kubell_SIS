@@ -1,8 +1,8 @@
-import { useContext } from 'react';
+import { useContext } from "react";
 
-import { AuthContext } from './AuthProvider';
-import { findUserByName } from './tools';
-import type { User } from './models';
+import { AuthContext } from "./AuthProvider";
+import { findUserByName } from "./tools";
+import type { User } from "./models";
 
 export class UserNotSignedInError extends Error {}
 
@@ -15,7 +15,7 @@ export const useSignedInUser = (): User => {
   const { signedInUser } = useContext(AuthContext);
 
   if (signedInUser === null) {
-    throw new UserNotSignedInError('ユーザーがサインインしていません');
+    throw new UserNotSignedInError("ユーザーがサインインしていません");
   }
 
   return signedInUser;

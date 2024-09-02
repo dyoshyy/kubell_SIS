@@ -1,7 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react";
 
 import { GroupChatsContainer } from ".";
-import { mockEmptyGetGroupChats, mockErrorGetGroupChats, mockSuccessGetGroupChats } from "./apis/mockGetGroupChats";
+import {
+  mockEmptyGetGroupChats,
+  mockErrorGetGroupChats,
+  mockSuccessGetGroupChats,
+} from "./apis/mockGetGroupChats";
 
 export default {
   title: "features/GroupChatsContainer",

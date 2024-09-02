@@ -45,7 +45,13 @@ const getRowsByLine: Record<Props["line"], number> = {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const noop = (_: string) => {};
 
-export function TextField({ texttype, line, onInput = noop, defaultValue = "", ...props }: Props) {
+export function TextField({
+  texttype,
+  line,
+  onInput = noop,
+  defaultValue = "",
+  ...props
+}: Props) {
   const handleInput = (event: FormEvent<HTMLTextAreaElement>) => {
     onInput(event.currentTarget.value);
   };

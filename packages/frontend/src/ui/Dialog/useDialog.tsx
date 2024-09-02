@@ -38,7 +38,7 @@ export function useDialog() {
         </Overlay>
       );
     },
-    [closeDialog, state]
+    [closeDialog, state],
   );
 
   return [MemoizedDialog, openDialog, closeDialog] as const;

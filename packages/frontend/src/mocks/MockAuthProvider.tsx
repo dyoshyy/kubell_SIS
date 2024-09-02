@@ -11,7 +11,7 @@ interface Props {
 
 export const MockAuthProvider = ({ children }: Props) => {
   const [signedInUser, setSignedInUser] = useState<User | null>(
-    REGISTERED_USERS[0]
+    REGISTERED_USERS[0],
   );
 
   return (
