@@ -89,22 +89,30 @@ class GroupChatCommandProcessor {
     memberRole: MemberRole,
     executorId: UserAccountId,
   ): TE.TaskEither<ProcessError, GroupChatEvent> {
-    return pipe(
-      this.groupChatRepository.findById(id),
-      TE.chainW(this.getOrError),
-      TE.chainW((groupChat) =>
-        pipe(
-          this.addMemberAsync(groupChat, memberId, memberRole, executorId),
-          TE.chainW(([groupChat, groupChatMemberAdded]) =>
-            pipe(
-              this.groupChatRepository.store(groupChatMemberAdded, groupChat),
-              TE.map(() => groupChatMemberAdded),
+    const attemptAddMember = (): TE.TaskEither<
+      ProcessError,
+      GroupChatEvent
+    > => {
+      return pipe(
+        this.groupChatRepository.findById(id),
+        TE.chainW(this.getOrError),
+        TE.chainW((groupChat) =>
+          pipe(
+            this.addMemberAsync(groupChat, memberId, memberRole, executorId),
+            TE.chainW(([groupChat, groupChatMemberAdded]) =>
+              pipe(
+                this.groupChatRepository.store(groupChatMemberAdded, groupChat),
+                TE.map(() => groupChatMemberAdded),
+              ),
             ),
           ),
         ),
-      ),
-      TE.mapLeft(this.convertToProcessError),
-    );
+      );
+    };
+
+    // フロントエンドから短時間で多くリクエストが来る可能性がある操作
+    // 楽観ロックに引っ掛かりやすいため、暫定対応としてAddMemberだけリトライを実装
+    return this.retry(attemptAddMember, 5, 1000);
   }
 
   removeMemberFromGroupChat(
@@ -250,6 +258,26 @@ class GroupChatCommandProcessor {
     executorId: UserAccountId,
   ) {
     return TE.fromEither(groupChat.deleteMessage(messageId, executorId));
+  }
+
+  private retry<T>(
+    fn: () => TE.TaskEither<ProcessError, T>,
+    retries: number,
+    delay: number,
+  ): TE.TaskEither<ProcessError, T> {
+    return pipe(
+      fn(),
+      TE.orElse((error) =>
+        error instanceof RepositoryError && retries > 0
+          ? pipe(
+              TE.fromTask(
+                () => new Promise((resolve) => setTimeout(resolve, delay)),
+              ),
+              TE.chain(() => this.retry(fn, retries - 1, delay)),
+            )
+          : TE.left(error),
+      ),
+    );
   }
 }
 
