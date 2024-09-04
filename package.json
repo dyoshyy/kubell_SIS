@@ -6,7 +6,8 @@
   "main": "index.js",
   "scripts": {
     "-----コード生成関連-----": "",
-    "generate:all": "pnpm generate:backend && pnpm generate:frontend",
+    "generate:all": "pnpm generate:backend && pnpm generate:schema && pnpm generate:frontend",
+    "generate:schema": "turbo generate:schema",
     "generate:backend": "turbo generate:backend",
     "generate:frontend": "pnpm --filter ./packages/frontend/ generate:frontend:all",
     "-----docker関連-----": "",
