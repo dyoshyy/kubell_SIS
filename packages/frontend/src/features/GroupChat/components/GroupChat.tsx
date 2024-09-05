@@ -1,23 +1,24 @@
+import { useFragment } from "__generated__/query";
 import { useMemo } from "react";
 import styled from "styled-components";
-import { useFragment } from "__generated__/query";
 import { gutterBy } from "styles/spaces";
 import { FONTSIZE_HEADER, FONTWEIGHT_IMPORTANT } from "styles/typography";
-import {
-  GroupChatFragment,
-  GroupChatMessagesFragment,
-} from "./groupChatFragment.query";
 import type {
   MaskedGroupChat,
   MaskedGroupChatMessages,
 } from "./groupChatFragment.query";
-import { MessageForm } from "./MessageForm";
+import {
+  GroupChatFragment,
+  GroupChatMessagesFragment,
+} from "./groupChatFragment.query";
 import { Message } from "./Message";
+import { MessageForm } from "./MessageForm";
 
 interface Props {
   groupChatFragment: MaskedGroupChat;
   getMessagesFragment: MaskedGroupChatMessages[];
   onPostMessage: (message: string) => void;
+  onDeleteMessage: (messageID: string) => void;
 }
 
 const Container = styled.div`
@@ -47,6 +48,7 @@ export const GroupChat = ({
   groupChatFragment,
   getMessagesFragment,
   onPostMessage,
+  onDeleteMessage,
 }: Props) => {
   const groupChat = useFragment(GroupChatFragment, groupChatFragment);
   const messages = useMemo(
@@ -59,7 +61,7 @@ export const GroupChat = ({
       <GroupChatTitle>{groupChat.name}</GroupChatTitle>
       <MessagesContainer>
         {messages.map((message) => (
-          <Message key={message.id} message={message} />
+          <Message key={message.id} message={message} onDeleteMessage={onDeleteMessage}/>
         ))}
       </MessagesContainer>
       <MessageFormWrapper>

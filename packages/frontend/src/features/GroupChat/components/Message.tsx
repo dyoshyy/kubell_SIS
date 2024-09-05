@@ -4,9 +4,10 @@ import styled from "styled-components";
 import { BLACK } from "styles/color";
 import {
   FONTSIZE_CAPTION,
-  FONTWEIGHT_IMPORTANT,
   FONTSIZE_PARAGRAPH,
+  FONTWEIGHT_IMPORTANT,
 } from "styles/typography";
+import { TextButton } from "ui";
 
 interface MessageType {
   id: string;
@@ -16,6 +17,7 @@ interface MessageType {
 }
 interface Props {
   message: MessageType;
+  onDeleteMessage: (messageID: string) => void;
 }
 
 const MessageLayout = styled.div`
@@ -41,10 +43,14 @@ const MessageText = styled.p`
   font-size: ${FONTSIZE_PARAGRAPH};
 `;
 
-export const Message = ({ message }: Props) => {
+export const Message = ({ message, onDeleteMessage }: Props) => {
   const date = useMemo(() => new Date(message.createdAt), [message]);
   const dateString = date.toLocaleString();
   const dateTimeString = date.toISOString();
+
+  const handleClickDelete = () => {
+    onDeleteMessage(message.id);
+  }
 
   return (
     <MessageLayout>
@@ -53,6 +59,11 @@ export const Message = ({ message }: Props) => {
         <DateTime dateTime={dateTimeString}>{dateString}</DateTime>
       </MetaText>
       <MessageText>{message.text}</MessageText>
+      <TextButton 
+        buttontype="primary" 
+        text="削除"
+        onClick={handleClickDelete}  
+      />
     </MessageLayout>
   );
 };
