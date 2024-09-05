@@ -1,37 +1,37 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from '@storybook/react';
 
-import { IconButton } from ".";
+import { IconButton } from '.';
 
 export default {
-  title: "ui/IconButton",
+  title: 'ui/IconButton',
   component: IconButton,
   args: {
-    icon: "circle-cross",
-  },
+    icon: 'circle-cross',
+  }
 } satisfies Meta<typeof IconButton>;
 
 type Story = StoryObj<typeof IconButton>;
 
 export const Primary: Story = {
   args: {
-    buttontype: "primary",
-  },
-};
+    buttonType: 'primary',
+  }
+}
 
 export const Default: Story = {
   args: {
-    buttontype: "default",
-  },
-};
+    buttonType: 'default',
+  }
+}
 
 export const Danger: Story = {
   args: {
-    buttontype: "danger",
-  },
-};
+    buttonType: 'danger',
+  }
+}
 
 export const None: Story = {
   args: {
-    buttontype: "none",
-  },
-};
+    buttonType: 'none',
+  }
+}

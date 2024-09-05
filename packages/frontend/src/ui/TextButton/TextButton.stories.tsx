@@ -1,37 +1,37 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from '@storybook/react';
 
-import { TextButton } from ".";
+import { TextButton } from '.';
 
 export default {
-  title: "ui/TextButton",
+  title: 'ui/TextButton',
   component: TextButton,
   args: {
-    text: "Click me",
-  },
+    text: 'Click me',
+  }
 } satisfies Meta<typeof TextButton>;
 
 type Story = StoryObj<typeof TextButton>;
 
 export const Primary: Story = {
   args: {
-    buttontype: "primary",
-  },
-};
+    buttonType: 'primary',
+  }
+}
 
 export const Default: Story = {
   args: {
-    buttontype: "default",
-  },
-};
+    buttonType: 'default',
+  }
+}
 
 export const Danger: Story = {
   args: {
-    buttontype: "danger",
-  },
-};
+    buttonType: 'danger',
+  }
+}
 
 export const None: Story = {
   args: {
-    buttontype: "none",
-  },
-};
+    buttonType: 'none',
+  }
+}
