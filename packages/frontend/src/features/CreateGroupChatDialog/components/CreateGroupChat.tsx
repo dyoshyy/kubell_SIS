@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { CheckBox, TextButton, TextField } from "ui/";
 import type { User } from "local-service/auth/models";
 import { gutterBy } from "styles/spaces";
-import * as Typography from 'styles/typography';
+import * as Typography from "styles/typography";
 
 interface Props {
   users: User[];
@@ -14,7 +14,7 @@ interface Props {
 const Caption = styled.p`
   font-size: ${Typography.FONTSIZE_CAPTION};
   margin: ${gutterBy(2)};
-`
+`;
 
 const UserCheckboxContainer = styled.div`
   width: calc(100% - ${gutterBy(2)} * 2);
@@ -62,7 +62,9 @@ export function CreateGroupChat({ users, onCreate, onClose }: Props) {
         placeholder="グループチャットのタイトル"
         onInput={handleInputTitle}
       />
-      <Caption>グループチャットに所属させるユーザーを選択してください：</Caption>
+      <Caption>
+        グループチャットに所属させるユーザーを選択してください：
+      </Caption>
       <UserCheckboxContainer>
         {users.map((user) => (
           <CheckBox
@@ -74,7 +76,11 @@ export function CreateGroupChat({ users, onCreate, onClose }: Props) {
       </UserCheckboxContainer>
       <ActionButtonContainer>
         <TextButton buttonType="danger" text="キャンセル" onClick={onClose} />
-        <TextButton buttonType="primary" text="作成" onClick={handleClickCreate} />
+        <TextButton
+          buttonType="primary"
+          text="作成"
+          onClick={handleClickCreate}
+        />
       </ActionButtonContainer>
     </>
   );
