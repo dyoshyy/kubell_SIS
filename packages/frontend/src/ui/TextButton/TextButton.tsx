@@ -10,7 +10,7 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
   text: string;
 }
 
-const Button = styled.button<{ buttonType: Props["buttonType"] }>`
+const Button = styled.button<{ $buttonType: Props["buttonType"] }>`
   border-style: solid;
   border-width: 1px;
   border-color: ${BLACK};
@@ -24,12 +24,12 @@ const Button = styled.button<{ buttonType: Props["buttonType"] }>`
     opacity: 0.9;
   }
 
-  ${props => getStyleByType[props.buttonType]}
+  ${(props) => getStyleByType[props.$buttonType]}
 `;
 
 export function TextButton({ buttonType, text, ...props }: Props) {
   return (
-    <Button buttonType={buttonType} type="button" {...props}>
+    <Button $buttonType={buttonType} type="button" {...props}>
       {text}
     </Button>
   );

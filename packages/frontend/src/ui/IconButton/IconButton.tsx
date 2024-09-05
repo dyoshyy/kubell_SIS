@@ -11,7 +11,7 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
   icon: 'circle-cross';
 }
 
-const Button = styled.button<{ buttonType: Props['buttonType'] }>`
+const Button = styled.button<{ $buttonType: Props['buttonType'] }>`
   width: 28px;
   height: 28px;
   padding: 0;
@@ -38,7 +38,7 @@ const Button = styled.button<{ buttonType: Props['buttonType'] }>`
     stroke-width: 2;
   }
 
-  ${props => getStyleByType[props.buttonType]}
+  ${props => getStyleByType[props.$buttonType]}
 `
 
 const getSvgByIcon: Record<Props['icon'], ReactElement> = {
@@ -53,7 +53,7 @@ export function IconButton({ buttonType, icon, ...props }: Props) {
   return (
     <Button
       type="button"
-      buttonType={buttonType}
+      $buttonType={buttonType}
       {...props}
     >
       {getSvgByIcon[icon]}
