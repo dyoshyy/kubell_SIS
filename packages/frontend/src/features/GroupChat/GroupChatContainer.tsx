@@ -1,11 +1,12 @@
-import { useCallback, useEffect } from "react";
 import { useMutation, useQuery } from "@apollo/client";
+import { useCallback, useEffect } from "react";
 
-import { GetGroupChatWithMessagesQuery } from "./apis/getGroupChatWithMessages.query";
 import { useSignedInUser } from "local-service/auth/hooks";
+import { DeleteMessageMutation } from "./apis/deleteMessage.command";
+import { GetGroupChatWithMessagesQuery } from "./apis/getGroupChatWithMessages.query";
+import { PostMessageMutation } from "./apis/postMessage.command";
 import { EmptyGroupChat } from "./components/EmptyGroupChat";
 import { GroupChat } from "./components/GroupChat";
-import { PostMessageMutation } from "./apis/postMessage.command";
 
 interface Props {
   groupChatId: string;
@@ -23,6 +24,9 @@ export const GroupChatContainer = ({ groupChatId }: Props) => {
     context: { clientName: "command" },
   });
 
+  const [deleteMessage] = useMutation(DeleteMessageMutation, {
+    context: {clientName: "command"},
+  });
   // 本来はGraphQLのsubscriptionなどでメッセージの変更を取得するべき
   // see: https://www.apollographql.com/docs/react/data/subscriptions/
   // 今回は簡易実装なので、2秒間隔のポーリングで変更を取得する
@@ -46,6 +50,21 @@ export const GroupChatContainer = ({ groupChatId }: Props) => {
     [groupChatId, postMessage, myID],
   );
 
+  const handleDeleteMessage = useCallback(
+    (messageID: string) => {
+      deleteMessage({
+        variables: {
+          input: {
+            groupChatId,
+            executorId: myID,
+            messageId: messageID,
+          },
+        },
+      });
+    },
+    [groupChatId, deleteMessage, myID],
+  );
+
   if (groupChatId === "") return <EmptyGroupChat />;
   if (loading || data === undefined) return <></>;
 
@@ -54,6 +73,7 @@ export const GroupChatContainer = ({ groupChatId }: Props) => {
       groupChatFragment={data.getGroupChat}
       getMessagesFragment={data.getMessages}
       onPostMessage={handlePostMessage}
+      onDeleteMessage={handleDeleteMessage}
     />
   );
 };
