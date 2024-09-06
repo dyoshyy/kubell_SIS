@@ -6,11 +6,11 @@ interface Props {
     user: User
 }
 
-const TableRow = styled.tr`
+export const TableRow = styled.tr`
   border-bottom: 1px solid #eee;
 `;
 
-const TableCell = styled.td`
+export const TableCell = styled.td`
   padding: ${gutterBy(1)};
   text-align: left;
   vertical-align: middle;

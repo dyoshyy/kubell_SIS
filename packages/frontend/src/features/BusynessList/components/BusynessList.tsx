@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { gutterBy } from '../../../styles/spaces';
 import { TextButton } from '../../../ui';
-import { BusynessListItem } from './BusynessListItem';
+import { BusynessListItem, TableCell, TableRow } from './BusynessListItem';
 
 interface Props {
   onClose: () => void;
@@ -53,6 +53,12 @@ export const BusynessList = ({ onClose }: Props) => {
       <Caption>従業員の忙しさ一覧</Caption>
       <TableContainer>
         <Table>
+          <TableRow>
+            <TableCell>アイコン</TableCell>
+            <TableCell>名前</TableCell>
+            <TableCell>忙しさ</TableCell>
+            <TableCell>アサイン中のプロジェクト</TableCell>
+          </TableRow>
           {busyItems.map((item) => (
             <BusynessListItem user={item} />
           ))}
