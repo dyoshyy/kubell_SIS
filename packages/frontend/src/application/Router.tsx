@@ -1,9 +1,10 @@
-import { useState, useContext } from "react";
+import { useContext, useState } from "react";
 import styled from "styled-components";
 
 import { CreateGroupChatDialogContainer } from "features/CreateGroupChatDialog";
-import { GroupChatsContainer } from "features/GroupChats";
 import { GroupChatContainer } from "features/GroupChat";
+import { GroupChatsContainer } from "features/GroupChats";
+
 import { AuthenticateContainer } from "features/Authenticate";
 import { AuthContext } from "local-service/auth/AuthProvider";
 import { LAYER_1 } from "styles/color";
@@ -14,6 +15,11 @@ const RootContainer = styled.div`
   flex-direction: row;
   align-items: stretch;
   height: 100vh;
+`;
+
+const Toolbar = styled.div`
+  width: 100%;
+  height: 50px;
 `;
 
 const GroupChatControls = styled.div`
@@ -40,6 +46,13 @@ export const Router = () => {
 
   return (
     <RootContainer>
+      <Toolbar>
+        <button>ビジーネスメンバーリスト</button>
+        {/* <BusynessMemberList /> */}
+        <button>プロジェクトメンバーリスト</button>
+        {/* <ProjectMemberList /> */}
+      </Toolbar>
+
       <GroupChatControls>
         <CreateGroupChatDialogContainer />
         <GroupChatsContainer handleChangeGroupChat={setSelectedGroupChatId} />
