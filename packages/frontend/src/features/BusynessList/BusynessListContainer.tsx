@@ -1,4 +1,3 @@
-import React from "react";
 import { TextButton } from "../../ui";
 import { useDialog } from "../../ui/Dialog";
 import { BusynessList } from "./components/BusynessList";

@@ -13,12 +13,22 @@ import { gutterBy } from "styles/spaces";
 
 const RootContainer = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: stretch;
   height: 100vh;
 `;
 
+const MainContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
+
 const Toolbar = styled.div`
+  display: flex;
+  background: #cccccc;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 10px;
   width: 100%;
   height: 50px;
 `;
@@ -50,18 +60,18 @@ export const Router = () => {
       <Toolbar>
         {/* <button>ビジーネスメンバーリスト</button> */}
         < BusynessListContainer />
-        <button>プロジェクトメンバーリスト</button>
-        {/* <ProjectMemberList /> */}
       </Toolbar>
 
-      <GroupChatControls>
-        <CreateGroupChatDialogContainer />
-        <GroupChatsContainer handleChangeGroupChat={setSelectedGroupChatId} />
-      </GroupChatControls>
+      <MainContainer>
+        <GroupChatControls>
+          <CreateGroupChatDialogContainer />
+          <GroupChatsContainer handleChangeGroupChat={setSelectedGroupChatId} />
+        </GroupChatControls>
 
-      <GroupChatWrapper>
-        <GroupChatContainer groupChatId={selectedGroupChatId} />
-      </GroupChatWrapper>
+        <GroupChatWrapper>
+          <GroupChatContainer groupChatId={selectedGroupChatId} />
+        </GroupChatWrapper>
+      </MainContainer>
     </RootContainer>
   );
 };
