@@ -1,10 +1,11 @@
-import { useState, useContext } from "react";
+import { useContext, useState } from "react";
 import styled from "styled-components";
 
-import { CreateGroupChatDialogContainer } from "features/CreateGroupChatDialog";
-import { GroupChatsContainer } from "features/GroupChats";
-import { GroupChatContainer } from "features/GroupChat";
 import { AuthenticateContainer } from "features/Authenticate";
+import { CreateGroupChatDialogContainer } from "features/CreateGroupChatDialog";
+import { GroupChatContainer } from "features/GroupChat";
+import { GroupChatsContainer } from "features/GroupChats";
+import { Header } from "features/Header";
 import { AuthContext } from "local-service/auth/AuthProvider";
 import { LAYER_1 } from "styles/color";
 import { gutterBy } from "styles/spaces";
@@ -39,6 +40,8 @@ export const Router = () => {
   }
 
   return (
+    <>
+    <Header />
     <RootContainer>
       <GroupChatControls>
         <CreateGroupChatDialogContainer />
@@ -49,5 +52,7 @@ export const Router = () => {
         <GroupChatContainer groupChatId={selectedGroupChatId} />
       </GroupChatWrapper>
     </RootContainer>
+    </>
+
   );
 };

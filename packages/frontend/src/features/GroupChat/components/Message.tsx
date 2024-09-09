@@ -1,7 +1,6 @@
 import { useMemo } from "react";
 import styled from "styled-components";
 
-import { BLACK } from "styles/color";
 import {
   FONTSIZE_CAPTION,
   FONTSIZE_PARAGRAPH,
@@ -21,14 +20,20 @@ interface Props {
 }
 
 const MessageLayout = styled.div`
-  border-bottom: 1px dashed ${BLACK};
-  padding: 8px;
+  width: 95%;
+  padding: 12px;
+  border-radius: 8px;
+  background-color: #f5f5f5;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: relative;
 `;
+
 const MetaText = styled.p`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
 `;
+
 const UserName = styled.span`
   font-size: ${FONTSIZE_CAPTION};
   font-weight: ${FONTWEIGHT_IMPORTANT};
@@ -39,8 +44,20 @@ const DateTime = styled.time`
   width: 150px;
   font-size: ${FONTSIZE_CAPTION};
 `;
+
 const MessageText = styled.p`
+  margin-top: 8px;
   font-size: ${FONTSIZE_PARAGRAPH};
+  white-space: pre-wrap;
+  word-wrap: break-word;
+`;
+
+const DeleteButton = styled(TextButton)`
+  position: absolute; /* Absolute positioning inside relative parent */
+  top: 8px;
+  right: 8px;
+  width: auto;
+  margin: 0;
 `;
 
 export const Message = ({ message, onDeleteMessage }: Props) => {
@@ -50,20 +67,29 @@ export const Message = ({ message, onDeleteMessage }: Props) => {
 
   const handleClickDelete = () => {
     onDeleteMessage(message.id);
-  }
+  };
 
   return (
-    <MessageLayout>
-      <MetaText>
-        <UserName>user account_id: {message.userAccountId}</UserName>
-        <DateTime dateTime={dateTimeString}>{dateString}</DateTime>
-      </MetaText>
-      <MessageText>{message.text}</MessageText>
-      <TextButton 
-        buttontype="primary" 
-        text="削除"
-        onClick={handleClickDelete}  
-      />
-    </MessageLayout>
+    <div
+      style={{
+        display: "flex",
+        width: "100%",
+        justifyContent: "center",
+        marginBottom: "16px",
+      }}
+    >
+      <MessageLayout>
+        <MetaText>
+          <UserName>user account_id: {message.userAccountId}</UserName>
+          <DateTime dateTime={dateTimeString}>{dateString}</DateTime>
+        </MetaText>
+        <MessageText>{message.text}</MessageText>
+        <DeleteButton
+          buttontype="primary"
+          text="削除"
+          onClick={handleClickDelete}
+        />
+      </MessageLayout>
+    </div>
   );
 };
