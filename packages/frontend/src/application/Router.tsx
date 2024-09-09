@@ -6,7 +6,7 @@ import { GroupChatContainer } from "features/GroupChat";
 import { GroupChatsContainer } from "features/GroupChats";
 
 import { AuthenticateContainer } from "features/Authenticate";
-import { BusynessListContainer } from "features/BusynessList";
+import { BusynessListContainer } from "features/ProjectManagement";
 import { AuthContext } from "local-service/auth/AuthProvider";
 import { LAYER_1 } from "styles/color";
 import { gutterBy } from "styles/spaces";

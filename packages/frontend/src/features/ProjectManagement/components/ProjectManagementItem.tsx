@@ -1,3 +1,4 @@
+import React from 'react';
 import styled from 'styled-components';
 import { gutterBy } from '../../../styles/spaces';
 import { User } from "../types";
@@ -85,7 +86,7 @@ const getBusyColor = (value: number) => {
     return '#F44336';  // 赤
 };
 
-export const BusynessListItem = ({user}: Props) => {
+export const ProjectManagementItem = ({user}: Props) => {
     return (
         <TableRow>
             <AvatarCell>
@@ -116,6 +117,6 @@ export const BusynessListItem = ({user}: Props) => {
     );
 }
 
-export default BusynessListItem;
+export default ProjectManagementItem;
 
 

@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { gutterBy } from '../../../styles/spaces';
 import { TextButton } from '../../../ui';
-import { BusynessListItem, TableCell, TableRow } from './BusynessListItem';
+import { ProjectManagementItem, TableCell, TableRow } from './ProjectManagementItem';
 
 interface Props {
   onClose: () => void;
@@ -31,7 +31,7 @@ const ActionButtonContainer = styled.div`
   text-align: center;
 `;
 
-export const BusynessList = ({ onClose }: Props) => {
+export const ProjectManagement = ({ onClose }: Props) => {
   const busyItems = [
     { id: 1, name: "佐藤 健太", value: 3, projects: [{name:"新規顧客管理システム開発"}, {name: "レガシーシステム保守"}] },
     { id: 2, name: "鈴木 美咲", value: 5, projects: [{name:"モバイルアプリUI/UX改善"}, {name: "社内勤怠システム更新"}] },
@@ -60,7 +60,7 @@ export const BusynessList = ({ onClose }: Props) => {
             <TableCell>アサイン中のプロジェクト</TableCell>
           </TableRow>
           {busyItems.map((item) => (
-            <BusynessListItem user={item} />
+            <ProjectManagementItem user={item} />
           ))}
         </Table>
       </TableContainer>
@@ -70,5 +70,3 @@ export const BusynessList = ({ onClose }: Props) => {
     </>
   );
 };
-
-export default BusynessList;

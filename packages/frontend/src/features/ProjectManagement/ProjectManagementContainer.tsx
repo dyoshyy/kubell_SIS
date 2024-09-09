@@ -1,6 +1,6 @@
 import { TextButton } from "../../ui";
 import { useDialog } from "../../ui/Dialog";
-import { BusynessList } from "./components/BusynessList";
+import { ProjectManagement } from "./components/ProjectManagement";
 
 
 export const BusynessListContainer = () => {
@@ -14,7 +14,7 @@ export const BusynessListContainer = () => {
         onClick={openDialog}
       />
       <Dialog>
-        <BusynessList
+        <ProjectManagement
           // users={otherUsers}
           onClose={closeDialog}
         />
