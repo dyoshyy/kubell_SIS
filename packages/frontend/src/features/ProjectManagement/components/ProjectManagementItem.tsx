@@ -1,31 +1,22 @@
 import styled from 'styled-components';
+import { LAYER_1, PRIMARY_COLOR } from '../../../styles/color';
 import { gutterBy } from '../../../styles/spaces';
+import { FONTWEIGHT_IMPORTANT } from '../../../styles/typography';
 import { Project } from "../types";
 import { SingleProjectButton } from './SingleProjectButton';
+import { NameCell, TableCell, TableRow } from './Table';
 
 interface Props {
     project: Project
 }
 
-export const TableRow = styled.tr`
-  border-bottom: 1px solid #eee;
-`;
-
-export const TableCell = styled.td`
-  padding: ${gutterBy(1)};
-  text-align: left;
-  vertical-align: middle;
-`;
-
-
-const NameCell = styled(TableCell)`
-  width: 90%;
-`;
-
 const ProjectLabel = styled.div`
-  background-color: #e0e0e0;
+  background-color: ${PRIMARY_COLOR};
   padding: ${gutterBy(1)};
   border-radius: 4px;
+  color: ${LAYER_1};
+  font-weight: ${FONTWEIGHT_IMPORTANT};
+  display: inline-block;
 `;
 
 export const ProjectManagementItem = ({project}: Props) => {
@@ -34,11 +25,11 @@ export const ProjectManagementItem = ({project}: Props) => {
             <NameCell>
                 <ProjectLabel>{project.name}</ProjectLabel>
             </NameCell>
-            <SingleProjectButton project = {project}/>
+            <TableCell>
+                <SingleProjectButton project={project} />
+            </TableCell>
         </TableRow>
     );
 }
 
 export default ProjectManagementItem;
-
-

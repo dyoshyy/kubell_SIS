@@ -2,7 +2,8 @@ import styled from 'styled-components';
 import { gutterBy } from '../../../styles/spaces';
 import { TextButton } from '../../../ui';
 import { TaskState } from "../types";
-import { ProjectManagementItem, TableCell, TableRow } from './ProjectManagementItem';
+import ProjectManagementItem from './ProjectManagementItem';
+import { TableCell, TableRow } from './Table';
 
 interface Props {
   onClose: () => void;
