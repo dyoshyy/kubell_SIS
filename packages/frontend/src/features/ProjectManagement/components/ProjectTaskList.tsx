@@ -42,7 +42,7 @@ export const ProjectTaskList = ({project}: ProjectTaskListProps) => {
     const [todoList, setTodoList] = useState<List|null>(null);
     const [doneList, setDoneList] = useState<List|null>(null);
 
-    const [activeId, setActiveId] = useState<string|null>(null);
+    // const [activeId, setActiveId] = useState<string|null>(null);
 
     useEffect(() => {
       setTodoList({id: 'todo_list', items: project.tasks.filter((task) => task.state == TaskState.Todo)});
@@ -127,7 +127,7 @@ export const ProjectTaskList = ({project}: ProjectTaskListProps) => {
       </ListContainerWrapper>
 
       <DragOverlay>
-        {activeId ? <SortableItem id={activeId} name={activeId} /> : null}
+        {/* {activeId ? <SortableItem id={activeId} name={activeId} /> : null} */}
       </DragOverlay>
     </DndContext>
     )
