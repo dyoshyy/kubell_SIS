@@ -7,26 +7,51 @@ import { GroupChatContainer } from "features/GroupChat";
 import { GroupChatsContainer } from "features/GroupChats";
 import { Header } from "features/Header";
 import { AuthContext } from "local-service/auth/AuthProvider";
-import { LAYER_1 } from "styles/color";
+import { LAYER_1, LAYER_2 } from "styles/color";
 import { gutterBy } from "styles/spaces";
 
 const RootContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: stretch;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
+`;
+
+const StyledHeader = styled.header`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 5vh;
+  display: flex;
+  align-items: center;
+  padding: ${gutterBy(2)};
+  background-color: ${LAYER_2};
+  font-weight: bold;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+  z-index: 100;
+`;
+
+const StyledMain = styled.main`
+  width: 100%;
+  margin-top: 5vh;
+  height: 95vh;
+  box-sizing: border-box;
+  display: flex;
 `;
 
 const GroupChatControls = styled.div`
-  width: 300px;
-  padding: ${gutterBy(2)};
+  width: 20%;
   box-sizing: border-box;
   background-color: ${LAYER_1};
 `;
 
 const GroupChatWrapper = styled.div`
-  width: calc(100% - 300px);
+  width: 80%;
   padding: 10px;
+  box-sizing: border-box;
 `;
 
 export const Router = () => {
@@ -40,19 +65,22 @@ export const Router = () => {
   }
 
   return (
-    <>
-    <Header />
     <RootContainer>
-      <GroupChatControls>
-        <CreateGroupChatDialogContainer />
-        <GroupChatsContainer handleChangeGroupChat={setSelectedGroupChatId} />
-      </GroupChatControls>
+      <StyledHeader>
+        <Header />
+      </StyledHeader>
 
-      <GroupChatWrapper>
-        <GroupChatContainer groupChatId={selectedGroupChatId} />
-      </GroupChatWrapper>
+      <StyledMain>
+        <GroupChatControls>
+          <CreateGroupChatDialogContainer />
+          <GroupChatsContainer handleChangeGroupChat={setSelectedGroupChatId} />
+        </GroupChatControls>
+
+        <GroupChatWrapper>
+          <GroupChatContainer groupChatId={selectedGroupChatId} />
+        </GroupChatWrapper>
+      </StyledMain>
+
     </RootContainer>
-    </>
-
   );
 };

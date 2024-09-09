@@ -25,6 +25,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   height: 100vh;
+  box-sizing: border-box;
 `;
 
 const GroupChatTitle = styled.h2`
@@ -32,13 +33,16 @@ const GroupChatTitle = styled.h2`
   font-weight: ${FONTWEIGHT_IMPORTANT};
   padding: ${gutterBy(3)} 0;
 `;
+
 const MessagesContainer = styled.div`
+  flex-grow: 1; /* 残りのスペースを埋める */
   overflow-y: auto;
+  box-sizing: border-box;
 `;
 
 const MessageFormWrapper = styled.div`
-  margin-top: auto;
   padding: ${gutterBy(2)} 0;
+  box-sizing: border-box;
 `;
 
 const useGetMessagesFragment = (getMessagesFragment: MaskedGroupChatMessages) =>
@@ -70,3 +74,4 @@ export const GroupChat = ({
     </Container>
   );
 };
+
