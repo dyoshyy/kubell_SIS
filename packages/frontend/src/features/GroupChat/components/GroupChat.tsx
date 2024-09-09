@@ -31,17 +31,21 @@ const Container = styled.div`
 const GroupChatTitle = styled.h2`
   font-size: ${FONTSIZE_HEADER};
   font-weight: ${FONTWEIGHT_IMPORTANT};
-  padding: ${gutterBy(3)} 0;
+  padding: ${gutterBy(2)};
 `;
 
 const MessagesContainer = styled.div`
-  flex-grow: 1; /* 残りのスペースを埋める */
   overflow-y: auto;
+  height: calc(100vh - 20vh - ${gutterBy(3)}); /* 高さを計算 */
   box-sizing: border-box;
 `;
 
 const MessageFormWrapper = styled.div`
+  position: sticky;
+  bottom: 0;
   padding: ${gutterBy(2)} 0;
+  background-color: #ffffff; /* Ensure it stands out from the messages */
+  z-index: 10; /* Ensure it stays on top of other content */
   box-sizing: border-box;
 `;
 
