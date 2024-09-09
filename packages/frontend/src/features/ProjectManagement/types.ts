@@ -1,4 +1,4 @@
-enum TaskState {
+export enum TaskState {
     Todo,
     Done
 }

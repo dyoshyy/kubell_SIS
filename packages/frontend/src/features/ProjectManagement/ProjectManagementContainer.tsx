@@ -3,14 +3,14 @@ import { useDialog } from "../../ui/Dialog";
 import { ProjectManagement } from "./components/ProjectManagement";
 
 
-export const BusynessListContainer = () => {
+export const ProjectManagementContainer = () => {
   const [Dialog, openDialog, closeDialog] = useDialog();
 
   return (
     <>
       <TextButton
         buttonType="primary"
-        text="忙しさリスト"
+        text="プロジェクト管理"
         onClick={openDialog}
       />
       <Dialog>
