@@ -44,6 +44,7 @@ const StyledMain = styled.main`
 
 const GroupChatControls = styled.div`
   width: 20%;
+  padding: ${gutterBy(1)};
   box-sizing: border-box;
   background-color: ${LAYER_1};
 `;
