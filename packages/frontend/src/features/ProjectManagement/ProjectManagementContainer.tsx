@@ -15,7 +15,6 @@ export const ProjectManagementContainer = () => {
       />
       <Dialog>
         <ProjectManagement
-          // users={otherUsers}
           onClose={closeDialog}
         />
       </Dialog>

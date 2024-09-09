@@ -125,7 +125,7 @@ export const ProjectManagement = ({ onClose }: Props) => {
         </Table>
       </TableContainer>
       <ActionButtonContainer>
-        <TextButton buttonType="danger" text="キャンセル" onClick={onClose} />
+        <TextButton buttontype="danger" text="閉じる" onClick={onClose} />
       </ActionButtonContainer>
     </>
   );

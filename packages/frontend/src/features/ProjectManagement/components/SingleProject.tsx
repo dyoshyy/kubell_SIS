@@ -55,7 +55,7 @@ export const SingleProject = ({ project, onClose }: Props) => {
 
   return (
     <>
-      <Caption>プロジェクト詳細</Caption>
+      <Caption>{project.name}</Caption>
       <div>
         <ProjectTaskList project={project}></ProjectTaskList>
         <div>
@@ -64,7 +64,7 @@ export const SingleProject = ({ project, onClose }: Props) => {
         </div>
       </div>
       <ActionButtonContainer>
-        <TextButton buttonType="danger" text="キャンセル" onClick={onClose} />
+        <TextButton buttontype="danger" text="閉じる" onClick={onClose} />
       </ActionButtonContainer>
     </>
   );

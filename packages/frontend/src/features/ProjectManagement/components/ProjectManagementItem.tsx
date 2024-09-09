@@ -22,7 +22,7 @@ const NameCell = styled(TableCell)`
   width: 90%;
 `;
 
-const BusyLabel = styled.div`
+const ProjectLabel = styled.div`
   background-color: #e0e0e0;
   padding: ${gutterBy(1)};
   border-radius: 4px;
@@ -32,7 +32,7 @@ export const ProjectManagementItem = ({project}: Props) => {
     return (
         <TableRow>
             <NameCell>
-                <BusyLabel>{project.name}</BusyLabel>
+                <ProjectLabel>{project.name}</ProjectLabel>
             </NameCell>
             <SingleProjectButton project = {project}/>
         </TableRow>

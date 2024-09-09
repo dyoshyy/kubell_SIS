@@ -12,7 +12,7 @@ export const SingleProjectButton = ({ project }: Props) => {
   return (
     <div>
       <TextButton
-        buttonType="primary"
+        buttontype="primary"
         text="管理"
         onClick={openDialog}
       />
