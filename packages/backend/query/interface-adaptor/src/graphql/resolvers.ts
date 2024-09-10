@@ -1,10 +1,64 @@
 import { PrismaClient } from "@prisma/client";
-import { Arg, Ctx, Query, Resolver } from "type-graphql";
-import { GroupChatOutput, MemberOutput, MessageOutput } from "./outputs";
 import { ILogObj, Logger } from "tslog";
+import { Arg, Ctx, Query, Resolver } from "type-graphql";
+import { GroupChatOutput, MemberOutput, MessageOutput, ProjectOutput } from "./outputs";
 
 interface QueryContext {
   prisma: PrismaClient;
+}
+
+@Resolver()
+class ProjectResolver {
+  private readonly logger: Logger<ILogObj> = new Logger();
+
+  @Query(() => ProjectOutput)
+  async getProject(
+    @Ctx() { prisma }: QueryContext,
+    @Arg("projectId") projectId: string,
+  ): Promise<ProjectOutput> {
+    const projects: ProjectOutput[] = await prisma.$queryRaw<
+      ProjectOutput[]
+    >`
+      SELECT
+        pj.id as id,
+        pj.name as name,
+        pj.leader_name as leaderName,
+        pj.created_at as createdAt,
+        pj.updated_at as updatedAt
+      FROM
+        projects AS pj
+      WHERE
+        pj.disabled = 'false' AND pj.id = ${projectId}`;
+
+      this.logger.debug("getProjects:", projects);
+      if(!projects.length) {
+        throw new Error("not found");
+      }
+      this.logger.debug("getProject:", projects[0]);
+      return projects[0];
+  }
+
+  @Query(() => [ProjectOutput])
+  async getProjecs(
+    @Ctx() { prisma }: QueryContext,
+  ): Promise<ProjectOutput[]> {
+    const projects: ProjectOutput[] = await prisma.$queryRaw<
+      ProjectOutput[]
+    >`
+      SELECT
+        pj.id as id,
+        pj.name as name,
+        pj.owner_name as ownerName,
+        pj.created_at as createdAt,
+        pj.updated_at as updatedAt
+      FROM
+        projects AS pj
+      WHERE
+        pj.disabled = 'false'`;
+
+      this.logger.debug("getProjects:", projects);
+      return projects;
+  }
 }
 
 @Resolver()
@@ -173,4 +227,5 @@ class GroupChatQueryResolver {
   }
 }
 
-export { QueryContext, GroupChatQueryResolver };
+export { GroupChatQueryResolver, ProjectResolver, QueryContext };
+
