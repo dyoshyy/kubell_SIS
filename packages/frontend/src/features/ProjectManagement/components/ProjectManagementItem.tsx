@@ -1,10 +1,11 @@
 import styled from 'styled-components';
+import { useDialog } from 'ui';
 import { LAYER_1, PRIMARY_COLOR } from '../../../styles/color';
 import { gutterBy } from '../../../styles/spaces';
 import { FONTWEIGHT_IMPORTANT } from '../../../styles/typography';
 import { Project } from "../types";
-import { SingleProjectButton } from './SingleProjectButton';
-import { NameCell, TableCell, TableRow } from './Table';
+import { SingleProject } from './SingleProject';
+import { NameCell, TableRow } from './Table';
 
 interface Props {
     project: Project
@@ -20,14 +21,27 @@ const ProjectLabel = styled.div`
 `;
 
 export const ProjectManagementItem = ({project}: Props) => {
+  const [Dialog, openDialog, closeDialog] = useDialog();
+
     return (
         <TableRow>
             <NameCell>
-                <ProjectLabel>{project.name}</ProjectLabel>
+              {project.id}
             </NameCell>
-            <TableCell>
+            <NameCell>
+                <ProjectLabel onClick={openDialog}>   
+                  {project.name}
+                </ProjectLabel>
+                <Dialog>
+                  <SingleProject
+                    project={project}
+                    onClose={closeDialog}
+                  />
+                </Dialog>
+            </NameCell>
+            {/* <TableCell>
                 <SingleProjectButton project={project} />
-            </TableCell>
+            </TableCell> */}
         </TableRow>
     );
 }
