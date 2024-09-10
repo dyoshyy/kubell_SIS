@@ -15,6 +15,7 @@ export const GREEN_LIGHT = "#ebf9f5";
 export const RED = "#ff4b4b";
 export const RED_LIGHT = "#fff0f0";
 export const PRIMARY_COLOR = BLUE;
+export const PRIMARY_COLOR_HOVER = "#1d5dd4";
 
 export const LAYER_0 = "#f9f9f9";
 export const LAYER_1 = "#ffffff"; // MEMO: LAYER_0 とのコントラスト比は 1.05 : 1
