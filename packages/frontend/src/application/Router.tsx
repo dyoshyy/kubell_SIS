@@ -12,7 +12,7 @@ import { gutterBy } from "styles/spaces";
 
 const RootContainer = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: stretch;
   width: 100%;
   height: 100%;
@@ -40,6 +40,36 @@ const StyledMain = styled.main`
   height: 95vh;
   box-sizing: border-box;
   display: flex;
+`;
+
+const MainContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
+
+const Toolbar = styled.div`
+  display: flex;
+  background: #cccccc;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 10px;
+  width: 100%;
+  height: 50px;
+`;
+
+const MainContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
+
+const Toolbar = styled.div`
+  display: flex;
+  background: #cccccc;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 10px;
+  width: 100%;
+  height: 50px;
 `;
 
 const GroupChatControls = styled.div`

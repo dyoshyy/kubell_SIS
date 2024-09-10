@@ -9,12 +9,13 @@ export const ProjectManagementContainer = () => {
   return (
     <>
       <TextButton
-        buttontype="primary"
+        buttonType="primary"
         text="プロジェクト管理"
         onClick={openDialog}
       />
       <Dialog>
         <ProjectManagement
+          // users={otherUsers}
           onClose={closeDialog}
         />
       </Dialog>

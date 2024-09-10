@@ -1,9 +1,9 @@
-import type { User } from "local-service/auth/models";
 import { useRef } from "react";
 import styled from "styled-components";
+import { CheckBox, TextButton, TextField } from "ui/";
+import type { User } from "local-service/auth/models";
 import { gutterBy } from "styles/spaces";
 import * as Typography from "styles/typography";
-import { CheckBox, TextButton, TextField } from "ui/";
 
 interface Props {
   users: User[];
@@ -75,9 +75,9 @@ export function CreateGroupChat({ users, onCreate, onClose }: Props) {
         ))}
       </UserCheckboxContainer>
       <ActionButtonContainer>
-        <TextButton buttontype="danger" text="キャンセル" onClick={onClose} />
+        <TextButton buttonType="danger" text="キャンセル" onClick={onClose} />
         <TextButton
-          buttontype="primary"
+          buttonType="primary"
           text="作成"
           onClick={handleClickCreate}
         />
