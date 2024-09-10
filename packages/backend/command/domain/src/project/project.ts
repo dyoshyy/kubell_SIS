@@ -1,5 +1,5 @@
 import { Aggregate } from "event-store-adapter-js";
-import { ProjectCreated } from "./project-events";
+import { ProjectCreated, ProjectEvent } from "./project-events";
 import { ProjectId } from "./project-id";
 import { ProjectLeaderName } from "./project-leader-name";
 import { ProjectName } from "./project-name";
@@ -41,6 +41,22 @@ class Project implements Aggregate<Project, ProjectId> {
     };
   }
 
+  applyEvent(event: ProjectEvent): Project {
+    switch (event.symbol) {
+      // case ProjectCreatedTypeSymbol: {
+      //   const typedEvent = event as ProjectCreated;
+      //   const result = this.rename(typedEvent.name, event.executorId);
+      //   if (E.isLeft(result)) {
+      //     throw new Error(result.left.message);
+      //   }
+      //   return result.right[0];
+      // }
+      default: {
+        throw new Error("Unknown event");
+      }
+    }
+  }
+
   static create(
     id: ProjectId,
     name: ProjectName,
@@ -58,6 +74,13 @@ class Project implements Aggregate<Project, ProjectId> {
       }),
       ProjectCreated.of(id, name, leaderName, version),
     ];
+  }
+
+  static replay(events: ProjectEvent[], snapshot: Project): Project {
+    return events.reduce(
+      (Project, event) => Project.applyEvent(event),
+      snapshot,
+    );
   }
 
   withVersion(version: number): Project {
