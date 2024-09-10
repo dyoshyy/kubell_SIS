@@ -49,8 +49,8 @@ class ProjectLeaderName {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function convertJSONToGroupChatName(json: any): ProjectLeaderName {
+function convertJSONToProjectLeaderName(json: any): ProjectLeaderName {
   return ProjectLeaderName.of(json.value);
 }
 
-export { ProjectLeaderName, ProjectLeaderNameTypeSymbol, convertJSONToGroupChatName };
+export { ProjectLeaderName, ProjectLeaderNameTypeSymbol, convertJSONToProjectLeaderName };

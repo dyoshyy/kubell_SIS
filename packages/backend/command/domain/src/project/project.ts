@@ -1,5 +1,5 @@
 import { Aggregate } from "event-store-adapter-js";
-import { ProjectCreated } from "./project-event";
+import { ProjectCreated } from "./project-events";
 import { ProjectId } from "./project-id";
 import { ProjectLeaderName } from "./project-leader-name";
 import { ProjectName } from "./project-name";

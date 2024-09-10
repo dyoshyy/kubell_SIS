@@ -1,11 +1,11 @@
-import { Event } from "event-store-adapter-js";
-import { convertJSONToGroupChatId, GroupChatId } from "./group-chat-id";
-import { convertJSONToUserAccountId, UserAccountId } from "../user-account";
-import { convertJSONToGroupChatName, GroupChatName } from "./group-chat-name";
-import { convertJSONToMembers, Members } from "./members";
-import { convertJSONToMember, Member } from "./member";
-import { convertJSONToMessage, Message } from "./message";
 import * as Infrastructure from "cqrs-es-example-js-infrastructure";
+import { Event } from "event-store-adapter-js";
+import { convertJSONToUserAccountId, UserAccountId } from "../user-account";
+import { convertJSONToGroupChatId, GroupChatId } from "./group-chat-id";
+import { convertJSONToGroupChatName, GroupChatName } from "./group-chat-name";
+import { convertJSONToMember, Member } from "./member";
+import { convertJSONToMembers, Members } from "./members";
+import { convertJSONToMessage, Message } from "./message";
 
 type GroupChatEventTypeSymbol =
   | typeof GroupChatCreatedTypeSymbol
@@ -456,22 +456,14 @@ function convertJSONToGroupChatEvent(json: any): GroupChatEvent {
 }
 
 export {
-  GroupChatEvent,
-  GroupChatEventTypeSymbol,
-  GroupChatCreated,
-  GroupChatCreatedTypeSymbol,
-  GroupChatRenamed,
-  GroupChatRenamedTypeSymbol,
-  GroupChatMemberAdded,
+  convertJSONToGroupChatEvent, GroupChatCreated,
+  GroupChatCreatedTypeSymbol, GroupChatDeleted,
+  GroupChatDeletedTypeSymbol, GroupChatEvent, GroupChatEventFactory, GroupChatEventTypeSymbol, GroupChatMemberAdded,
   GroupChatMemberAddedTypeSymbol,
   GroupChatMemberRemoved,
-  GroupChatMemberRemovedTypeSymbol,
-  GroupChatMessagePosted,
-  GroupChatMessagePostedTypeSymbol,
-  GroupChatMessageDeleted,
-  GroupChatMessageDeletedTypeSymbol,
-  GroupChatDeleted,
-  GroupChatDeletedTypeSymbol,
-  GroupChatEventFactory,
-  convertJSONToGroupChatEvent,
+  GroupChatMemberRemovedTypeSymbol, GroupChatMessageDeleted,
+  GroupChatMessageDeletedTypeSymbol, GroupChatMessagePosted,
+  GroupChatMessagePostedTypeSymbol, GroupChatRenamed,
+  GroupChatRenamedTypeSymbol
 };
+
