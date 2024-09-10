@@ -1,6 +1,6 @@
 import * as Infrastructure from "cqrs-es-example-js-infrastructure";
 import { Event } from "event-store-adapter-js";
-import { ProjectId } from "./project-id";
+import { convertJSONToProjectId, ProjectId } from "./project-id";
 import { ProjectLeaderName } from "./project-leader-name";
 import { ProjectName } from "./project-name";
 
@@ -57,7 +57,29 @@ class ProjectCreated implements ProjectEvent {
   }
 }
 
-export { ProjectCreated, ProjectCreatedTypeSymbol, ProjectEvent };
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function convertJSONToProjectEvent(json: any): ProjectEvent {
+  const id = convertJSONToProjectId(json.data.aggregateId);
+  switch (json.type) {
+    case "ProjectCreated": {
+      return ProjectCreated.of(
+        id,
+        ProjectName.of(json.data.name),
+        ProjectLeaderName.of(json.data.leaderName),
+        json.data.sequenceNumber,
+      );
+    }
+    default:
+      throw new Error(`Unknown type: ${json.type}`);
+  }
+}
+
+export {
+  convertJSONToProjectEvent,
+  ProjectCreated,
+  ProjectCreatedTypeSymbol,
+  ProjectEvent
+};
 
 
 

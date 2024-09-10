@@ -57,9 +57,9 @@ class ProjectId implements AggregateId {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function convertJSONToGroupChatId(json: any): ProjectId {
+function convertJSONToProjectId(json: any): ProjectId {
   return ProjectId.of(json.value);
 }
 
-export { convertJSONToGroupChatId, ProjectId, ProjectIdTypeSymbol };
+export { convertJSONToProjectId, ProjectId, ProjectIdTypeSymbol };
 
