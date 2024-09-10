@@ -35,82 +35,82 @@ const ActionButtonContainer = styled.div`
 export const ProjectManagement = ({ onClose }: Props) => {
   const ProjectItems = [
     {
-      name: "Project 1",
+      name: "Website Redesign",
       tasks: [
-          { name: "Task 1.1", state: TaskState.Todo },
-          { name: "Task 1.2", state: TaskState.Done },
-          { name: "Task 1.3", state: TaskState.Todo },
+        { name: "Create wireframes", state: TaskState.Todo },
+        { name: "Design homepage mockup", state: TaskState.Done },
+        { name: "Develop responsive layout", state: TaskState.Todo },
       ]
-  },
-  {
-      name: "Project 2",
+    },
+    {
+      name: "Mobile App Development",
       tasks: [
-          { name: "Task 2.1", state: TaskState.Done },
-          { name: "Task 2.2", state: TaskState.Todo },
-          { name: "Task 2.3", state: TaskState.Todo },
+        { name: "Finalize app architecture", state: TaskState.Done },
+        { name: "Implement user authentication", state: TaskState.Todo },
+        { name: "Design UI components", state: TaskState.Todo },
       ]
-  },
-  {
-      name: "Project 3",
+    },
+    {
+      name: "Marketing Campaign",
       tasks: [
-          { name: "Task 3.1", state: TaskState.Done },
-          { name: "Task 3.2", state: TaskState.Done },
+        { name: "Define target audience", state: TaskState.Done },
+        { name: "Create social media content", state: TaskState.Done },
       ]
-  },
-  {
-      name: "Project 4",
+    },
+    {
+      name: "Customer Support System",
       tasks: [
-          { name: "Task 4.1", state: TaskState.Todo },
-          { name: "Task 4.2", state: TaskState.Todo },
+        { name: "Set up ticketing software", state: TaskState.Todo },
+        { name: "Train support team", state: TaskState.Todo },
       ]
-  },
-  {
-      name: "Project 5",
+    },
+    {
+      name: "Product Launch",
       tasks: [
-          { name: "Task 5.1", state: TaskState.Done },
-          { name: "Task 5.2", state: TaskState.Todo },
-          { name: "Task 5.3", state: TaskState.Todo },
-          { name: "Task 5.4", state: TaskState.Done },
+        { name: "Finalize product features", state: TaskState.Done },
+        { name: "Prepare press release", state: TaskState.Todo },
+        { name: "Schedule launch event", state: TaskState.Todo },
+        { name: "Update website with new product", state: TaskState.Done },
       ]
-  },
-  {
-      name: "Project 6",
+    },
+    {
+      name: "Office Relocation",
       tasks: [
-          { name: "Task 6.1", state: TaskState.Todo },
-          { name: "Task 6.2", state: TaskState.Todo },
+        { name: "Find new office space", state: TaskState.Todo },
+        { name: "Plan office layout", state: TaskState.Todo },
       ]
-  },
-  {
-      name: "Project 7",
+    },
+    {
+      name: "Annual Financial Audit",
       tasks: [
-          { name: "Task 7.1", state: TaskState.Done },
-          { name: "Task 7.2", state: TaskState.Done },
+        { name: "Gather financial documents", state: TaskState.Done },
+        { name: "Meet with auditors", state: TaskState.Done },
       ]
-  },
-  {
-      name: "Project 8",
+    },
+    {
+      name: "Employee Training Program",
       tasks: [
-          { name: "Task 8.1", state: TaskState.Todo },
-          { name: "Task 8.2", state: TaskState.Todo },
-          { name: "Task 8.3", state: TaskState.Done },
+        { name: "Identify training needs", state: TaskState.Todo },
+        { name: "Develop training materials", state: TaskState.Todo },
+        { name: "Schedule training sessions", state: TaskState.Done },
       ]
-  },
-  {
-      name: "Project 9",
+    },
+    {
+      name: "Inventory Management System",
       tasks: [
-          { name: "Task 9.1", state: TaskState.Done },
-          { name: "Task 9.2", state: TaskState.Todo },
+        { name: "Implement barcode scanning", state: TaskState.Done },
+        { name: "Integrate with existing ERP", state: TaskState.Todo },
       ]
-  },
-  {
-      name: "Project 10",
+    },
+    {
+      name: "Cybersecurity Upgrade",
       tasks: [
-          { name: "Task 10.1", state: TaskState.Todo },
-          { name: "Task 10.2", state: TaskState.Done },
+        { name: "Conduct security audit", state: TaskState.Todo },
+        { name: "Implement two-factor authentication", state: TaskState.Done },
       ]
-  },
-  ];
-
+    },
+  ]
+  
   return (
     <>
       <Caption>プロジェクト一覧</Caption>
