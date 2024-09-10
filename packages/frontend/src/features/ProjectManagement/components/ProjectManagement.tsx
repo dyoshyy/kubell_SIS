@@ -3,7 +3,7 @@ import { gutterBy } from '../../../styles/spaces';
 import { TextButton } from '../../../ui';
 import { TaskState } from "../types";
 import ProjectManagementItem from './ProjectManagementItem';
-import { TableCell, TableRow } from './Table';
+import { Table, TableCell, TableContainer, TableRow } from './Table';
 
 interface Props {
   onClose: () => void;
@@ -12,18 +12,6 @@ interface Props {
 const Caption = styled.p`
   font-size: 30px;
   margin: ${gutterBy(2)};
-`;
-
-const TableContainer = styled.div`
-  height: 70%;
-  min-height: 300px;
-  overflow-y: auto;
-  margin: ${gutterBy(2)};
-`;
-
-const Table = styled.table`
-  width: 100%;
-  border-spacing: 0;
 `;
 
 const ActionButtonContainer = styled.div`

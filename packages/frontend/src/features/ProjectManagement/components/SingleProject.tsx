@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { gutterBy } from '../../../styles/spaces';
 import { TextButton } from '../../../ui';
 import { Project } from '../types';
-import Details from './ProjectDtails';
+import Details from './ProjectDetails';
 import ChatButtons from './ProjectGroupchatButton';
 import { ProjectTaskList } from './ProjectTaskList';
 
