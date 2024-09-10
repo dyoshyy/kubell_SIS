@@ -16,7 +16,7 @@ export const TableRow = styled.tr`
 
 export const TableCell = styled.td`
   padding: ${gutterBy(2)};
-  text-align: left;
+  text-align: center;
   vertical-align: middle;
   font-size: ${FONTSIZE_PARAGRAPH};
   color: ${TEXT_PRIMARY};
@@ -27,6 +27,10 @@ export const TableContainer = styled.div`
   min-height: 300px;
   overflow-y: auto;
   margin: ${gutterBy(2)};
+`;
+
+export const IDCell = styled(TableCell)`
+  width: 20%;
 `;
 
 export const NameCell = styled(TableCell)`

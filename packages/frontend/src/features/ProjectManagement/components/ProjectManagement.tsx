@@ -3,7 +3,7 @@ import { gutterBy } from '../../../styles/spaces';
 import { TextButton } from '../../../ui';
 import { TaskState } from "../types";
 import ProjectManagementItem from './ProjectManagementItem';
-import { Table, TableCell, TableContainer, TableRow } from './Table';
+import { IDCell, NameCell, Table, TableContainer, TableRow } from './Table';
 
 interface Props {
   onClose: () => void;
@@ -112,8 +112,8 @@ export const ProjectManagement = ({ onClose }: Props) => {
       <TableContainer>
         <Table>
           <TableRow>
-            <TableCell>ID</TableCell>
-            <TableCell>名前</TableCell>
+            <IDCell>ID</IDCell>
+            <NameCell>名前</NameCell>
           </TableRow>
           {ProjectItems.map((item) => (
             <ProjectManagementItem project={item} />

@@ -1,23 +1,28 @@
 import styled from 'styled-components';
 import { useDialog } from 'ui';
-import { LAYER_1, PRIMARY_COLOR } from '../../../styles/color';
+import { LAYER_1, PRIMARY_COLOR, PRIMARY_COLOR_HOVER } from '../../../styles/color';
 import { gutterBy } from '../../../styles/spaces';
 import { FONTWEIGHT_IMPORTANT } from '../../../styles/typography';
 import { Project } from "../types";
 import { SingleProject } from './SingleProject';
-import { NameCell, TableRow } from './Table';
+import { IDCell, NameCell, TableRow } from './Table';
 
 interface Props {
     project: Project
 }
 
-const ProjectLabel = styled.div`
+const ProjectLabel = styled.button`
   background-color: ${PRIMARY_COLOR};
   padding: ${gutterBy(1)};
   border-radius: 4px;
   color: ${LAYER_1};
+  font-size: 24px;
   font-weight: ${FONTWEIGHT_IMPORTANT};
   display: inline-block;
+  &:hover {
+    cursor: pointer;
+    background-color: ${PRIMARY_COLOR_HOVER};
+  }
 `;
 
 export const ProjectManagementItem = ({project}: Props) => {
@@ -25,23 +30,20 @@ export const ProjectManagementItem = ({project}: Props) => {
 
     return (
         <TableRow>
-            <NameCell>
+            <IDCell>
               {project.id}
-            </NameCell>
+            </IDCell>
             <NameCell>
-                <ProjectLabel onClick={openDialog}>   
-                  {project.name}
-                </ProjectLabel>
-                <Dialog>
-                  <SingleProject
-                    project={project}
-                    onClose={closeDialog}
-                  />
-                </Dialog>
+              <ProjectLabel onClick={openDialog}>   
+                {project.name}
+              </ProjectLabel>
+              <Dialog>
+                <SingleProject
+                  project={project}
+                  onClose={closeDialog}
+                />
+              </Dialog>
             </NameCell>
-            {/* <TableCell>
-                <SingleProjectButton project={project} />
-            </TableCell> */}
         </TableRow>
     );
 }
