@@ -4,7 +4,7 @@ import { LAYER_1, PRIMARY_COLOR, PRIMARY_COLOR_HOVER } from '../../../styles/col
 import { gutterBy } from '../../../styles/spaces';
 import { FONTWEIGHT_IMPORTANT } from '../../../styles/typography';
 import { Project } from "../types";
-import { SingleProject } from './SingleProject';
+import { SingleProject } from './Project/SingleProject';
 import { IDCell, NameCell, TableRow } from './Table';
 
 interface Props {

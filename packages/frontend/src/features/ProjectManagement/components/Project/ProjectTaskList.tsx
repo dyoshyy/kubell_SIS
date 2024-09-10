@@ -18,10 +18,10 @@ import {
   LAYER_2,
   TEXT_PRIMARY,
   TEXT_SECONDARY,
-} from '../../../styles/color';
-import { gutterBy } from '../../../styles/spaces';
-import { FONTSIZE_PARAGRAPH, FONTWEIGHT_IMPORTANT } from '../../../styles/typography';
-import { Project, Task, TaskState } from '../types';
+} from '../../../../styles/color';
+import { gutterBy } from '../../../../styles/spaces';
+import { FONTSIZE_PARAGRAPH, FONTWEIGHT_IMPORTANT } from '../../../../styles/typography';
+import { Project, Task, TaskState } from '../../types';
 
 interface ProjectTaskListProps {
   project: Project;
