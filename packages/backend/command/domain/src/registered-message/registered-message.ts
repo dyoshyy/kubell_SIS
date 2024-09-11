@@ -1,7 +1,7 @@
 import { Aggregate } from "event-store-adapter-js";
 import { RegisteredMessageBody } from "./registered-message-body";
 import { RegisteredMessageCreated, RegisteredMessageEvent } from "./registered-message-events";
-import { RegisteredMessageId } from "./registered-message-id";
+import { convertJSONToRegisteredMessageId, RegisteredMessageId } from "./registered-message-id";
 import { RegisteredMessageTitle } from "./registered-message-title";
 
 const RegisteredMessageTypeSymbol = Symbol('RegisteredMessage');
@@ -95,6 +95,23 @@ class RegisteredMessage implements Aggregate<RegisteredMessage, RegisteredMessag
   updateVersion(versionF: (value: number) => number): RegisteredMessage {
     return new RegisteredMessage({ ...this, version: versionF(this.version) });
   }
+
+  static of(params: RegisteredMessageParams): RegisteredMessage {
+    return new RegisteredMessage(params);
+  }
 }
 
-export { RegisteredMessage, RegisteredMessageTypeSymbol };
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function convertJSONToRegisteredMessage(json: any): RegisteredMessage {
+  const id = convertJSONToRegisteredMessageId(json.data.id);
+  return RegisteredMessage.of({
+    id,
+    title: json.data.title,
+    body: json.data.body,
+    sequenceNumber: json.data.sequenceNumber,
+    version: json.data.version,
+  });
+}
+
+export { convertJSONToRegisteredMessage, RegisteredMessage, RegisteredMessageTypeSymbol };
+

@@ -1,8 +1,8 @@
 import { Aggregate } from "event-store-adapter-js";
 import { ProjectCreated, ProjectEvent } from "./project-events";
-import { ProjectId } from "./project-id";
+import { convertJSONToProjectId, ProjectId } from "./project-id";
 import { ProjectLeaderName } from "./project-leader-name";
-import { ProjectName } from "./project-name";
+import { convertJSONToProjectName, ProjectName } from "./project-name";
 
 const ProjectTypeSymbol = Symbol('Project');
 
@@ -90,6 +90,24 @@ class Project implements Aggregate<Project, ProjectId> {
   updateVersion(versionF: (value: number) => number): Project {
     return new Project({ ...this, version: versionF(this.version) });
   }
+
+  static of(params: ProjectParams): Project{
+    return new Project(params);
+  }
 }
 
-export { Project, ProjectTypeSymbol };
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function convertJSONToProject(json: any): Project {
+  const id = convertJSONToProjectId(json.data.id);
+  const name = convertJSONToProjectName(json.data.name);
+  return Project.of({
+    id,
+    name,
+    leaderName: json.data.leaderName,
+    sequenceNumber: json.data.sequenceNumber,
+    version: json.data.version,
+  });
+}
+
+export { convertJSONToProject, Project, ProjectTypeSymbol };
+
