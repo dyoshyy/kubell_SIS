@@ -12,6 +12,7 @@ import {
 } from "cqrs-es-example-js-command-interface-adaptor-if";
 import * as TE from "fp-ts/TaskEither";
 import { pipe } from "fp-ts/function";
+import { ProcessError, ProcessInternalError } from "../group-chat";
 
 class ProjectCommandProcessor {
 private constructor(
@@ -83,26 +84,28 @@ private retry<T>(
 }
 }
 
-abstract class ProcessError extends Error {}
+export { ProjectCommandProcessor };
 
-class ProcessInternalError extends ProcessError {
-constructor(message: string, cause?: Error) {
-  super(message);
-  this.name = "ProcessError";
-  this.cause = cause;
-}
-}
+// abstract class ProcessError extends Error {}
 
-class ProcessNotFoundError extends ProcessError {
-constructor(message: string, cause?: Error) {
-  super(message);
-  this.name = "ProcessError";
-  this.cause = cause;
-}
-}
+// class ProcessInternalError extends ProcessError {
+// constructor(message: string, cause?: Error) {
+//   super(message);
+//   this.name = "ProcessError";
+//   this.cause = cause;
+// }
+// }
 
-export {
-  ProcessError,
-  ProcessInternalError,
-  ProcessNotFoundError, ProjectCommandProcessor
-};
+// class ProcessNotFoundError extends ProcessError {
+// constructor(message: string, cause?: Error) {
+//   super(message);
+//   this.name = "ProcessError";
+//   this.cause = cause;
+// }
+// }
+
+// export {
+//   ProcessError,
+//   ProcessInternalError,
+//   ProcessNotFoundError, ProjectCommandProcessor
+// };

@@ -81,11 +81,18 @@ class DeleteMessageInput {
   executorId!: string;
 }
 
+// Project
+
+@InputType()
+class CreateProjectInput {
+  @Field()
+  name!: string;
+
+  @Field()
+  leaderName!: string;
+}
+
 export {
-  CreateGroupChatInput,
-  DeleteGroupChatInput,
-  RenameGroupChatInput,
-  RemoveMemberInput,
-  PostMessageInput,
-  DeleteMessageInput,
+  CreateGroupChatInput, CreateProjectInput, DeleteGroupChatInput, DeleteMessageInput, PostMessageInput, RemoveMemberInput, RenameGroupChatInput
 };
+
