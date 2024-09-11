@@ -309,6 +309,9 @@ importers:
       prettier:
         specifier: 3.2.5
         version: 3.2.5
+      reflect-metadata:
+        specifier: ^0.2.1
+        version: 0.2.2
       rimraf:
         specifier: ^5.0.1
         version: 5.0.7
@@ -516,6 +519,9 @@ importers:
       prisma:
         specifier: ^5.10.2
         version: 5.13.0
+      reflect-metadata:
+        specifier: ^0.2.1
+        version: 0.2.2
       rimraf:
         specifier: ^5.0.1
         version: 5.0.7

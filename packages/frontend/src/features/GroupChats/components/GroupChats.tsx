@@ -1,7 +1,7 @@
-import { useFragment } from "__generated__/query";
 import styled from "styled-components";
-import { gutterBy } from "styles/spaces";
 import { TextButton } from "ui";
+import { gutterBy } from "styles/spaces";
+import { useFragment } from "__generated__/query";
 import {
   GroupChatsFragment,
   MaskedGroupChats,
@@ -37,7 +37,7 @@ export const GroupChats = ({
   return (
     <>
       <TextButton
-        buttontype="default"
+        buttonType="default"
         text="グループチャット一覧を更新する"
         onClick={onUpdate}
       />
@@ -50,7 +50,7 @@ export const GroupChats = ({
             aria-label={groupChat.name}
           >
             <TextButton
-              buttontype="none"
+              buttonType="none"
               text={groupChat.name}
               onClick={() => onChangeGroupChat(groupChat.id)}
             />

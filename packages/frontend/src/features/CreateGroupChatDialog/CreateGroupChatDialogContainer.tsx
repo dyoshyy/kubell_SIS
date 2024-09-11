@@ -64,7 +64,7 @@ export const CreateGroupChatDialogContainer = () => {
   return (
     <>
       <TextButton
-        buttontype="primary"
+        buttonType="primary"
         text="グループチャットを作成する"
         onClick={openDialog}
       />

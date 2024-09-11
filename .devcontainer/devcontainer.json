@@ -15,6 +15,6 @@
       ]
     }
   },
-  "onCreateCommand": "pnpm install && pnpm generate:backend && pnpm docker:build-backend",
+  "onCreateCommand": "pnpm install && pnpm generate:all && pnpm docker:build-backend",
   "postCreateCommand": "docker-compose -f ./tools/docker-compose/docker-compose-databases.yml pull && npm install -g concurrently"
 }

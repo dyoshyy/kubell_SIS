@@ -21,4 +21,8 @@ yarn-error.log
 
 package.json.backup
 
+<<<<<<< HEAD
 .pnpm-store/
+=======
+**/*.graphql
+>>>>>>> 34e9f28b1c2051cfa482c05106c79b647a112109
