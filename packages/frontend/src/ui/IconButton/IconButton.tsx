@@ -1,16 +1,16 @@
-import type { ButtonHTMLAttributes, ReactElement } from "react";
+import type { ReactElement, ButtonHTMLAttributes } from "react";
 import styled from "styled-components";
 
-import { BLACK } from "styles/color";
 import { FONTCOLOR_BLACK } from "styles/typography";
+import { BLACK } from "styles/color";
 import { getStyleByType } from "./style";
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
-  buttontype: "primary" | "default" | "danger" | "none";
+  buttonType: "primary" | "default" | "danger" | "none";
   icon: "circle-cross";
 }
 
-const Button = styled.button<{ buttontype: Props["buttontype"] }>`
+const Button = styled.button<{ $buttonType: Props["buttonType"] }>`
   width: 28px;
   height: 28px;
   padding: 0;
@@ -37,7 +37,7 @@ const Button = styled.button<{ buttontype: Props["buttontype"] }>`
     stroke-width: 2;
   }
 
-  ${(props) => getStyleByType[props.buttontype]}
+  ${(props) => getStyleByType[props.$buttonType]}
 `;
 
 const getSvgByIcon: Record<Props["icon"], ReactElement> = {
@@ -48,9 +48,9 @@ const getSvgByIcon: Record<Props["icon"], ReactElement> = {
   ),
 };
 
-export function IconButton({ buttontype, icon, ...props }: Props) {
+export function IconButton({ buttonType, icon, ...props }: Props) {
   return (
-    <Button type="button" buttontype={buttontype} {...props}>
+    <Button type="button" $buttonType={buttonType} {...props}>
       {getSvgByIcon[icon]}
     </Button>
   );

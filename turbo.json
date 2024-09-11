@@ -17,6 +17,7 @@
     "clean-package": {
       "cache": false
     },
-    "generate:backend": {}
+    "generate:backend": {},
+    "generate:schema": {}
   }
 }

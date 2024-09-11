@@ -1,8 +1,8 @@
 import { useCallback, useRef, useState } from "react";
 import styled from "styled-components";
 
-import { gutterBy } from "styles/spaces";
 import { TextButton, TextField } from "ui";
+import { gutterBy } from "styles/spaces";
 
 interface Props {
   onSignIn: (name: string) => void;
@@ -45,7 +45,7 @@ export const Authenticate = ({ onSignIn }: Props) => {
       />
 
       <TextButton
-        buttontype="primary"
+        buttonType="primary"
         text="じゅもんをとなえる 💥"
         onClick={handleOnSignin}
       />

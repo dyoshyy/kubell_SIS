@@ -3,7 +3,7 @@ import { useCallback, useState } from "react";
 
 import { IconButton } from "../IconButton";
 
-import { Dialog, Overlay } from "./style";
+import { Overlay, Dialog } from "./style";
 
 interface Props {
   children?: ReactNode;
@@ -29,7 +29,7 @@ export function useDialog() {
             onClick={stopPropagation}
           >
             <IconButton
-              buttontype="danger"
+              buttonType="danger"
               icon="circle-cross"
               onClick={closeDialog}
             />

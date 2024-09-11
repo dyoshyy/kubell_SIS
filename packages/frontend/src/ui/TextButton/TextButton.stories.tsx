@@ -14,24 +14,24 @@ type Story = StoryObj<typeof TextButton>;
 
 export const Primary: Story = {
   args: {
-    buttontype: "primary",
+    buttonType: "primary",
   },
 };
 
 export const Default: Story = {
   args: {
-    buttontype: "default",
+    buttonType: "default",
   },
 };
 
 export const Danger: Story = {
   args: {
-    buttontype: "danger",
+    buttonType: "danger",
   },
 };
 
 export const None: Story = {
   args: {
-    buttontype: "none",
+    buttonType: "none",
   },
 };

@@ -13,7 +13,7 @@ export function ExampleLayout() {
   return (
     <>
       <TextButton
-        buttontype="primary"
+        buttonType="primary"
         text="Open"
         onClick={openDialog}
         style={style}
