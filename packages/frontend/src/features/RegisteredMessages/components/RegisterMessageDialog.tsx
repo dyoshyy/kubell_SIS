@@ -110,7 +110,13 @@ export const RegisterMessage = ({ onClose, handleRegisterMessage }: Props) => {
         onChange={(e) => setBody(e.target.value)}
       />
       <ActionButtonContainer>
-        <TextButton buttonType="danger" text="登録" onClick={() => handleRegisterMessage(title, body)} />
+        <TextButton 
+          buttonType="danger" 
+          text="登録" 
+          onClick={() => {
+            handleRegisterMessage(title, body)
+            onClose()
+          }} />
         <TextButton buttonType="danger" text="キャンセル" onClick={onClose} />
       </ActionButtonContainer>
     </Container>

@@ -12,7 +12,7 @@ export const RegisterMessageButton = ({handleRegisterMessage}: Props) => {
     <>
       <TextButton
         buttonType="primary"
-        text="登録"
+        text="業務連絡登録"
         onClick={openDialog}
       />
       <Dialog>
