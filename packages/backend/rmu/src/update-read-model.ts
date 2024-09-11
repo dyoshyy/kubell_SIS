@@ -2,6 +2,7 @@ import { DynamoDBStreamEvent } from "aws-lambda";
 import {
   convertJSONToGroupChatEvent,
   convertJSONToProjectEvent,
+  convertJSONToRegisteredMessageEvent,
   GroupChatCreated,
   GroupChatCreatedTypeSymbol,
   GroupChatDeleted,
@@ -18,11 +19,14 @@ import {
   GroupChatRenamedTypeSymbol,
   ProjectCreated,
   ProjectCreatedTypeSymbol,
+  RegisteredMessageCreated,
+  RegisteredMessageCreatedTypeSymbol,
 } from "cqrs-es-example-js-command-domain";
 import { TextDecoder } from "node:util";
 import { ILogObj, Logger } from "tslog";
 import { GroupChatDao } from "./group-chat-dao";
 import { ProjectDao } from "./project-dao";
+import { RegisteredMessageDao } from "./registered-message-dao";
 
 // import {Callback} from "aws-lambda/handler";
 
@@ -67,8 +71,11 @@ class ReadModelUpdater {
       if (payloadJson.type.includes("GroupChat")) {
         convertedEvent = convertJSONToGroupChatEvent(payloadJson);
       }
-      else {
+      else if (payloadJson.type.includes("Project")) {
         convertedEvent = convertJSONToProjectEvent(payloadJson);
+      }
+      else {
+        convertedEvent = convertJSONToRegisteredMessageEvent(payloadJson);
       }
 
       switch (convertedEvent.symbol) {
@@ -155,12 +162,32 @@ class ReadModelUpdater {
           this.logger.debug("inserted project");
           break;
         }
+        case RegisteredMessageCreatedTypeSymbol: {
+          const typedEvent = convertedEvent as RegisteredMessageCreated;
+          this.logger.debug(`event = ${typedEvent.toString()}`);
+          this.registeredMessageDao.insertRegisteredMessage(
+            typedEvent.aggregateId,
+            typedEvent.title,
+            typedEvent.body,
+            new Date(),
+          );
+          this.logger.debug("inserted registered message");
+          break;
+        }
       }
     });
   }
 
-  static of(groupChatDao: GroupChatDao, projectDao: ProjectDao): ReadModelUpdater {
-    return new ReadModelUpdater(groupChatDao, projectDao);
+  static of(
+    groupChatDao: GroupChatDao, 
+    projectDao: ProjectDao,
+    registeredMessageDao: RegisteredMessageDao,
+  ): ReadModelUpdater {
+    return new ReadModelUpdater(
+      groupChatDao, 
+      projectDao, 
+      registeredMessageDao
+    );
   }
 }
 
