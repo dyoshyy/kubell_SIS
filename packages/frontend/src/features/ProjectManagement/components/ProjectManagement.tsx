@@ -6,8 +6,13 @@ import { TaskState } from "../types";
 import ProjectManagementItem from './ProjectManagementItem';
 import { IDCell, NameCell, Table, TableContainer, TableRow } from './Table';
 =======
+<<<<<<< HEAD
+import ProjectManagementItem from './ProjectManagementItem';
+import { IDCell, NameCell, Table, TableContainer, TableRow } from './Table';
+=======
 import { ProjectManagementItem, TableCell, TableRow } from './ProjectManagementItem';
 >>>>>>> 34e9f28b1c2051cfa482c05106c79b647a112109
+>>>>>>> 7b07093525bc704015ecc68e8b3a18b2071af78e
 
 interface Props {
   onClose: () => void;
@@ -18,6 +23,8 @@ const Caption = styled.p`
   margin: ${gutterBy(2)};
 `;
 
+<<<<<<< HEAD
+=======
 <<<<<<< HEAD
 =======
 const TableContainer = styled.div`
@@ -32,6 +39,7 @@ const Table = styled.table`
 `;
 
 >>>>>>> 34e9f28b1c2051cfa482c05106c79b647a112109
+>>>>>>> 7b07093525bc704015ecc68e8b3a18b2071af78e
 const ActionButtonContainer = styled.div`
   position: absolute;
   bottom: 0;
@@ -44,6 +52,9 @@ export const ProjectManagement = ({ onClose }: Props) => {
   const ProjectItems = [
     {
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 7b07093525bc704015ecc68e8b3a18b2071af78e
         id: "1",
         name: "顧客A税務申告",
         tasks: [
@@ -212,8 +223,13 @@ export const ProjectManagement = ({ onClose }: Props) => {
             <IDCell>ID</IDCell>
             <NameCell>名前</NameCell>
 =======
+<<<<<<< HEAD
+            <IDCell>ID</IDCell>
+            <NameCell>名前</NameCell>
+=======
             <TableCell>名前</TableCell>
 >>>>>>> 34e9f28b1c2051cfa482c05106c79b647a112109
+>>>>>>> 7b07093525bc704015ecc68e8b3a18b2071af78e
           </TableRow>
           {ProjectItems.map((item) => (
             <ProjectManagementItem project={item} />
@@ -224,8 +240,12 @@ export const ProjectManagement = ({ onClose }: Props) => {
 <<<<<<< HEAD
         <TextButton buttontype="danger" text="閉じる" onClick={onClose} />
 =======
+<<<<<<< HEAD
+        <TextButton buttontype="danger" text="閉じる" onClick={onClose} />
+=======
         <TextButton buttonType="danger" text="キャンセル" onClick={onClose} />
 >>>>>>> 34e9f28b1c2051cfa482c05106c79b647a112109
+>>>>>>> 7b07093525bc704015ecc68e8b3a18b2071af78e
       </ActionButtonContainer>
     </>
   );

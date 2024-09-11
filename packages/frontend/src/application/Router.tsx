@@ -1,21 +1,12 @@
 import { useContext, useState } from "react";
 import styled from "styled-components";
 
-<<<<<<< HEAD
 import { AuthenticateContainer } from "features/Authenticate";
 import { CreateGroupChatDialogContainer } from "features/CreateGroupChatDialog";
 import { GroupChatContainer } from "features/GroupChat";
 import { GroupChatsContainer } from "features/GroupChats";
 import { Header } from "features/Header";
-=======
-import { CreateGroupChatDialogContainer } from "features/CreateGroupChatDialog";
-import { GroupChatContainer } from "features/GroupChat";
-import { GroupChatsContainer } from "features/GroupChats";
-
-import { AuthenticateContainer } from "features/Authenticate";
-import { ProjectManagementContainer } from "features/ProjectManagement";
 import { RegisteredMessagesContainer } from "features/RegisteredMessages";
->>>>>>> 34e9f28b1c2051cfa482c05106c79b647a112109
 import { AuthContext } from "local-service/auth/AuthProvider";
 import { LAYER_1, LAYER_2 } from "styles/color";
 import { gutterBy } from "styles/spaces";
@@ -52,21 +43,6 @@ const StyledMain = styled.main`
   display: flex;
 `;
 
-const MainContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-`;
-
-const Toolbar = styled.div`
-  display: flex;
-  background: #cccccc;
-  justify-content: flex-end;
-  gap: 10px;
-  padding: 10px;
-  width: 100%;
-  height: 50px;
-`;
-
 const GroupChatControls = styled.div`
   width: 20%;
   padding: ${gutterBy(1)};
@@ -95,7 +71,6 @@ export const Router = () => {
 
   return (
     <RootContainer>
-<<<<<<< HEAD
       <StyledHeader>
         <Header />
       </StyledHeader>
@@ -109,28 +84,10 @@ export const Router = () => {
         <GroupChatWrapper>
           <GroupChatContainer groupChatId={selectedGroupChatId} />
         </GroupChatWrapper>
-      </StyledMain>
-
-=======
-      <Toolbar>
-        {/* <button>ビジーネスメンバーリスト</button> */}
-        {/* < RegisterMessageContainer handleRegisterMessage={handleRegisterMessage} /> */}
-        < ProjectManagementContainer />
-      </Toolbar>
-
-      <MainContainer>
-        <GroupChatControls>
-          <CreateGroupChatDialogContainer />
-          <GroupChatsContainer handleChangeGroupChat={setSelectedGroupChatId} />
-        </GroupChatControls>
-
-        <GroupChatWrapper>
-          <GroupChatContainer groupChatId={selectedGroupChatId} />
-        </GroupChatWrapper>
 
         <RegisteredMessagesContainer groupChatId={selectedGroupChatId}/>
-      </MainContainer>
->>>>>>> 34e9f28b1c2051cfa482c05106c79b647a112109
+      </StyledMain>
+
     </RootContainer>
   );
 };

@@ -15,9 +15,22 @@ class MessageOutput {
 }
 
 @ObjectType()
+class ProjectOutput {
+  @Field()
+  projectId!: string;
+}
+
+@ObjectType()
+class RegisteredMessageOutput {
+  @Field()
+  registeredMessageId!: string;
+}
+
+@ObjectType()
 class HealthCheckOutput {
   @Field()
   value!: string;
 }
 
-export { GroupChatOutput, MessageOutput, HealthCheckOutput };
+export { GroupChatOutput, HealthCheckOutput, MessageOutput, ProjectOutput, RegisteredMessageOutput };
+

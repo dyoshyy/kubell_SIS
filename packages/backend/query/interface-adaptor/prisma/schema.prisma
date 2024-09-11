@@ -46,3 +46,13 @@ model Messages {
   @@index([groupChatId], map: "group_chat_id")
   @@map("messages")
 }
+
+model RegisteredMessages {
+  id         String @id @db.VarChar(64)
+  title      String @db.VarChar(64)
+  body       String @db.Text
+  createdAt  DateTime @db.DateTime(0) @map("created_at")
+  updatedAt  DateTime @db.DateTime(0) @map("updated_at")
+
+  @@map("registered_messages")
+}

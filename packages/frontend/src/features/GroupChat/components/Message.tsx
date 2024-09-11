@@ -85,7 +85,7 @@ export const Message = ({ message, onDeleteMessage }: Props) => {
         </MetaText>
         <MessageText>{message.text}</MessageText>
         <DeleteButton
-          buttontype="primary"
+          buttonType="primary"
           text="削除"
           onClick={handleClickDelete}
         />
