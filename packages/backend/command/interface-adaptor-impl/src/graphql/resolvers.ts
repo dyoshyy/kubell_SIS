@@ -7,6 +7,8 @@ import {
   MessageId,
   ProjectLeaderName,
   ProjectName,
+  RegisteredMessageBody,
+  RegisteredMessageTitle,
   UserAccountId
 } from "cqrs-es-example-js-command-domain";
 import { RepositoryError } from "cqrs-es-example-js-command-interface-adaptor-if";
@@ -15,6 +17,7 @@ import {
   ProcessError,
   ProcessNotFoundError,
   ProjectCommandProcessor,
+  RegisteredMessageCommandProcessor,
 } from "cqrs-es-example-js-command-processor";
 import { OptimisticLockError } from "event-store-adapter-js";
 import { pipe } from "fp-ts/function";
@@ -27,17 +30,19 @@ import {
   AddMemberInput,
   CreateGroupChatInput,
   CreateProjectInput,
+  CreateRegisteredMessageInput,
   DeleteGroupChatInput,
   DeleteMessageInput,
   PostMessageInput,
   RemoveMemberInput,
   RenameGroupChatInput,
 } from "./inputs";
-import { GroupChatOutput, HealthCheckOutput, MessageOutput, ProjectOutput } from "./outputs";
+import { GroupChatOutput, HealthCheckOutput, MessageOutput, ProjectOutput, RegisteredMessageOutput } from "./outputs";
 
 interface CommandContext {
   groupChatCommandProcessor: GroupChatCommandProcessor;
   projectCommandProcessor: ProjectCommandProcessor;
+  registeredMessageCommandProcessor: RegisteredMessageCommandProcessor;
 }
 
 @Resolver()
@@ -508,6 +513,94 @@ class ProjectCommandResolver {
 
 }
 
+@Resolver()
+class RegisteredMessageCommandResolver {
+  @Query(() => HealthCheckOutput)
+  async healthCheck(): Promise<HealthCheckOutput> {
+    return { value: "OK" };
+  }
+
+  @Mutation(() => RegisteredMessageOutput)
+  async createRegisteredMessage(
+    @Ctx() { registeredMessageCommandProcessor }: CommandContext,
+    @Arg("input") input: CreateRegisteredMessageInput,
+  ): Promise<RegisteredMessageOutput> {
+    return pipe(
+      this.validateRegisteredMessageTitle(input.title),
+      TE.chainW((validatedTitle) =>
+        pipe(
+          this.validateRegisteredMessageBody(input.body),
+          TE.map((validatedBody) => ({
+            validatedTitle,
+            validatedBody,
+          })),
+        ),
+      ),
+      TE.chainW(({ validatedTitle, validatedBody }) =>
+        registeredMessageCommandProcessor.createRegisteredMessage(
+          validatedTitle,
+          validatedBody,
+        ),
+        ),
+      TE.map((registeredMessageEvent) => ({
+        registeredMessageId: registeredMessageEvent.aggregateId.asString(),
+      })),
+      TE.mapLeft(this.convertToError),
+      this.toTask(),
+    )();
+  }
+
+  private convertToError(error: string | ProcessError): Error {
+    if (typeof error === "string") {
+      return new ValidationGraphQLError(error);
+    } else {
+      if (
+        error.cause instanceof RepositoryError &&
+        error.cause.cause instanceof OptimisticLockError
+      ) {
+        return new OptimisticLockingGraphQLError(
+          "A conflict occurred while attempting to save your changes. Please try again.",
+          error,
+        );
+      } else if (error.cause instanceof GroupChatError) {
+        return new DomainLogicGraphQLError(
+          "The request could not be processed due to a domain logic error. Please verify your data and try again.",
+          error,
+        );
+      } else if (error instanceof ProcessNotFoundError) {
+        return new NotFoundGraphQLError(
+          "The requested resource could not be found.",
+          error,
+        );
+      }
+      return new InternalServerGraphQLError(
+        "An unexpected error occurred. Please try again later.",
+        error,
+      );
+    }
+  }
+
+  private toTask<A, B>(): (_: TaskEither<A, B>) => Task<B> {
+    return TE.fold<A, B, B>(
+      (e) => () => Promise.reject(e),
+      (r) => () => Promise.resolve(r),
+    );
+  }
+
+  private validateRegisteredMessageTitle(
+    value: string,
+  ): TaskEither<string, RegisteredMessageTitle> {
+    return TE.fromEither(RegisteredMessageTitle.validate(value));
+  }
+
+  private validateRegisteredMessageBody(
+    value: string,
+  ): TaskEither<string, RegisteredMessageBody> {
+    return TE.fromEither(RegisteredMessageBody.validate(value));
+}
+
+}
+
 class ValidationGraphQLError extends GraphQLError {
   constructor(message: string) {
     super(message, {
@@ -564,6 +657,6 @@ class InternalServerGraphQLError extends GraphQLError {
 
 export {
   CommandContext,
-  GroupChatCommandResolver, InternalServerGraphQLError, OptimisticLockingGraphQLError, ProjectCommandResolver, ValidationGraphQLError
+  GroupChatCommandResolver, InternalServerGraphQLError, OptimisticLockingGraphQLError, ProjectCommandResolver, RegisteredMessageCommandResolver, ValidationGraphQLError
 };
 
