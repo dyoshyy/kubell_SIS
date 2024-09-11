@@ -15,8 +15,8 @@ class RegisteredMessageDao {
       await _prismaClient.registeredMessages.create({
         data: {
           id: aggregateId.asString(),
-          title: title,
-          body: body,
+          title: title.asString(),
+          body: body.asString(),
           createdAt: createdAt,
           updatedAt: createdAt,
         },
