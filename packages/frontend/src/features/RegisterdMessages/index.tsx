@@ -1,0 +1,1 @@
+export { RegisterMessageContainer } from "./RegisterMessageContainer";

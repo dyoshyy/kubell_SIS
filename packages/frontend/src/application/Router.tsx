@@ -7,6 +7,7 @@ import { GroupChatsContainer } from "features/GroupChats";
 
 import { AuthenticateContainer } from "features/Authenticate";
 import { ProjectManagementContainer } from "features/ProjectManagement";
+import { RegisterMessageContainer } from "features/RegisterdMessages";
 import { AuthContext } from "local-service/auth/AuthProvider";
 import { LAYER_1 } from "styles/color";
 import { gutterBy } from "styles/spaces";
@@ -54,11 +55,21 @@ export const Router = () => {
   if (!isSignedIn) {
     return <AuthenticateContainer />;
   }
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  // const [RegisteredMessages, setRegisteredMessages] = useState([]);
+
+  const handleRegisterMessage = (title: string, body: string) => {
+    console.log(title, body);
+    // TODO 状態変数に登録
+    // setRegisteredMessages([...RegisteredMessages, { title, body }]);
+  };
+
 
   return (
     <RootContainer>
       <Toolbar>
         {/* <button>ビジーネスメンバーリスト</button> */}
+        < RegisterMessageContainer handleRegisterMessage={handleRegisterMessage} />
         < ProjectManagementContainer />
       </Toolbar>
 
