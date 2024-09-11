@@ -5,10 +5,9 @@ import {
   MemberRole,
   Message,
   MessageId,
-  ProjectId,
   ProjectLeaderName,
   ProjectName,
-  UserAccountId,
+  UserAccountId
 } from "cqrs-es-example-js-command-domain";
 import { RepositoryError } from "cqrs-es-example-js-command-interface-adaptor-if";
 import {
@@ -491,9 +490,9 @@ class ProjectCommandResolver {
     );
   }
 
-  private validateProjectId(value: string): TaskEither<string, ProjectId> {
-    return TE.fromEither(ProjectId.validate(value));
-  }
+  // private validateProjectId(value: string): TaskEither<string, ProjectId> {
+  //   return TE.fromEither(ProjectId.validate(value));
+  // }
 
   private validateLeaderName(
     value: string,

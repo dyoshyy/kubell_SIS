@@ -8,7 +8,7 @@ interface QueryContext {
 }
 
 @Resolver()
-class ProjectResolver {
+class ProjectQueryResolver {
   private readonly logger: Logger<ILogObj> = new Logger();
 
   @Query(() => ProjectOutput)
@@ -227,5 +227,5 @@ class GroupChatQueryResolver {
   }
 }
 
-export { GroupChatQueryResolver, ProjectResolver, QueryContext };
+export { GroupChatQueryResolver, ProjectQueryResolver, QueryContext };
 

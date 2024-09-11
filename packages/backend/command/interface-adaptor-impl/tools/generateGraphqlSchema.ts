@@ -1,10 +1,10 @@
 import path from "path";
 import "reflect-metadata";
 import { buildSchema } from "type-graphql";
-import { GroupChatCommandResolver } from "../src/graphql/resolvers";
+import { GroupChatCommandResolver, ProjectCommandResolver } from "../src/graphql/resolvers";
 
 void buildSchema({
-  resolvers: [GroupChatCommandResolver],
+  resolvers: [GroupChatCommandResolver, ProjectCommandResolver],
   emitSchemaFile: path.resolve(
     __dirname,
     "../../../../../schema/command.graphql",
