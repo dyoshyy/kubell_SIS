@@ -1,12 +1,11 @@
-import { TextButton } from "../../ui";
-import { useDialog } from "../../ui/Dialog";
-import { RegisterMessage } from "./components/RegisterMessage";
+import { TextButton, useDialog } from "ui";
+import { RegisterMessage } from "./RegisterMessageDialog";
 
 interface Props {
   handleRegisterMessage: (title: string, body:string) => void;
 }
 
-export const RegisterMessageContainer = ({handleRegisterMessage}: Props) => {
+export const RegisterMessageButton = ({handleRegisterMessage}: Props) => {
   const [Dialog, openDialog, closeDialog] = useDialog();
 
   return (
