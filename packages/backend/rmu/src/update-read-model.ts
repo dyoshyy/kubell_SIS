@@ -37,6 +37,7 @@ class ReadModelUpdater {
   private constructor(
     private readonly groupChatDao: GroupChatDao,
     private readonly projectDao: ProjectDao,
+    private readonly registeredMessageDao: RegisteredMessageDao,
   ) {}
 
   async updateReadModel(event: DynamoDBStreamEvent): Promise<void> {
