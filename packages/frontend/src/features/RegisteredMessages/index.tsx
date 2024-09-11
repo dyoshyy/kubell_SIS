@@ -1,0 +1,2 @@
+export { RegisteredMessagesContainer } from "./RegisteredMessagesContainer";
+

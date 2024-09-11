@@ -2,8 +2,17 @@ import styled from 'styled-components';
 import { gutterBy } from '../../../styles/spaces';
 import { TextButton } from '../../../ui';
 import { TaskState } from "../types";
+<<<<<<< HEAD
 import ProjectManagementItem from './ProjectManagementItem';
 import { IDCell, NameCell, Table, TableContainer, TableRow } from './Table';
+=======
+<<<<<<< HEAD
+import ProjectManagementItem from './ProjectManagementItem';
+import { IDCell, NameCell, Table, TableContainer, TableRow } from './Table';
+=======
+import { ProjectManagementItem, TableCell, TableRow } from './ProjectManagementItem';
+>>>>>>> 34e9f28b1c2051cfa482c05106c79b647a112109
+>>>>>>> 7b07093525bc704015ecc68e8b3a18b2071af78e
 
 interface Props {
   onClose: () => void;
@@ -14,6 +23,23 @@ const Caption = styled.p`
   margin: ${gutterBy(2)};
 `;
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+const TableContainer = styled.div`
+  max-height: 480px;
+  overflow-y: auto;
+  margin: ${gutterBy(2)};
+`;
+
+const Table = styled.table`
+  width: 100%;
+  border-spacing: 0;
+`;
+
+>>>>>>> 34e9f28b1c2051cfa482c05106c79b647a112109
+>>>>>>> 7b07093525bc704015ecc68e8b3a18b2071af78e
 const ActionButtonContainer = styled.div`
   position: absolute;
   bottom: 0;
@@ -25,6 +51,10 @@ const ActionButtonContainer = styled.div`
 export const ProjectManagement = ({ onClose }: Props) => {
   const ProjectItems = [
     {
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 7b07093525bc704015ecc68e8b3a18b2071af78e
         id: "1",
         name: "顧客A税務申告",
         tasks: [
@@ -105,6 +135,83 @@ export const ProjectManagement = ({ onClose }: Props) => {
         ]
     }
 ];
+=======
+      name: "Website Redesign",
+      tasks: [
+        { name: "Create wireframes", state: TaskState.Todo },
+        { name: "Design homepage mockup", state: TaskState.Done },
+        { name: "Develop responsive layout", state: TaskState.Todo },
+      ]
+    },
+    {
+      name: "Mobile App Development",
+      tasks: [
+        { name: "Finalize app architecture", state: TaskState.Done },
+        { name: "Implement user authentication", state: TaskState.Todo },
+        { name: "Design UI components", state: TaskState.Todo },
+      ]
+    },
+    {
+      name: "Marketing Campaign",
+      tasks: [
+        { name: "Define target audience", state: TaskState.Done },
+        { name: "Create social media content", state: TaskState.Done },
+      ]
+    },
+    {
+      name: "Customer Support System",
+      tasks: [
+        { name: "Set up ticketing software", state: TaskState.Todo },
+        { name: "Train support team", state: TaskState.Todo },
+      ]
+    },
+    {
+      name: "Product Launch",
+      tasks: [
+        { name: "Finalize product features", state: TaskState.Done },
+        { name: "Prepare press release", state: TaskState.Todo },
+        { name: "Schedule launch event", state: TaskState.Todo },
+        { name: "Update website with new product", state: TaskState.Done },
+      ]
+    },
+    {
+      name: "Office Relocation",
+      tasks: [
+        { name: "Find new office space", state: TaskState.Todo },
+        { name: "Plan office layout", state: TaskState.Todo },
+      ]
+    },
+    {
+      name: "Annual Financial Audit",
+      tasks: [
+        { name: "Gather financial documents", state: TaskState.Done },
+        { name: "Meet with auditors", state: TaskState.Done },
+      ]
+    },
+    {
+      name: "Employee Training Program",
+      tasks: [
+        { name: "Identify training needs", state: TaskState.Todo },
+        { name: "Develop training materials", state: TaskState.Todo },
+        { name: "Schedule training sessions", state: TaskState.Done },
+      ]
+    },
+    {
+      name: "Inventory Management System",
+      tasks: [
+        { name: "Implement barcode scanning", state: TaskState.Done },
+        { name: "Integrate with existing ERP", state: TaskState.Todo },
+      ]
+    },
+    {
+      name: "Cybersecurity Upgrade",
+      tasks: [
+        { name: "Conduct security audit", state: TaskState.Todo },
+        { name: "Implement two-factor authentication", state: TaskState.Done },
+      ]
+    },
+  ]
+>>>>>>> 34e9f28b1c2051cfa482c05106c79b647a112109
   
   return (
     <>
@@ -112,8 +219,17 @@ export const ProjectManagement = ({ onClose }: Props) => {
       <TableContainer>
         <Table>
           <TableRow>
+<<<<<<< HEAD
             <IDCell>ID</IDCell>
             <NameCell>名前</NameCell>
+=======
+<<<<<<< HEAD
+            <IDCell>ID</IDCell>
+            <NameCell>名前</NameCell>
+=======
+            <TableCell>名前</TableCell>
+>>>>>>> 34e9f28b1c2051cfa482c05106c79b647a112109
+>>>>>>> 7b07093525bc704015ecc68e8b3a18b2071af78e
           </TableRow>
           {ProjectItems.map((item) => (
             <ProjectManagementItem project={item} />
@@ -121,7 +237,15 @@ export const ProjectManagement = ({ onClose }: Props) => {
         </Table>
       </TableContainer>
       <ActionButtonContainer>
+<<<<<<< HEAD
         <TextButton buttontype="danger" text="閉じる" onClick={onClose} />
+=======
+<<<<<<< HEAD
+        <TextButton buttontype="danger" text="閉じる" onClick={onClose} />
+=======
+        <TextButton buttonType="danger" text="キャンセル" onClick={onClose} />
+>>>>>>> 34e9f28b1c2051cfa482c05106c79b647a112109
+>>>>>>> 7b07093525bc704015ecc68e8b3a18b2071af78e
       </ActionButtonContainer>
     </>
   );

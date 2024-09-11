@@ -6,6 +6,7 @@ import { CreateGroupChatDialogContainer } from "features/CreateGroupChatDialog";
 import { GroupChatContainer } from "features/GroupChat";
 import { GroupChatsContainer } from "features/GroupChats";
 import { Header } from "features/Header";
+import { RegisteredMessagesContainer } from "features/RegisteredMessages";
 import { AuthContext } from "local-service/auth/AuthProvider";
 import { LAYER_1, LAYER_2 } from "styles/color";
 import { gutterBy } from "styles/spaces";
@@ -64,6 +65,9 @@ export const Router = () => {
   if (!isSignedIn) {
     return <AuthenticateContainer />;
   }
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  // const [RegisteredMessages, setRegisteredMessages] = useState([]);
+
 
   return (
     <RootContainer>
@@ -80,6 +84,8 @@ export const Router = () => {
         <GroupChatWrapper>
           <GroupChatContainer groupChatId={selectedGroupChatId} />
         </GroupChatWrapper>
+
+        <RegisteredMessagesContainer groupChatId={selectedGroupChatId}/>
       </StyledMain>
 
     </RootContainer>

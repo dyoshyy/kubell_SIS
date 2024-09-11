@@ -1,5 +1,6 @@
 import { TextButton, useDialog } from "ui";
 import { Project } from "../types";
+import { SingleProject } from "./SingleProject";
 
 interface Props {
   project: Project;
@@ -16,10 +17,10 @@ export const SingleProjectButton = ({ project }: Props) => {
         onClick={openDialog}
       />
       <Dialog>
-        {/* <SingleProject
+        <SingleProject
           project={project}
           onClose={closeDialog}
-        /> */}
+        />
       </Dialog>
     </div>
   )
