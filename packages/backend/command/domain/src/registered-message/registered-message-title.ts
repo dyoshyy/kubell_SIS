@@ -19,7 +19,7 @@ class RegisteredMessageTitle {
   }
 
   asString() {
-    return `${this.value}`;
+    return this.value;
   }
 
   toString() {
