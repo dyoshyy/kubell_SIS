@@ -1,8 +1,8 @@
 import { useCallback, useRef, useState } from "react";
 import styled from "styled-components";
 
-import { TextButton, TextField } from "ui";
 import { gutterBy } from "styles/spaces";
+import { TextButton, TextField } from "ui";
 
 interface Props {
   onSignIn: (name: string) => void;
@@ -18,6 +18,12 @@ const ErrorMessage = styled.p`
   color: red;
   font-weight: bold;
   padding-top: ${gutterBy(2)};
+`;
+
+const SpacedContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;  // 各コンポーネント間に 16px の余白
 `;
 export const Authenticate = ({ onSignIn }: Props) => {
   const nameRef = useRef("");
@@ -37,18 +43,19 @@ export const Authenticate = ({ onSignIn }: Props) => {
 
   return (
     <AuthLayout>
+     <SpacedContainer>
       <TextField
         texttype="plain"
         line="single"
         placeholder="ユーザー名"
         onInput={handleInputName}
       />
-
       <TextButton
         buttonType="primary"
-        text="じゅもんをとなえる 💥"
+        text="ログイン"
         onClick={handleOnSignin}
       />
+    </SpacedContainer>
 
       {error && <ErrorMessage>{error}</ErrorMessage>}
     </AuthLayout>

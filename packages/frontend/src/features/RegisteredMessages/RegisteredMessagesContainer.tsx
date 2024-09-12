@@ -63,10 +63,12 @@ export const RegisteredMessagesContainer = ({groupChatId}: RegisteredMessagesCon
     if(loading || data?.getRegisteredMessages === undefined) return <></>;
 
     return (
+      <div style={{ width: '100%' }}> {}
         <RegisteredMessages 
           registeredMessagesFragment={data.getRegisteredMessages}
           onCreateRegisterMessage={handleRegisterMessage} 
           onPostMessage={handlePostMessage}
         />
+    </div>
     )
 }

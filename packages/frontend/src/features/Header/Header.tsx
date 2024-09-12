@@ -1,4 +1,3 @@
-import { ProjectManagementContainer } from "features/ProjectManagement";
 import styled from "styled-components";
 import { gutterBy } from "styles/spaces";
 
@@ -18,7 +17,7 @@ export const Header = () => {
     <>
       <Logo>ChatAPP</Logo>
       <HeaderActions>
-        <ProjectManagementContainer />
+        {/* <ProjectManagementContainer /> */}
       </HeaderActions>
     </>
   );
