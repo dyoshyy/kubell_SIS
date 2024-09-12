@@ -25,7 +25,7 @@ class RegisteredMessageCreated implements RegisteredMessageEvent {
     public readonly aggregateId: RegisteredMessageId,
     public readonly title: RegisteredMessageTitle,
     public readonly body: RegisteredMessageBody,
-    public readonly owner_id: UserAccountId,
+    public readonly ownerId: UserAccountId,
     public readonly sequenceNumber: number,
     public readonly occurredAt: Date,
   ) {}
