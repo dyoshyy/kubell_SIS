@@ -533,20 +533,28 @@ class RegisteredMessageCommandResolver {
           TE.chainW((validatedBody) =>
             pipe(
               this.validateUserAccountId(input.ownerId),
-              TE.map((validatedOwnerId) => ({
-                validatedTitle,
-                validatedBody,
-                validatedOwnerId,
-              }),)
+              TE.chainW((validatedOwnerId) =>
+                pipe(
+                  this.validateGroupChatId(input.groupChatId),
+                  TE.map((validatedGroupChatId) => ({
+                    validatedTitle,
+                    validatedBody,
+                    validatedOwnerId,
+                    validatedGroupChatId,
+                  })
+                ),
+              ))
             ),
           ),
         ),
       ),
-      TE.chainW(({ validatedTitle, validatedBody, validatedOwnerId }) =>
+      TE.chainW(({ validatedTitle, validatedBody, validatedOwnerId, validatedGroupChatId }) =>
         registeredMessageCommandProcessor.createRegisteredMessage(
           validatedTitle,
           validatedBody,
           validatedOwnerId,
+          validatedGroupChatId,
+          input.cronFormular,
         ),
         ),
       TE.map((registeredMessageEvent) => ({
@@ -610,7 +618,11 @@ class RegisteredMessageCommandResolver {
     value: string,
   ): TaskEither<string, RegisteredMessageBody> {
     return TE.fromEither(RegisteredMessageBody.validate(value));
-}
+  }
+
+  private validateGroupChatId(value: string): TaskEither<string, GroupChatId> {
+    return TE.fromEither(GroupChatId.validate(value));
+  }
 
 }
 

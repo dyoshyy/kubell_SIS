@@ -1,4 +1,5 @@
 import { Aggregate } from "event-store-adapter-js";
+import { convertJSONToGroupChatId, GroupChatId } from "../group-chat";
 import { convertJSONToUserAccountId, UserAccountId } from "../user-account";
 import { convertJSONToRegisteredMessageBody, RegisteredMessageBody } from "./registered-message-body";
 import { RegisteredMessageCreated, RegisteredMessageEvent } from "./registered-message-events";
@@ -13,6 +14,8 @@ export interface RegisteredMessageParams {
   title: RegisteredMessageTitle;
   body: RegisteredMessageBody;
   ownerId: UserAccountId;
+  groupChatId: GroupChatId;
+  cronFormular: string;
   sequenceNumber: number;
   version: number;
 }
@@ -25,6 +28,8 @@ class RegisteredMessage implements Aggregate<RegisteredMessage, RegisteredMessag
   public readonly title: RegisteredMessageTitle;
   public readonly body: RegisteredMessageBody;
   public readonly ownerId: UserAccountId;
+  public readonly groupChatId: GroupChatId;
+  public readonly cronFormular: string;
   public readonly sequenceNumber: number;
   public readonly version: number;
 
@@ -33,6 +38,8 @@ class RegisteredMessage implements Aggregate<RegisteredMessage, RegisteredMessag
     this.title = params.title;
     this.body = params.body;
     this.ownerId = params.ownerId;
+    this.groupChatId = params.groupChatId;
+    this.cronFormular = params.cronFormular;
     this.sequenceNumber = params.sequenceNumber;
     this.version = params.version;
   }
@@ -67,6 +74,8 @@ class RegisteredMessage implements Aggregate<RegisteredMessage, RegisteredMessag
     title: RegisteredMessageTitle,
     body: RegisteredMessageBody,
     ownerId: UserAccountId,
+    groupChatId: GroupChatId,
+    cronFormular: string,
   ): [RegisteredMessage, RegisteredMessageCreated] {
     const sequenceNumber = 1;
     const version = 1;
@@ -76,6 +85,8 @@ class RegisteredMessage implements Aggregate<RegisteredMessage, RegisteredMessag
         title,
         body,
         ownerId,
+        groupChatId,
+        cronFormular,
         sequenceNumber,
         version,
       }),
@@ -115,12 +126,15 @@ function convertJSONToRegisteredMessage(json: any): RegisteredMessage {
   const title = convertJSONToRegisteredMessageTitle(json.data.title);
   const body = convertJSONToRegisteredMessageBody(json.data.body);
   const ownerId = convertJSONToUserAccountId(json.data.ownerId);
+  const groupChatId = convertJSONToGroupChatId(json.data.groupChatId);
 
   return RegisteredMessage.of({
     id,
     title,
     body,
     ownerId,
+    groupChatId,
+    cronFormular: json.data.cronFormular,
     sequenceNumber: json.data.sequenceNumber,
     version: json.data.version,
   });
