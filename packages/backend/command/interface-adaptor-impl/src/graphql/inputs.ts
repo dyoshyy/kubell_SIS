@@ -103,7 +103,7 @@ class CreateRegisteredMessageInput {
   body!: string;
 
   @Field()
-  owner_id!: string;
+  ownerId!: string;
 }
 
 export { AddMemberInput, CreateGroupChatInput, CreateProjectInput, CreateRegisteredMessageInput, DeleteGroupChatInput, DeleteMessageInput, PostMessageInput, RemoveMemberInput, RenameGroupChatInput };

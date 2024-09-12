@@ -532,7 +532,7 @@ class RegisteredMessageCommandResolver {
           this.validateRegisteredMessageBody(input.body),
           TE.chainW((validatedBody) =>
             pipe(
-              this.validateUserAccountId(input.owner_id),
+              this.validateUserAccountId(input.ownerId),
               TE.map((validatedOwnerId) => ({
                 validatedTitle,
                 validatedBody,

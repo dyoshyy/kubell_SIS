@@ -18,7 +18,7 @@ export const RegisteredMessagesContainer = ({groupChatId}: RegisteredMessagesCon
     //     setRegisteredMessages([...registeredMessages, { id: '0', title: title, body: body }]);
     // }
     const { data, loading, error, refetch } = useQuery(GetRegtisteredMessagesQuery, {
-      variables: {}
+      variables: {ownerId: myID}
     });
 
     const handleUpdate = () => refetch();
@@ -53,11 +53,12 @@ export const RegisteredMessagesContainer = ({groupChatId}: RegisteredMessagesCon
             input: {
               title: title,
               body: body,
+              ownerId: myID
             },
           },
         });
       },
-      [createRegisteredMessage],
+      [createRegisteredMessage, myID],
     );
 
     if(error) return <p>Error Happened</p>;

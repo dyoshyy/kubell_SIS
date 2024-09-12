@@ -14,7 +14,7 @@ class RegisteredMessageQueryResolver {
   @Query(() => [RegisteredMessageOutput])
   async getRegisteredMessages(
     @Ctx() { prisma }: QueryContext,
-    @Arg("userAccountId") userAccountId: string,
+    @Arg("ownerId") userAccountId: string,
   ): Promise<RegisteredMessageOutput[]> {
     const registeredMessages: RegisteredMessageOutput[] = await prisma.$queryRaw<RegisteredMessageOutput[]>`
         SELECT
