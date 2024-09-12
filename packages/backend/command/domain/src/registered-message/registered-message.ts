@@ -1,6 +1,6 @@
 import { Aggregate } from "event-store-adapter-js";
-import { convertJSONToGroupChatId, GroupChatId } from "../group-chat";
-import { convertJSONToUserAccountId, UserAccountId } from "../user-account";
+import { convertJSONToGroupChatId, GroupChatId } from "../group-chat/group-chat-id";
+import { convertJSONToUserAccountId, UserAccountId } from "../user-account/user-account-id";
 import { convertJSONToRegisteredMessageBody, RegisteredMessageBody } from "./registered-message-body";
 import { RegisteredMessageCreated, RegisteredMessageEvent } from "./registered-message-events";
 import { convertJSONToRegisteredMessageId, RegisteredMessageId } from "./registered-message-id";
@@ -49,7 +49,6 @@ class RegisteredMessage implements Aggregate<RegisteredMessage, RegisteredMessag
       id: this.id.toJSON(),
       title: this.title,
       body: this.body,
-      ownerId: this.ownerId,
     };
   }
 
@@ -75,7 +74,7 @@ class RegisteredMessage implements Aggregate<RegisteredMessage, RegisteredMessag
     body: RegisteredMessageBody,
     ownerId: UserAccountId,
     groupChatId: GroupChatId,
-    cronFormular: string,
+    cronFormular: string
   ): [RegisteredMessage, RegisteredMessageCreated] {
     const sequenceNumber = 1;
     const version = 1;
@@ -129,6 +128,7 @@ function convertJSONToRegisteredMessage(json: any): RegisteredMessage {
   const body = convertJSONToRegisteredMessageBody(json.data.body);
   const ownerId = convertJSONToUserAccountId(json.data.ownerId);
   const groupChatId = convertJSONToGroupChatId(json.data.groupChatId);
+  const cronFormular = json.data.cronFormular
 
   return RegisteredMessage.of({
     id,
@@ -136,7 +136,7 @@ function convertJSONToRegisteredMessage(json: any): RegisteredMessage {
     body,
     ownerId,
     groupChatId,
-    cronFormular: json.data.cronFormular,
+    cronFormular,
     sequenceNumber: json.data.sequenceNumber,
     version: json.data.version,
   });
