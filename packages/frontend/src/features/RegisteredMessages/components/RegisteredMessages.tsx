@@ -1,5 +1,6 @@
 import { useFragment } from '__generated__/query';
 import styled from 'styled-components';
+import { TextButton } from 'ui';
 import { RegisteredMessageItem } from './RegisteredMessageItem';
 import { MaskedRegisteredMessages, RegisteredMessagesFragment } from './registeredMessagesFragment.query';
 import { RegisterMessageButton } from './RegisterMessageButton';
@@ -9,6 +10,7 @@ interface RegisteredMessagesProps {
     registeredMessagesFragment: MaskedRegisteredMessages[];
     onCreateRegisterMessage: (title: string, body: string) => void;
     onPostMessage: (message: string) => void;
+    onUpdate: () => void;
 }
 
 const Container = styled.div`
@@ -30,7 +32,7 @@ const ButtonWrapper = styled.div`
 const useRegisteredMessagesFragment = (registeredMessagesFragment: MaskedRegisteredMessages) =>
     useFragment(RegisteredMessagesFragment, registeredMessagesFragment);
 
-export const RegisteredMessages = ({registeredMessagesFragment, onCreateRegisterMessage, onPostMessage }: RegisteredMessagesProps) => {
+export const RegisteredMessages = ({registeredMessagesFragment, onCreateRegisterMessage, onPostMessage, onUpdate }: RegisteredMessagesProps) => {
 
     const registeredMessages = registeredMessagesFragment.map(useRegisteredMessagesFragment);
 
@@ -39,6 +41,7 @@ export const RegisteredMessages = ({registeredMessagesFragment, onCreateRegister
             <RegisterMessageButton 
                 onCreateRegisterMessage={onCreateRegisterMessage}>
             </RegisterMessageButton>
+            <TextButton buttonType='default' onClick={onUpdate} text='更新' />
             <Container>
                 {registeredMessages.map((registeredMessage) => (
                     <RegisteredMessageItem message={registeredMessage} handlePostMessage={onPostMessage}></RegisteredMessageItem>

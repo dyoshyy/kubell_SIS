@@ -17,9 +17,11 @@ export const RegisteredMessagesContainer = ({groupChatId}: RegisteredMessagesCon
     // const handleRegisterMessage = (title: string, body: string) => {
     //     setRegisteredMessages([...registeredMessages, { id: '0', title: title, body: body }]);
     // }
-    const { data, loading, error } = useQuery(GetRegtisteredMessagesQuery, {
+    const { data, loading, error, refetch } = useQuery(GetRegtisteredMessagesQuery, {
       variables: {}
     });
+
+    const handleUpdate = () => refetch();
 
     const [postMessage] = useMutation(PostMessageMutation, {
         context: { clientName: "command" },
@@ -68,6 +70,7 @@ export const RegisteredMessagesContainer = ({groupChatId}: RegisteredMessagesCon
           registeredMessagesFragment={data.getRegisteredMessages}
           onCreateRegisterMessage={handleRegisterMessage} 
           onPostMessage={handlePostMessage}
+          onUpdate={handleUpdate}
         />
     </div>
     )
