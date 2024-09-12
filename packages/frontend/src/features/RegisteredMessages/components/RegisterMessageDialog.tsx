@@ -1,10 +1,18 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { gutterBy } from '../../../styles/spaces';
 import { TextButton } from '../../../ui';
+import RepeatModal from './RepeatModal'; // 繰り返し設定のモーダルをインポート
 
 interface Props {
-  onCreateRegisterMessage: (title: string, body: string) => void;
+  onCreateRegisterMessage: (
+    title: string,
+    body: string,
+    cronExpression: string,
+    startDate: string,
+    frequency: string,
+    time: string
+  ) => void;
   onClose: () => void;
 }
 
@@ -71,6 +79,36 @@ const TextAreaField = styled.textarea`
   }
 `;
 
+const FrequencyContainer = styled.div`
+  margin-bottom: ${gutterBy(2)};
+`;
+
+const Label = styled.label`
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+  margin-right: ${gutterBy(1)};
+`;
+
+const TimeInput = styled.input`
+  padding: ${gutterBy(1)};
+  font-size: 16px;
+  width: 80px;
+  text-align: center;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+`;
+
+const DateInput = styled.input`
+  padding: ${gutterBy(1)};
+  font-size: 16px;
+  width: 160px;
+  text-align: center;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  margin-bottom: ${gutterBy(2)};
+`;
+
 const ActionButtonContainer = styled.div`
   display: flex;
   justify-content: space-between;
@@ -92,8 +130,49 @@ const ActionButtonContainer = styled.div`
 `;
 
 export const RegisterMessage = ({ onClose, onCreateRegisterMessage }: Props) => {
-  const [title, setTitle] = useState("");
-  const [body, setBody] = useState("");
+  const [title, setTitle] = useState('');
+  const [body, setBody] = useState('');
+  const [selectedTime, setSelectedTime] = useState(''); // デフォルトを空に設定
+  const [startDate, setStartDate] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [repeatSettings, setRepeatSettings] = useState(null); // 繰り返し設定
+
+  // 両方の値が設定されたらモーダルを開く
+  useEffect(() => {
+    if (startDate && selectedTime) {
+      setIsModalOpen(true); // モーダルを開く
+    }
+  }, [startDate, selectedTime]);
+
+  const buildCronExpression = () => {
+    const [hours, minutes] = selectedTime.split(':');
+    let cronExpression = '* * * * *';
+
+    // 繰り返し設定に基づいてCron式を生成
+    if (repeatSettings) {
+      const { repeatType, selectedDays, repeatInterval } = repeatSettings;
+      switch (repeatType) {
+        case 'daily':
+          cronExpression = `${minutes} ${hours} */${repeatInterval} * *`;
+          break;
+        case 'weekly':
+          cronExpression = `${minutes} ${hours} * * ${selectedDays.join(',')}`;
+          break;
+        case 'monthly':
+          cronExpression = `${minutes} ${hours} 1 */${repeatInterval} *`;
+          break;
+        default:
+          cronExpression = '* * * * *';
+      }
+    }
+
+    return cronExpression;
+  };
+
+  const handleSaveRepeatSettings = (data: any) => {
+    setRepeatSettings(data);
+    setIsModalOpen(false); // モーダルを閉じる
+  };
 
   return (
     <Container>
@@ -109,14 +188,45 @@ export const RegisterMessage = ({ onClose, onCreateRegisterMessage }: Props) => 
         value={body}
         onChange={(e) => setBody(e.target.value)}
       />
+
+      <FrequencyContainer>
+        <Label>開始日程:</Label>
+        <DateInput
+          type="date"
+          value={startDate}
+          onChange={(e) => setStartDate(e.target.value)}
+        />
+        <Label>実行時刻:</Label>
+        <TimeInput
+          type="time"
+          value={selectedTime}
+          onChange={(e) => setSelectedTime(e.target.value)}
+        />
+      </FrequencyContainer>
+
+      {isModalOpen && (
+        <RepeatModal
+          onClose={() => setIsModalOpen(false)}
+          onSave={handleSaveRepeatSettings}
+        />
+      )}
+
       <ActionButtonContainer>
-        <TextButton 
-          buttonType="danger" 
-          text="登録" 
+        <TextButton
+          buttonType="danger"
+          text="登録"
           onClick={() => {
-            onCreateRegisterMessage(title, body)
-            onClose()
-          }} />
+            onCreateRegisterMessage(
+              title,
+              body,
+              buildCronExpression(),
+              startDate,
+              'repeat',
+              selectedTime
+            );
+            onClose();
+          }}
+        />
         <TextButton buttonType="danger" text="キャンセル" onClick={onClose} />
       </ActionButtonContainer>
     </Container>

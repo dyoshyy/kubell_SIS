@@ -1,9 +1,9 @@
+import type { User } from "local-service/auth/models";
 import { useRef } from "react";
 import styled from "styled-components";
-import { CheckBox, TextButton, TextField } from "ui/";
-import type { User } from "local-service/auth/models";
 import { gutterBy } from "styles/spaces";
 import * as Typography from "styles/typography";
+import { CheckBox, TextButton, TextField } from "ui/";
 
 interface Props {
   users: User[];
@@ -62,6 +62,7 @@ export function CreateGroupChat({ users, onCreate, onClose }: Props) {
         placeholder="グループチャットのタイトル"
         onInput={handleInputTitle}
       />
+      
       <Caption>
         グループチャットに所属させるユーザーを選択してください：
       </Caption>

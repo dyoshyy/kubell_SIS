@@ -14,6 +14,7 @@ class RegisteredMessageQueryResolver {
   @Query(() => [RegisteredMessageOutput])
   async getRegisteredMessages(
     @Ctx() { prisma }: QueryContext,
+    @Arg("ownerId") userAccountId: string,
   ): Promise<RegisteredMessageOutput[]> {
     const registeredMessages: RegisteredMessageOutput[] = await prisma.$queryRaw<RegisteredMessageOutput[]>`
         SELECT
@@ -23,7 +24,9 @@ class RegisteredMessageQueryResolver {
             rm.created_at as createdAt,
             rm.updated_at as updatedAt
         FROM
-            registered_messages AS rm`;
+            registered_messages AS rm
+        WHERE
+            rm.owner_id = ${userAccountId}`;
     this.logger.debug("getRegisteredMessages:", registeredMessages);
     return registeredMessages;
   }

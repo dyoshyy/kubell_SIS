@@ -151,6 +151,7 @@ class ReadModelUpdater {
           this.logger.debug(`event = ${typedEvent.toString()}`);
           this.registeredMessageDao.insertRegisteredMessage(
             typedEvent.aggregateId,
+            typedEvent.ownerId,
             typedEvent.title,
             typedEvent.body,
             new Date(),

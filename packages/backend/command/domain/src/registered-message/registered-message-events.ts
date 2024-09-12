@@ -1,10 +1,9 @@
 import * as Infrastructure from "cqrs-es-example-js-infrastructure";
 import { Event } from "event-store-adapter-js";
-import { RegisteredMessageBody } from "./registered-message-body";
+import { convertJSONToUserAccountId, UserAccountId } from "../user-account";
+import { convertJSONToRegisteredMessageBody, RegisteredMessageBody } from "./registered-message-body";
 import { convertJSONToRegisteredMessageId, RegisteredMessageId } from "./registered-message-id";
-import { convertJSONToRegisteredMessageBody } from "./registered-message-body"
-import { convertJSONToRegisteredMessageTitle } from "./registered-message-title"
-import { RegisteredMessageTitle } from "./registered-message-title";
+import { convertJSONToRegisteredMessageTitle, RegisteredMessageTitle } from "./registered-message-title";
 
 type RegisteredMessageEventTypeSymbol =
   | typeof RegisteredMessageCreatedTypeSymbol;
@@ -26,6 +25,7 @@ class RegisteredMessageCreated implements RegisteredMessageEvent {
     public readonly aggregateId: RegisteredMessageId,
     public readonly title: RegisteredMessageTitle,
     public readonly body: RegisteredMessageBody,
+    public readonly ownerId: UserAccountId,
     public readonly sequenceNumber: number,
     public readonly occurredAt: Date,
   ) {}
@@ -40,6 +40,7 @@ class RegisteredMessageCreated implements RegisteredMessageEvent {
     aggregateId: RegisteredMessageId,
     title: RegisteredMessageTitle,
     body: RegisteredMessageBody,
+    ownerId: UserAccountId,
     sequenceNumber: number,
   ): RegisteredMessageCreated {
     return new RegisteredMessageCreated(
@@ -47,6 +48,7 @@ class RegisteredMessageCreated implements RegisteredMessageEvent {
       aggregateId,
       title,
       body,
+      ownerId,
       sequenceNumber,
       new Date(),
     );
@@ -58,6 +60,7 @@ function convertJSONToRegisteredMessageEvent(json: any): RegisteredMessageEvent 
   const id = convertJSONToRegisteredMessageId(json.data.aggregateId);
   const title = convertJSONToRegisteredMessageTitle(json.data.title);
   const body = convertJSONToRegisteredMessageBody(json.data.body);
+  const ownerId = convertJSONToUserAccountId(json.data.ownerId);
 
   switch (json.type) {
     case "RegisteredMessageCreated": {
@@ -65,6 +68,7 @@ function convertJSONToRegisteredMessageEvent(json: any): RegisteredMessageEvent 
         id,
         title,
         body,
+        ownerId,
         json.data.sequenceNumber,
       );
     }

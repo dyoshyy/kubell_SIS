@@ -3,6 +3,7 @@ import { RegisteredMessage } from '../types';
 
 interface RegisteredMessageItemProps {
     message: RegisteredMessage;
+    groupChatId: string;
     handlePostMessage: (message: string) => void;
 }
 
@@ -11,33 +12,45 @@ const MessageContainer = styled.div`
   padding: 10px;
   margin: 10px 0;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
 `;
 
 const MessageContent = styled.div`
-  flex: 1;
+  margin-bottom: 10px;
+`;
+
+const MetaData = styled.div`
+  font-size: 12px;
+  color: #555;
 `;
 
 const SendButton = styled.button`
   padding: 5px 10px;
-  margin-left: 10px;
   background-color: #007bff;
   color: white;
   border: none;
   cursor: pointer;
+  align-self: flex-end;
   &:hover {
     background-color: #0056b3;
   }
 `;
 
-export const RegisteredMessageItem = ({ message, handlePostMessage }: RegisteredMessageItemProps) => {
+export const RegisteredMessageItem = ({ message, groupChatId, handlePostMessage }: RegisteredMessageItemProps) => {
     return (
         <MessageContainer>
             <MessageContent>
-                <div>{message.title}</div>
+                <div><strong>タイトル:</strong> {message.title}</div>
             </MessageContent>
-            <SendButton onClick={() => {handlePostMessage(message.body)}}>送信</SendButton>
+            <MetaData>
+                <div>開始日: {message.startDate}</div>
+                <div>頻度: {message.frequency}</div>
+                <div>時刻: {message.time}</div>
+            </MetaData>
+            {groupChatId &&
+              <SendButton onClick={() => {handlePostMessage(message.body)}}>送信</SendButton>
+            }
+            
         </MessageContainer>
     );
-}
+};

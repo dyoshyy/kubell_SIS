@@ -51,6 +51,7 @@ model RegisteredMessages {
   id         String @id @db.VarChar(64)
   title      String @db.VarChar(64)
   body       String @db.Text
+  ownerId    String @db.VarChar(64)
   createdAt  DateTime @db.DateTime(0) @map("created_at")
   updatedAt  DateTime @db.DateTime(0) @map("updated_at")
 

@@ -6,8 +6,9 @@ import { RegisterMessageButton } from './RegisterMessageButton';
 
 
 interface RegisteredMessagesProps {
+    groupChatId: string;
     registeredMessagesFragment: MaskedRegisteredMessages[];
-    onCreateRegisterMessage: (title: string, body: string) => void;
+    onCreateRegisterMessage: (title: string, body: string, cronExpression: string, startDate: string, frequency: string, time: string) => void;
     onPostMessage: (message: string) => void;
 }
 
@@ -19,18 +20,20 @@ const Container = styled.div`
   background-color: #f9f9f9;
   border-radius: 8px;
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+ 
 `;
 
-const ButtonWrapper = styled.div`
-  display: flex;
-  justify-content: flex-start; /* Align the button to the left */
-  margin-bottom: 16px;
-`;
+
+// const ButtonWrapper = styled.div`
+//   display: flex;
+//   justify-content: flex-start; /* Align the button to the left */
+//   margin-bottom: 16px;
+// `;
 
 const useRegisteredMessagesFragment = (registeredMessagesFragment: MaskedRegisteredMessages) =>
     useFragment(RegisteredMessagesFragment, registeredMessagesFragment);
 
-export const RegisteredMessages = ({registeredMessagesFragment, onCreateRegisterMessage, onPostMessage }: RegisteredMessagesProps) => {
+export const RegisteredMessages = ({groupChatId, registeredMessagesFragment, onCreateRegisterMessage, onPostMessage }: RegisteredMessagesProps) => {
 
     const registeredMessages = registeredMessagesFragment.map(useRegisteredMessagesFragment);
 
@@ -41,7 +44,7 @@ export const RegisteredMessages = ({registeredMessagesFragment, onCreateRegister
             </RegisterMessageButton>
             <Container>
                 {registeredMessages.map((registeredMessage) => (
-                    <RegisteredMessageItem message={registeredMessage} handlePostMessage={onPostMessage}></RegisteredMessageItem>
+                    <RegisteredMessageItem message={registeredMessage} groupChatId={groupChatId} handlePostMessage={onPostMessage}></RegisteredMessageItem>
                 ))}
             </Container>
         </div>

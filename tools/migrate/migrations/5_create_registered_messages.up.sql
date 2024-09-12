@@ -1,6 +1,7 @@
 CREATE TABLE `registered_messages`
 (
     `id`         varchar(64) NOT NULL,
+    `owner_id`   varchar(64) NOT NULL,
     `title`       varchar(64) NOT NULL,
     `body`       varchar(256) NOT NULL,
     `created_at` datetime    NOT NULL,
