@@ -63,6 +63,8 @@ const RegisteredMessagesWrapper = styled.div`
   display: flex;
   flex-direction: column;
   border-left: 1px solid ${LAYER_2}; /* Add a subtle divider */
+   max-height: 100%; /* Set a maximum height */
+  overflow-y: auto;  /* Enable vertical scrolling */
 `;
 
 // const MessagesList = styled.div`
