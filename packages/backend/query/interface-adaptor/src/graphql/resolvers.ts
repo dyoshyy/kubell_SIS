@@ -23,9 +23,7 @@ class RegisteredMessageQueryResolver {
             rm.created_at as createdAt,
             rm.updated_at as updatedAt
         FROM
-            registered_messages AS rm
-        WHERE
-            rm.disabled = 'false'`;
+            registered_messages AS rm`;
     this.logger.debug("getRegisteredMessages:", registeredMessages);
     return registeredMessages;
   }
