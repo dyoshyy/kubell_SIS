@@ -154,6 +154,8 @@ class ReadModelUpdater {
             typedEvent.ownerId,
             typedEvent.title,
             typedEvent.body,
+            typedEvent.groupChatId,
+            typedEvent.cronFormular,
             new Date(),
           );
           this.logger.debug("inserted registered message");
