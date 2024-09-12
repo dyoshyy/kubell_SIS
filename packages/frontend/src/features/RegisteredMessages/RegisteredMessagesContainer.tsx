@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from '@apollo/client';
 import { PostMessageMutation } from 'features/GroupChat/apis/postMessage.command';
 import { useSignedInUser } from 'local-service/auth/hooks';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { CreateRegisteredMessageMutation } from './api/createRegisteredMessage.command';
 import { GetRegtisteredMessagesQuery } from './api/getRegisteredMessages.query';
 import { RegisteredMessages } from './components/RegisteredMessages';
@@ -17,9 +17,14 @@ export const RegisteredMessagesContainer = ({groupChatId}: RegisteredMessagesCon
     // const handleRegisterMessage = (title: string, body: string) => {
     //     setRegisteredMessages([...registeredMessages, { id: '0', title: title, body: body }]);
     // }
-    const { data, loading, error } = useQuery(GetRegtisteredMessagesQuery, {
+    const { data, loading, error, refetch } = useQuery(GetRegtisteredMessagesQuery, {
       variables: {}
     });
+
+    useEffect(() => {
+      const timer = globalThis.setInterval(refetch, 2000);
+      return () => globalThis.clearInterval(timer);
+    }, [refetch]);
 
     const [postMessage] = useMutation(PostMessageMutation, {
         context: { clientName: "command" },
@@ -64,7 +69,8 @@ export const RegisteredMessagesContainer = ({groupChatId}: RegisteredMessagesCon
 
     return (
       <div style={{ width: '100%' }}> {}
-        <RegisteredMessages 
+        <RegisteredMessages
+          groupChatId={groupChatId}
           registeredMessagesFragment={data.getRegisteredMessages}
           onCreateRegisterMessage={handleRegisterMessage} 
           onPostMessage={handlePostMessage}

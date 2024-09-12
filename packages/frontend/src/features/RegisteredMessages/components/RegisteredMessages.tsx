@@ -6,6 +6,7 @@ import { RegisterMessageButton } from './RegisterMessageButton';
 
 
 interface RegisteredMessagesProps {
+    groupChatId: string;
     registeredMessagesFragment: MaskedRegisteredMessages[];
     onCreateRegisterMessage: (title: string, body: string, cronExpression: string, startDate: string, frequency: string, time: string) => void;
     onPostMessage: (message: string) => void;
@@ -32,7 +33,7 @@ const Container = styled.div`
 const useRegisteredMessagesFragment = (registeredMessagesFragment: MaskedRegisteredMessages) =>
     useFragment(RegisteredMessagesFragment, registeredMessagesFragment);
 
-export const RegisteredMessages = ({registeredMessagesFragment, onCreateRegisterMessage, onPostMessage }: RegisteredMessagesProps) => {
+export const RegisteredMessages = ({groupChatId, registeredMessagesFragment, onCreateRegisterMessage, onPostMessage }: RegisteredMessagesProps) => {
 
     const registeredMessages = registeredMessagesFragment.map(useRegisteredMessagesFragment);
 
@@ -43,7 +44,7 @@ export const RegisteredMessages = ({registeredMessagesFragment, onCreateRegister
             </RegisterMessageButton>
             <Container>
                 {registeredMessages.map((registeredMessage) => (
-                    <RegisteredMessageItem message={registeredMessage} handlePostMessage={onPostMessage}></RegisteredMessageItem>
+                    <RegisteredMessageItem message={registeredMessage} groupChatId={groupChatId} handlePostMessage={onPostMessage}></RegisteredMessageItem>
                 ))}
             </Container>
         </div>

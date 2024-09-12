@@ -3,6 +3,7 @@ import { RegisteredMessage } from '../types';
 
 interface RegisteredMessageItemProps {
     message: RegisteredMessage;
+    groupChatId: string;
     handlePostMessage: (message: string) => void;
 }
 
@@ -35,7 +36,7 @@ const SendButton = styled.button`
   }
 `;
 
-export const RegisteredMessageItem = ({ message, handlePostMessage }: RegisteredMessageItemProps) => {
+export const RegisteredMessageItem = ({ message, groupChatId, handlePostMessage }: RegisteredMessageItemProps) => {
     return (
         <MessageContainer>
             <MessageContent>
@@ -46,7 +47,10 @@ export const RegisteredMessageItem = ({ message, handlePostMessage }: Registered
                 <div>頻度: {message.frequency}</div>
                 <div>時刻: {message.time}</div>
             </MetaData>
-            <SendButton onClick={() => {handlePostMessage(message.body)}}>送信</SendButton>
+            {groupChatId &&
+              <SendButton onClick={() => {handlePostMessage(message.body)}}>送信</SendButton>
+            }
+            
         </MessageContainer>
     );
 };

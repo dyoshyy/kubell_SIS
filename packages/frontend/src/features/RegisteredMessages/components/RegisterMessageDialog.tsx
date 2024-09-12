@@ -1,10 +1,18 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { gutterBy } from '../../../styles/spaces';
 import { TextButton } from '../../../ui';
+import RepeatModal from './RepeatModal'; // 繰り返し設定のモーダルをインポート
 
 interface Props {
-  onCreateRegisterMessage: (title: string, body: string, cronExpression: string, startDate: string, frequency: string, time: string) => void;
+  onCreateRegisterMessage: (
+    title: string,
+    body: string,
+    cronExpression: string,
+    startDate: string,
+    frequency: string,
+    time: string
+  ) => void;
   onClose: () => void;
 }
 
@@ -82,13 +90,6 @@ const Label = styled.label`
   margin-right: ${gutterBy(1)};
 `;
 
-const SelectField = styled.select`
-  padding: ${gutterBy(1)};
-  font-size: 16px;
-  border-radius: 4px;
-  border: 1px solid #ccc;
-`;
-
 const TimeInput = styled.input`
   padding: ${gutterBy(1)};
   font-size: 16px;
@@ -129,25 +130,48 @@ const ActionButtonContainer = styled.div`
 `;
 
 export const RegisterMessage = ({ onClose, onCreateRegisterMessage }: Props) => {
-  const [title, setTitle] = useState("");
-  const [body, setBody] = useState("");
-  const [frequencyType, setFrequencyType] = useState("daily");
-  const [selectedTime, setSelectedTime] = useState("09:00");
-  const [startDate, setStartDate] = useState("");
+  const [title, setTitle] = useState('');
+  const [body, setBody] = useState('');
+  const [selectedTime, setSelectedTime] = useState(''); // デフォルトを空に設定
+  const [startDate, setStartDate] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [repeatSettings, setRepeatSettings] = useState(null); // 繰り返し設定
+
+  // 両方の値が設定されたらモーダルを開く
+  useEffect(() => {
+    if (startDate && selectedTime) {
+      setIsModalOpen(true); // モーダルを開く
+    }
+  }, [startDate, selectedTime]);
 
   const buildCronExpression = () => {
-    const [hours, minutes] = selectedTime.split(":");
+    const [hours, minutes] = selectedTime.split(':');
+    let cronExpression = '* * * * *';
 
-    switch (frequencyType) {
-      case "daily":
-        return `${minutes} ${hours} * * *`; // Every day at the specified time
-      case "weekly":
-        return `${minutes} ${hours} * * 1`; // Every Monday at the specified time
-      case "monthly":
-        return `${minutes} ${hours} 1 * *`; // Every 1st of the month at the specified time
-      default:
-        return "* * * * *";
+    // 繰り返し設定に基づいてCron式を生成
+    if (repeatSettings) {
+      const { repeatType, selectedDays, repeatInterval } = repeatSettings;
+      switch (repeatType) {
+        case 'daily':
+          cronExpression = `${minutes} ${hours} */${repeatInterval} * *`;
+          break;
+        case 'weekly':
+          cronExpression = `${minutes} ${hours} * * ${selectedDays.join(',')}`;
+          break;
+        case 'monthly':
+          cronExpression = `${minutes} ${hours} 1 */${repeatInterval} *`;
+          break;
+        default:
+          cronExpression = '* * * * *';
+      }
     }
+
+    return cronExpression;
+  };
+
+  const handleSaveRepeatSettings = (data: any) => {
+    setRepeatSettings(data);
+    setIsModalOpen(false); // モーダルを閉じる
   };
 
   return (
@@ -172,16 +196,7 @@ export const RegisterMessage = ({ onClose, onCreateRegisterMessage }: Props) => 
           value={startDate}
           onChange={(e) => setStartDate(e.target.value)}
         />
-      </FrequencyContainer>
-
-      <FrequencyContainer>
-        <Label>頻度：</Label>
-        <SelectField value={frequencyType} onChange={(e) => setFrequencyType(e.target.value)}>
-          <option value="daily">毎日</option>
-          <option value="weekly">毎週</option>
-          <option value="monthly">毎月</option>
-        </SelectField>
-        <Label>実行時刻：</Label>
+        <Label>実行時刻:</Label>
         <TimeInput
           type="time"
           value={selectedTime}
@@ -189,12 +204,26 @@ export const RegisterMessage = ({ onClose, onCreateRegisterMessage }: Props) => 
         />
       </FrequencyContainer>
 
+      {isModalOpen && (
+        <RepeatModal
+          onClose={() => setIsModalOpen(false)}
+          onSave={handleSaveRepeatSettings}
+        />
+      )}
+
       <ActionButtonContainer>
         <TextButton
           buttonType="danger"
           text="登録"
           onClick={() => {
-            onCreateRegisterMessage(title, body, buildCronExpression(), startDate, frequencyType, selectedTime);
+            onCreateRegisterMessage(
+              title,
+              body,
+              buildCronExpression(),
+              startDate,
+              'repeat',
+              selectedTime
+            );
             onClose();
           }}
         />
@@ -203,5 +232,3 @@ export const RegisterMessage = ({ onClose, onCreateRegisterMessage }: Props) => 
     </Container>
   );
 };
-
-  
