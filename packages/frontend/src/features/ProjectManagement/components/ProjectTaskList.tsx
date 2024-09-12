@@ -5,10 +5,9 @@ import { Project, Task, TaskState } from '../types';
 import {
   closestCenter,
   DndContext,
-  DragOverlay,
   PointerSensor,
   useSensor,
-  useSensors,
+  useSensors
 } from '@dnd-kit/core';
 import {
   SortableContext,
@@ -42,7 +41,7 @@ export const ProjectTaskList = ({project}: ProjectTaskListProps) => {
     const [todoList, setTodoList] = useState<List|null>(null);
     const [doneList, setDoneList] = useState<List|null>(null);
 
-    const [activeId, setActiveId] = useState<string|null>(null);
+    // const [activeId, setActiveId] = useState<string|null>(null);
 
     useEffect(() => {
       setTodoList({id: 'todo_list', items: project.tasks.filter((task) => task.state == TaskState.Todo)});
@@ -126,9 +125,9 @@ export const ProjectTaskList = ({project}: ProjectTaskListProps) => {
         </div>
       </ListContainerWrapper>
 
-      <DragOverlay>
+      {/* <DragOverlay>
         {activeId ? <SortableItem id={activeId} name={activeId} /> : null}
-      </DragOverlay>
+      </DragOverlay> */}
     </DndContext>
     )
 }

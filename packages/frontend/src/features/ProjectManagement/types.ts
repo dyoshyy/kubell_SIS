@@ -9,10 +9,7 @@ export interface Task {
 }
 
 export interface Project {
-<<<<<<<<< Temporary merge branch 1
-=========
     id: string,
->>>>>>>>> Temporary merge branch 2
     name: string,
     tasks: Task[]
 }
