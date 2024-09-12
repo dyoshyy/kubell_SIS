@@ -31,7 +31,7 @@ class RenameGroupChatInput {
 }
 
 @InputType()
-export class AddMemberInput {
+class AddMemberInput {
   @Field()
   groupChatId!: string;
 
@@ -81,11 +81,27 @@ class DeleteMessageInput {
   executorId!: string;
 }
 
-export {
-  CreateGroupChatInput,
-  DeleteGroupChatInput,
-  RenameGroupChatInput,
-  RemoveMemberInput,
-  PostMessageInput,
-  DeleteMessageInput,
-};
+// Project
+
+@InputType()
+class CreateProjectInput {
+  @Field()
+  name!: string;
+
+  @Field()
+  leaderName!: string;
+}
+
+// RegisteredMessage
+
+@InputType()
+class CreateRegisteredMessageInput {
+  @Field()
+  title!: string;
+
+  @Field()
+  body!: string;
+}
+
+export { AddMemberInput, CreateGroupChatInput, CreateProjectInput, CreateRegisteredMessageInput, DeleteGroupChatInput, DeleteMessageInput, PostMessageInput, RemoveMemberInput, RenameGroupChatInput };
+

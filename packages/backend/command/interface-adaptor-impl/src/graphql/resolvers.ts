@@ -1,17 +1,3 @@
-import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
-import {
-  AddMemberInput,
-  CreateGroupChatInput,
-  DeleteGroupChatInput,
-  DeleteMessageInput,
-  PostMessageInput,
-  RemoveMemberInput,
-  RenameGroupChatInput,
-} from "./inputs";
-import {
-  GroupChatCommandProcessor,
-  ProcessNotFoundError,
-} from "cqrs-es-example-js-command-processor";
 import {
   GroupChatError,
   GroupChatId,
@@ -19,20 +5,44 @@ import {
   MemberRole,
   Message,
   MessageId,
-  UserAccountId,
+  ProjectLeaderName,
+  ProjectName,
+  RegisteredMessageBody,
+  RegisteredMessageTitle,
+  UserAccountId
 } from "cqrs-es-example-js-command-domain";
-import * as TE from "fp-ts/TaskEither";
-import { GroupChatOutput, HealthCheckOutput, MessageOutput } from "./outputs";
-import { GraphQLError } from "graphql/error";
-import { pipe } from "fp-ts/function";
-import { ProcessError } from "cqrs-es-example-js-command-processor";
 import { RepositoryError } from "cqrs-es-example-js-command-interface-adaptor-if";
+import {
+  GroupChatCommandProcessor,
+  ProcessError,
+  ProcessNotFoundError,
+  ProjectCommandProcessor,
+  RegisteredMessageCommandProcessor,
+} from "cqrs-es-example-js-command-processor";
 import { OptimisticLockError } from "event-store-adapter-js";
-import { TaskEither } from "fp-ts/TaskEither";
+import { pipe } from "fp-ts/function";
 import { Task } from "fp-ts/Task";
+import * as TE from "fp-ts/TaskEither";
+import { TaskEither } from "fp-ts/TaskEither";
+import { GraphQLError } from "graphql/error";
+import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
+import {
+  AddMemberInput,
+  CreateGroupChatInput,
+  CreateProjectInput,
+  CreateRegisteredMessageInput,
+  DeleteGroupChatInput,
+  DeleteMessageInput,
+  PostMessageInput,
+  RemoveMemberInput,
+  RenameGroupChatInput,
+} from "./inputs";
+import { GroupChatOutput, HealthCheckOutput, MessageOutput, ProjectOutput, RegisteredMessageOutput } from "./outputs";
 
 interface CommandContext {
   groupChatCommandProcessor: GroupChatCommandProcessor;
+  projectCommandProcessor: ProjectCommandProcessor;
+  registeredMessageCommandProcessor: RegisteredMessageCommandProcessor;
 }
 
 @Resolver()
@@ -69,7 +79,8 @@ class GroupChatCommandResolver {
       })),
       TE.mapLeft(this.convertToError),
       this.toTask(),
-    )();
+    )(
+    );
   }
 
   @Mutation(() => GroupChatOutput)
@@ -410,6 +421,186 @@ class GroupChatCommandResolver {
   }
 }
 
+@Resolver()
+class ProjectCommandResolver {
+  @Query(() => HealthCheckOutput)
+  async healthCheck(): Promise<HealthCheckOutput> {
+    return { value: "OK" };
+  }
+
+  @Mutation(() => ProjectOutput)
+  async createProject(
+    @Ctx() { projectCommandProcessor }: CommandContext,
+    @Arg("input") input: CreateProjectInput,
+  ): Promise<ProjectOutput> {
+    return pipe(
+      this.validateProjectName(input.name),
+      TE.chainW((validatedName) =>
+        pipe(
+          this.validateLeaderName(input.leaderName),
+          TE.map((validatedLeaderName) => ({
+            validatedName,
+            validatedLeaderName,
+          })),
+        ),
+      ),
+      TE.chainW(({ validatedName, validatedLeaderName }) =>
+        projectCommandProcessor.createProject(
+          validatedName,
+          validatedLeaderName,
+        ),
+        ),
+      TE.map((projectEvent) => ({
+        projectId: projectEvent.aggregateId.asString(),
+      })),
+      TE.mapLeft(this.convertToError),
+      this.toTask(),
+    )();
+  }
+
+  private convertToError(error: string | ProcessError): Error {
+    if (typeof error === "string") {
+      return new ValidationGraphQLError(error);
+    } else {
+      if (
+        error.cause instanceof RepositoryError &&
+        error.cause.cause instanceof OptimisticLockError
+      ) {
+        return new OptimisticLockingGraphQLError(
+          "A conflict occurred while attempting to save your changes. Please try again.",
+          error,
+        );
+      } else if (error.cause instanceof GroupChatError) {
+        return new DomainLogicGraphQLError(
+          "The request could not be processed due to a domain logic error. Please verify your data and try again.",
+          error,
+        );
+      } else if (error instanceof ProcessNotFoundError) {
+        return new NotFoundGraphQLError(
+          "The requested resource could not be found.",
+          error,
+        );
+      }
+      return new InternalServerGraphQLError(
+        "An unexpected error occurred. Please try again later.",
+        error,
+      );
+    }
+  }
+
+  private toTask<A, B>(): (_: TaskEither<A, B>) => Task<B> {
+    return TE.fold<A, B, B>(
+      (e) => () => Promise.reject(e),
+      (r) => () => Promise.resolve(r),
+    );
+  }
+
+  // private validateProjectId(value: string): TaskEither<string, ProjectId> {
+  //   return TE.fromEither(ProjectId.validate(value));
+  // }
+
+  private validateLeaderName(
+    value: string,
+  ): TaskEither<string, ProjectLeaderName> {
+    return TE.fromEither(ProjectLeaderName.validate(value));
+  }
+
+  private validateProjectName(
+    value: string,
+  ): TaskEither<string, ProjectName> {
+    return TE.fromEither(ProjectName.validate(value));
+  }
+
+}
+
+@Resolver()
+class RegisteredMessageCommandResolver {
+  @Query(() => HealthCheckOutput)
+  async healthCheck(): Promise<HealthCheckOutput> {
+    return { value: "OK" };
+  }
+
+  @Mutation(() => RegisteredMessageOutput)
+  async createRegisteredMessage(
+    @Ctx() { registeredMessageCommandProcessor }: CommandContext,
+    @Arg("input") input: CreateRegisteredMessageInput,
+  ): Promise<RegisteredMessageOutput> {
+    return pipe(
+      this.validateRegisteredMessageTitle(input.title),
+      TE.chainW((validatedTitle) =>
+        pipe(
+          this.validateRegisteredMessageBody(input.body),
+          TE.map((validatedBody) => ({
+            validatedTitle,
+            validatedBody,
+          })),
+        ),
+      ),
+      TE.chainW(({ validatedTitle, validatedBody }) =>
+        registeredMessageCommandProcessor.createRegisteredMessage(
+          validatedTitle,
+          validatedBody,
+        ),
+        ),
+      TE.map((registeredMessageEvent) => ({
+        registeredMessageId: registeredMessageEvent.aggregateId.asString(),
+      })),
+      TE.mapLeft(this.convertToError),
+      this.toTask(),
+    )();
+  }
+
+  private convertToError(error: string | ProcessError): Error {
+    if (typeof error === "string") {
+      return new ValidationGraphQLError(error);
+    } else {
+      if (
+        error.cause instanceof RepositoryError &&
+        error.cause.cause instanceof OptimisticLockError
+      ) {
+        return new OptimisticLockingGraphQLError(
+          "A conflict occurred while attempting to save your changes. Please try again.",
+          error,
+        );
+      } else if (error.cause instanceof GroupChatError) {
+        return new DomainLogicGraphQLError(
+          "The request could not be processed due to a domain logic error. Please verify your data and try again.",
+          error,
+        );
+      } else if (error instanceof ProcessNotFoundError) {
+        return new NotFoundGraphQLError(
+          "The requested resource could not be found.",
+          error,
+        );
+      }
+      return new InternalServerGraphQLError(
+        "An unexpected error occurred. Please try again later.",
+        error,
+      );
+    }
+  }
+
+  private toTask<A, B>(): (_: TaskEither<A, B>) => Task<B> {
+    return TE.fold<A, B, B>(
+      (e) => () => Promise.reject(e),
+      (r) => () => Promise.resolve(r),
+    );
+  }
+
+  private validateRegisteredMessageTitle(
+    value: string,
+  ): TaskEither<string, RegisteredMessageTitle> {
+    return TE.fromEither(RegisteredMessageTitle.validate(value));
+  }
+
+  private validateRegisteredMessageBody(
+    value: string,
+  ): TaskEither<string, RegisteredMessageBody> {
+    return TE.fromEither(RegisteredMessageBody.validate(value));
+}
+
+}
+
 class ValidationGraphQLError extends GraphQLError {
   constructor(message: string) {
     super(message, {
@@ -466,8 +657,6 @@ class InternalServerGraphQLError extends GraphQLError {
 
 export {
   CommandContext,
-  GroupChatCommandResolver,
-  ValidationGraphQLError,
-  OptimisticLockingGraphQLError,
-  InternalServerGraphQLError,
+  GroupChatCommandResolver, InternalServerGraphQLError, OptimisticLockingGraphQLError, ProjectCommandResolver, RegisteredMessageCommandResolver, ValidationGraphQLError
 };
+

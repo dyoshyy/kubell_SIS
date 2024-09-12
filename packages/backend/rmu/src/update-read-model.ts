@@ -1,7 +1,8 @@
 import { DynamoDBStreamEvent } from "aws-lambda";
-import { GroupChatDao } from "./group-chat-dao";
 import {
   convertJSONToGroupChatEvent,
+  convertJSONToProjectEvent,
+  convertJSONToRegisteredMessageEvent,
   GroupChatCreated,
   GroupChatCreatedTypeSymbol,
   GroupChatDeleted,
@@ -16,9 +17,16 @@ import {
   GroupChatMessagePostedTypeSymbol,
   GroupChatRenamed,
   GroupChatRenamedTypeSymbol,
+  ProjectCreated,
+  ProjectCreatedTypeSymbol,
+  RegisteredMessageCreated,
+  RegisteredMessageCreatedTypeSymbol,
 } from "cqrs-es-example-js-command-domain";
-import { ILogObj, Logger } from "tslog";
 import { TextDecoder } from "node:util";
+import { ILogObj, Logger } from "tslog";
+import { GroupChatDao } from "./group-chat-dao";
+import { ProjectDao } from "./project-dao";
+import { RegisteredMessageDao } from "./registered-message-dao";
 
 // import {Callback} from "aws-lambda/handler";
 
@@ -30,7 +38,11 @@ class ReadModelUpdater {
   private logger: Logger<ILogObj> = new Logger();
   private decoder: TextDecoder = new TextDecoder("utf-8");
 
-  private constructor(private readonly groupChatDao: GroupChatDao) {}
+  private constructor(
+    private readonly groupChatDao: GroupChatDao,
+    private readonly projectDao: ProjectDao,
+    private readonly registeredMessageDao: RegisteredMessageDao,
+  ) {}
 
   async updateReadModel(event: DynamoDBStreamEvent): Promise<void> {
     this.logger.info("EVENT: \n" + JSON.stringify(event, null, 2));
@@ -53,10 +65,22 @@ class ReadModelUpdater {
         new Uint8Array(base64EncodedPayload.split(",").map(Number)),
       );
       const payloadJson = JSON.parse(payload);
-      const groupChatEvent = convertJSONToGroupChatEvent(payloadJson);
-      switch (groupChatEvent.symbol) {
+      
+      let convertedEvent;
+
+      if (payloadJson.type.includes("GroupChat")) {
+        convertedEvent = convertJSONToGroupChatEvent(payloadJson);
+      }
+      else if (payloadJson.type.includes("Project")) {
+        convertedEvent = convertJSONToProjectEvent(payloadJson);
+      }
+      else {
+        convertedEvent = convertJSONToRegisteredMessageEvent(payloadJson);
+      }
+
+      switch (convertedEvent.symbol) {
         case GroupChatCreatedTypeSymbol: {
-          const typedEvent = groupChatEvent as GroupChatCreated;
+          const typedEvent = convertedEvent as GroupChatCreated;
           this.logger.debug(`event = ${typedEvent.toString()}`);
           this.groupChatDao.insertGroupChat(
             typedEvent.aggregateId,
@@ -68,14 +92,14 @@ class ReadModelUpdater {
           break;
         }
         case GroupChatDeletedTypeSymbol: {
-          const typedEvent = groupChatEvent as GroupChatDeleted;
+          const typedEvent = convertedEvent as GroupChatDeleted;
           this.logger.debug(`event = ${typedEvent.toString()}`);
           this.groupChatDao.deleteGroupChat(typedEvent.aggregateId, new Date());
           this.logger.debug("deleted group chat");
           break;
         }
         case GroupChatRenamedTypeSymbol: {
-          const typedEvent = groupChatEvent as GroupChatRenamed;
+          const typedEvent = convertedEvent as GroupChatRenamed;
           this.logger.debug(`event = ${typedEvent.toString()}`);
           this.groupChatDao.updateGroupChatName(
             typedEvent.aggregateId,
@@ -86,7 +110,7 @@ class ReadModelUpdater {
           break;
         }
         case GroupChatMemberAddedTypeSymbol: {
-          const typedEvent = groupChatEvent as GroupChatMemberAdded;
+          const typedEvent = convertedEvent as GroupChatMemberAdded;
           this.logger.debug(`event = ${typedEvent.toString()}`);
           this.groupChatDao.insertGroupChatMember(
             typedEvent.member.id,
@@ -99,7 +123,7 @@ class ReadModelUpdater {
           break;
         }
         case GroupChatMemberRemovedTypeSymbol: {
-          const typedEvent = groupChatEvent as GroupChatMemberRemoved;
+          const typedEvent = convertedEvent as GroupChatMemberRemoved;
           this.logger.debug(`event = ${typedEvent.toString()}`);
           this.groupChatDao.deleteMember(
             typedEvent.aggregateId,
@@ -109,7 +133,7 @@ class ReadModelUpdater {
           break;
         }
         case GroupChatMessagePostedTypeSymbol: {
-          const typedEvent = groupChatEvent as GroupChatMessagePosted;
+          const typedEvent = convertedEvent as GroupChatMessagePosted;
           this.logger.debug(`event = ${typedEvent.toString()}`);
           this.groupChatDao.insertMessage(
             typedEvent.aggregateId,
@@ -120,18 +144,50 @@ class ReadModelUpdater {
           break;
         }
         case GroupChatMessageDeletedTypeSymbol: {
-          const typedEvent = groupChatEvent as GroupChatMessageDeleted;
+          const typedEvent = convertedEvent as GroupChatMessageDeleted;
           this.logger.debug(`event = ${typedEvent.toString()}`);
           this.groupChatDao.deleteMessage(typedEvent.message.id, new Date());
           this.logger.debug("deleted message");
+          break;
+        }
+        case ProjectCreatedTypeSymbol: {
+          const typedEvent = convertedEvent as ProjectCreated;
+          this.logger.debug(`event = ${typedEvent.toString()}`);
+          this.projectDao.insertProject(
+            typedEvent.aggregateId,
+            typedEvent.name,
+            typedEvent.leaderName,
+            new Date(),
+          )
+          this.logger.debug("inserted project");
+          break;
+        }
+        case RegisteredMessageCreatedTypeSymbol: {
+          const typedEvent = convertedEvent as RegisteredMessageCreated;
+          this.logger.debug(`event = ${typedEvent.toString()}`);
+          this.registeredMessageDao.insertRegisteredMessage(
+            typedEvent.aggregateId,
+            typedEvent.title,
+            typedEvent.body,
+            new Date(),
+          );
+          this.logger.debug("inserted registered message");
           break;
         }
       }
     });
   }
 
-  static of(groupChatDao: GroupChatDao): ReadModelUpdater {
-    return new ReadModelUpdater(groupChatDao);
+  static of(
+    groupChatDao: GroupChatDao, 
+    projectDao: ProjectDao,
+    registeredMessageDao: RegisteredMessageDao,
+  ): ReadModelUpdater {
+    return new ReadModelUpdater(
+      groupChatDao, 
+      projectDao, 
+      registeredMessageDao
+    );
   }
 }
 

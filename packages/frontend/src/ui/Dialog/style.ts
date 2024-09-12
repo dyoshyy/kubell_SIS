@@ -17,5 +17,6 @@ export const Overlay = styled.div`
 export const Dialog = styled.div`
   position: relative;
   background-color: ${LAYER_0};
+  padding: 2%;
   z-index: calc(infinity);
 `;

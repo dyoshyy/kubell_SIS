@@ -1,4 +1,5 @@
 export const FONTSIZE_HEADER = "24px";
+export const FONTSIZE_HEADING = "20px";
 export const FONTSIZE_PARAGRAPH = "16px";
 export const FONTSIZE_CAPTION = "12px";
 

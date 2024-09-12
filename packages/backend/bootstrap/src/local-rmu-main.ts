@@ -13,7 +13,8 @@ import {
   DynamoDBStreamEvent,
   AttributeValue as LambdaAttributeValue,
 } from "aws-lambda";
-import { GroupChatDao, ReadModelUpdater } from "cqrs-es-example-js-rmu";
+import { GroupChatDao, ReadModelUpdater, RegisteredMessageDao } from "cqrs-es-example-js-rmu";
+import { ProjectDao } from "cqrs-es-example-js-rmu/src/project-dao";
 import { logger } from "./index";
 
 async function localRmuMain() {
@@ -94,8 +95,14 @@ async function localRmuMain() {
     logger.info("Params: " + e.params);
     logger.info("Duration: " + e.duration + "ms");
   });
-  const dao = GroupChatDao.of(prisma);
-  const readModelUpdater = ReadModelUpdater.of(dao);
+  const groupChatDao = GroupChatDao.of(prisma);
+  const projectDao = ProjectDao.of(prisma);
+  const registeredMessageDao = RegisteredMessageDao.of(prisma);
+  const readModelUpdater = ReadModelUpdater.of(
+    groupChatDao,
+    projectDao,
+    registeredMessageDao,
+  );
 
   for (;;) {
     await streamDriver(

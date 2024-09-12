@@ -4,16 +4,28 @@ import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import {
   convertJSONToGroupChat,
   convertJSONToGroupChatEvent,
+  convertJSONToProject,
+  convertJSONToProjectEvent,
+  convertJSONToRegisteredMessage,
+  convertJSONToRegisteredMessageEvent,
   GroupChat,
   GroupChatEvent,
   GroupChatId,
+  Project,
+  ProjectEvent,
+  ProjectId,
+  RegisteredMessage,
+  RegisteredMessageEvent,
+  RegisteredMessageId,
 } from "cqrs-es-example-js-command-domain";
 import {
   CommandContext,
   createCommandSchema,
   GroupChatRepositoryImpl,
+  ProjectRepositoryImpl,
+  RegisteredMessageRepositoryImpl,
 } from "cqrs-es-example-js-command-interface-adaptor-impl";
-import { GroupChatCommandProcessor } from "cqrs-es-example-js-command-processor";
+import { GroupChatCommandProcessor, ProjectCommandProcessor, RegisteredMessageCommandProcessor } from "cqrs-es-example-js-command-processor";
 import { EventStoreFactory } from "event-store-adapter-js";
 import { logger } from "./index";
 
@@ -71,7 +83,8 @@ async function writeApiMain() {
     dynamodbClient = new DynamoDBClient();
   }
 
-  const eventStore = EventStoreFactory.ofDynamoDB<
+  // groupchat
+  const groupChatEventStore = EventStoreFactory.ofDynamoDB<
     GroupChatId,
     GroupChat,
     GroupChatEvent
@@ -86,15 +99,57 @@ async function writeApiMain() {
     convertJSONToGroupChat,
   );
   const groupChatRepository =
-    GroupChatRepositoryImpl.of(eventStore).withRetention(100);
+    GroupChatRepositoryImpl.of(groupChatEventStore).withRetention(100);
   const groupChatCommandProcessor =
     GroupChatCommandProcessor.of(groupChatRepository);
+
+  // project
+  const ProjectEventStore = EventStoreFactory.ofDynamoDB<
+    ProjectId,
+    Project,
+    ProjectEvent
+  >(
+    dynamodbClient,
+    journalTableName,
+    snapshotTableName,
+    journalAidIndexName,
+    snapshotAidIndexName,
+    shardCount,
+    convertJSONToProjectEvent,
+    convertJSONToProject,
+  );
+  const projectRepository = ProjectRepositoryImpl.of(ProjectEventStore).withRetention(100);
+  const projectCommandProcessor = ProjectCommandProcessor.of(projectRepository);
+
+  // registered message
+  const registeredMessageEventStore = EventStoreFactory.ofDynamoDB<
+    RegisteredMessageId,
+    RegisteredMessage,
+    RegisteredMessageEvent
+  >(
+    dynamodbClient,
+    journalTableName,
+    snapshotTableName,
+    journalAidIndexName,
+    snapshotAidIndexName,
+    shardCount,
+    convertJSONToRegisteredMessageEvent,
+    convertJSONToRegisteredMessage,
+  );
+  const registeredMessageRepository = RegisteredMessageRepositoryImpl.of(
+    registeredMessageEventStore,
+  ).withRetention(100);
+  const registeredMessageCommandProcessor = RegisteredMessageCommandProcessor.of(
+    registeredMessageRepository,
+  );
 
   const schema = await createCommandSchema();
   const server = new ApolloServer<CommandContext>({ schema });
   const { url } = await startStandaloneServer(server, {
     context: async (): Promise<CommandContext> => ({
       groupChatCommandProcessor,
+      projectCommandProcessor,
+      registeredMessageCommandProcessor,
     }),
     listen: { host: apiHost, port: apiPort },
   });
