@@ -530,16 +530,23 @@ class RegisteredMessageCommandResolver {
       TE.chainW((validatedTitle) =>
         pipe(
           this.validateRegisteredMessageBody(input.body),
-          TE.map((validatedBody) => ({
-            validatedTitle,
-            validatedBody,
-          })),
+          TE.chainW((validatedBody) =>
+            pipe(
+              this.validateUserAccountId(input.owner_id),
+              TE.map((validatedOwnerId) => ({
+                validatedTitle,
+                validatedBody,
+                validatedOwnerId,
+              }),)
+            ),
+          ),
         ),
       ),
-      TE.chainW(({ validatedTitle, validatedBody }) =>
+      TE.chainW(({ validatedTitle, validatedBody, validatedOwnerId }) =>
         registeredMessageCommandProcessor.createRegisteredMessage(
           validatedTitle,
           validatedBody,
+          validatedOwnerId,
         ),
         ),
       TE.map((registeredMessageEvent) => ({
@@ -585,6 +592,12 @@ class RegisteredMessageCommandResolver {
       (e) => () => Promise.reject(e),
       (r) => () => Promise.resolve(r),
     );
+  }
+
+  private validateUserAccountId(
+    value: string,
+  ): TaskEither<string, UserAccountId> {
+    return TE.fromEither(UserAccountId.validate(value));
   }
 
   private validateRegisteredMessageTitle(
