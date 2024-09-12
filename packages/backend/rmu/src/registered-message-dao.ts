@@ -12,6 +12,7 @@ class RegisteredMessageDao {
     createdAt: Date,
   ) {
     return await this.prismaClient.$transaction(async (_prismaClient) => {
+      console.log(title)
       await _prismaClient.registeredMessages.create({
         data: {
           id: aggregateId.asString(),
