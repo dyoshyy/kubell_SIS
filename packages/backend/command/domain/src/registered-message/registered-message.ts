@@ -95,6 +95,8 @@ class RegisteredMessage implements Aggregate<RegisteredMessage, RegisteredMessag
         title, 
         body,
         ownerId,
+        groupChatId,
+        cronFormular,
         version
       ),
     ];
