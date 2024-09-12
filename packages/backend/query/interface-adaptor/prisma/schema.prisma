@@ -52,6 +52,8 @@ model RegisteredMessages {
   title      String @db.VarChar(64)
   body       String @db.Text
   ownerId    String @db.VarChar(64)
+  groupChatId    String @db.VarChar(64) @map("group_chat_id")
+  cronFormular String @db.VarChar(64) @map("cron_formular")
   createdAt  DateTime @db.DateTime(0) @map("created_at")
   updatedAt  DateTime @db.DateTime(0) @map("updated_at")
 

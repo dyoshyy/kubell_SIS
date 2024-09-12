@@ -7,6 +7,11 @@ class RegisteredMessageOutput {
 
   // @Field()
   // userAccountId!: string;
+  @Field()
+  groupChatId!: string;
+
+  @Field()
+  cronFormular!: string;
 
   @Field()
   title!: string;
