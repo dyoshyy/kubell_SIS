@@ -17,15 +17,12 @@ import {
   GroupChatMessagePostedTypeSymbol,
   GroupChatRenamed,
   GroupChatRenamedTypeSymbol,
-  ProjectCreated,
-  ProjectCreatedTypeSymbol,
   RegisteredMessageCreated,
-  RegisteredMessageCreatedTypeSymbol,
+  RegisteredMessageCreatedTypeSymbol
 } from "cqrs-es-example-js-command-domain";
 import { TextDecoder } from "node:util";
 import { ILogObj, Logger } from "tslog";
 import { GroupChatDao } from "./group-chat-dao";
-import { ProjectDao } from "./project-dao";
 import { RegisteredMessageDao } from "./registered-message-dao";
 
 // import {Callback} from "aws-lambda/handler";
@@ -40,7 +37,6 @@ class ReadModelUpdater {
 
   private constructor(
     private readonly groupChatDao: GroupChatDao,
-    private readonly projectDao: ProjectDao,
     private readonly registeredMessageDao: RegisteredMessageDao,
   ) {}
 
@@ -150,18 +146,6 @@ class ReadModelUpdater {
           this.logger.debug("deleted message");
           break;
         }
-        case ProjectCreatedTypeSymbol: {
-          const typedEvent = convertedEvent as ProjectCreated;
-          this.logger.debug(`event = ${typedEvent.toString()}`);
-          this.projectDao.insertProject(
-            typedEvent.aggregateId,
-            typedEvent.name,
-            typedEvent.leaderName,
-            new Date(),
-          )
-          this.logger.debug("inserted project");
-          break;
-        }
         case RegisteredMessageCreatedTypeSymbol: {
           const typedEvent = convertedEvent as RegisteredMessageCreated;
           this.logger.debug(`event = ${typedEvent.toString()}`);
@@ -180,12 +164,10 @@ class ReadModelUpdater {
 
   static of(
     groupChatDao: GroupChatDao, 
-    projectDao: ProjectDao,
     registeredMessageDao: RegisteredMessageDao,
   ): ReadModelUpdater {
     return new ReadModelUpdater(
       groupChatDao, 
-      projectDao, 
       registeredMessageDao
     );
   }
