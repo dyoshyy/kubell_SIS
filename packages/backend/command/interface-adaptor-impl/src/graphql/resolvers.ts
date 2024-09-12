@@ -620,7 +620,9 @@ class RegisteredMessageCommandResolver {
     return TE.fromEither(RegisteredMessageBody.validate(value));
   }
 
-  private validateGroupChatId(value: string): TaskEither<string, GroupChatId> {
+  private validateGroupChatId(
+    value: string
+  ): TaskEither<string, GroupChatId> {
     return TE.fromEither(GroupChatId.validate(value));
   }
 

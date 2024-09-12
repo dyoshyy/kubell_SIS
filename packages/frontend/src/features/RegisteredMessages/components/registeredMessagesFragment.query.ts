@@ -5,6 +5,7 @@ export const RegisteredMessagesFragment = gql(`
         id
         title
         body
+        cronFormular
     }
 `);
 

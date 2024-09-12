@@ -3,7 +3,7 @@ import { PostMessageMutation } from 'features/GroupChat/apis/postMessage.command
 import { useSignedInUser } from 'local-service/auth/hooks';
 import { useCallback, useEffect } from 'react';
 import { CreateRegisteredMessageMutation } from './api/createRegisteredMessage.command';
-import { GetRegtisteredMessagesQuery } from './api/getRegisteredMessages.query';
+import { GetRegisteredMessagesQuery } from './api/getRegisteredMessages.query';
 import { RegisteredMessages } from './components/RegisteredMessages';
 
 export interface RegisteredMessagesContainerProps {
@@ -17,7 +17,7 @@ export const RegisteredMessagesContainer = ({groupChatId}: RegisteredMessagesCon
     // const handleRegisterMessage = (title: string, body: string) => {
     //     setRegisteredMessages([...registeredMessages, { id: '0', title: title, body: body }]);
     // }
-    const { data, loading, error, refetch } = useQuery(GetRegtisteredMessagesQuery, {
+    const { data, loading, error, refetch } = useQuery(GetRegisteredMessagesQuery, {
          variables: {ownerId: myID}
     });
 
@@ -50,13 +50,15 @@ export const RegisteredMessagesContainer = ({groupChatId}: RegisteredMessagesCon
     );
 
     const handleRegisterMessage = useCallback(
-      (title: string, body: string) => {
+      (title: string, body: string, groupChatId: string, cronFormular: string) => {
         createRegisteredMessage({
           variables: {
             input: {
               title: title,
               body: body,
-              ownerId: myID
+              ownerId: myID,
+              groupChatId: groupChatId,
+              cronFormular: cronFormular
             },
           },
         });

@@ -1,10 +1,11 @@
+import { useState } from 'react';
 import styled from 'styled-components';
 import { RegisteredMessage } from '../types';
 
 interface RegisteredMessageItemProps {
-    message: RegisteredMessage;
+    registeredMessage: RegisteredMessage;
     groupChatId: string;
-    handlePostMessage: (message: string) => void;
+    handlePostMessage: (registeredMessage: string) => void;
 }
 
 const MessageContainer = styled.div`
@@ -17,6 +18,7 @@ const MessageContainer = styled.div`
 
 const MessageContent = styled.div`
   margin-bottom: 10px;
+  cursor: pointer;
 `;
 
 const MetaData = styled.div`
@@ -36,21 +38,86 @@ const SendButton = styled.button`
   }
 `;
 
-export const RegisteredMessageItem = ({ message, groupChatId, handlePostMessage }: RegisteredMessageItemProps) => {
+const ModalOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+`;
+
+const ModalContent = styled.div`
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 400px;
+  max-width: 100%;
+  position: relative;
+`;
+
+const CloseButton = styled.button`
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+`;
+
+export const RegisteredMessageItem = ({ registeredMessage, groupChatId, handlePostMessage }: RegisteredMessageItemProps) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  
+  const cronToTime = (cronFormular: string) => {
+    const [minute, hour, dayOfMonth, month, dayOfWeek] = cronFormular.split(' ').map(part => part.trim());
+
+    const timePart = `${hour.padStart(2, '0')}:${minute.padStart(2, '0')}`;
+    let dayPart = '';
+
+    if(dayOfWeek === '*') {
+      if(dayOfMonth === '*') {
+        dayPart = '毎日';
+      } else {
+        dayPart = `毎月${dayOfMonth}日`;
+      }
+    } else if (dayOfMonth === '*') {
+      const days = ['日', '月', '火', '水', '木', '金', '土'];
+      dayPart = `毎週${days[parseInt(dayOfWeek, 10)]}曜日`;
+    } else {
+      dayPart = `毎月${dayOfMonth}日`;
+    }
+
+    return `${dayPart}の${timePart}`;
+  } 
+
     return (
+      <>
         <MessageContainer>
-            <MessageContent>
-                <div><strong>タイトル:</strong> {message.title}</div>
+            <MessageContent onClick={() => setIsModalOpen(true)}>
+                <div><strong>タイトル:</strong> {registeredMessage.title}</div>
             </MessageContent>
             <MetaData>
-                <div>開始日: {message.startDate}</div>
-                <div>頻度: {message.frequency}</div>
-                <div>時刻: {message.time}</div>
+                <div>投稿日: {cronToTime(registeredMessage.cronFormular)}</div>
             </MetaData>
             {groupChatId &&
-              <SendButton onClick={() => {handlePostMessage(message.body)}}>送信</SendButton>
+              <SendButton onClick={() => {handlePostMessage(registeredMessage.body)}}>送信</SendButton>
             }
             
-        </MessageContainer>
+      </MessageContainer>
+      {isModalOpen && (
+        <ModalOverlay>
+          <ModalContent>
+            <CloseButton onClick={() => setIsModalOpen(false)}>✕</CloseButton>
+            <h3>タイトル: {registeredMessage.title}</h3>
+            <p><strong>本文: </strong>{registeredMessage.body}</p>
+          </ModalContent>
+        </ModalOverlay>
+      )}
+    </>
     );
 };

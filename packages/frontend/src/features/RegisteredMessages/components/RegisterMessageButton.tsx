@@ -3,7 +3,7 @@ import { TextButton, useDialog } from "ui";
 import { RegisterMessage } from "./RegisterMessageDialog";
 
 interface Props {
-  onCreateRegisterMessage: (title: string, body: string, cronExpression: string, startDate: string, frequency: string, time: string) => void;
+  onCreateRegisterMessage: (title: string, body: string, groupChatId:string, cronFormular:string ) => void;
 }
 
 // TextButton を引き継いだ RegisterButton コンポーネントを作成

@@ -1,18 +1,15 @@
-import { useEffect, useState } from 'react';
+import { useQuery } from '@apollo/client';
+import { useFragment } from '__generated__/query';
+import { GetGroupChatsQuery } from 'features/GroupChats/apis/getGroupChats.query';
+import { GroupChatsFragment, MaskedGroupChats } from 'features/GroupChats/components/groupChatsFragment.query';
+import { useSignedInUser } from 'local-service/auth/hooks';
+import { useState } from 'react';
 import styled from 'styled-components';
 import { gutterBy } from '../../../styles/spaces';
 import { TextButton } from '../../../ui';
-import RepeatModal from './RepeatModal'; // 繰り返し設定のモーダルをインポート
 
 interface Props {
-  onCreateRegisterMessage: (
-    title: string,
-    body: string,
-    cronExpression: string,
-    startDate: string,
-    frequency: string,
-    time: string
-  ) => void;
+  onCreateRegisterMessage: (title: string, body: string, groupChatId: string, cronFormular: string) => void;
   onClose: () => void;
 }
 
@@ -90,6 +87,13 @@ const Label = styled.label`
   margin-right: ${gutterBy(1)};
 `;
 
+const SelectField = styled.select`
+  padding: ${gutterBy(1)};
+  font-size: 16px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+`;
+
 const TimeInput = styled.input`
   padding: ${gutterBy(1)};
   font-size: 16px;
@@ -107,6 +111,12 @@ const DateInput = styled.input`
   border-radius: 4px;
   border: 1px solid #ccc;
   margin-bottom: ${gutterBy(2)};
+`;
+
+const FlexContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px; /* 間隔を設定 */
 `;
 
 const ActionButtonContainer = styled.div`
@@ -134,19 +144,34 @@ export const RegisterMessage = ({ onClose, onCreateRegisterMessage }: Props) => 
   const [body, setBody] = useState('');
   const [selectedTime, setSelectedTime] = useState(''); // デフォルトを空に設定
   const [startDate, setStartDate] = useState('');
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [repeatSettings, setRepeatSettings] = useState(null); // 繰り返し設定
+  const [groupChatId, setGroupChatId] = useState<string|null>(null);
+  const { id: myID } = useSignedInUser();
+  const [repeatSettings, setRepeatSettings] = useState({
+    repeatInterval: 1,
+    repeatType: 'daily',
+    selectedDays: [] as string[],
+  });
 
-  // 両方の値が設定されたらモーダルを開く
-  useEffect(() => {
-    if (startDate && selectedTime) {
-      setIsModalOpen(true); // モーダルを開く
-    }
-  }, [startDate, selectedTime]);
+   const daysOfWeek = ['日', '月', '火', '水', '木', '金', '土'];
+
+  const { data, loading, error } = useQuery(GetGroupChatsQuery, {
+    variables: { accountId: myID },
+  });
+
+  if (error) return <p>Error Happened</p>;
+
+  if (loading || data?.getGroupChats === undefined) return <></>;
+
+  const useGroupChatsFragment = (groupChatsFragment: MaskedGroupChats) => 
+    useFragment(GroupChatsFragment, groupChatsFragment);
+
+  const groupChats = data.getGroupChats.map(useGroupChatsFragment);
+  
 
   const buildCronExpression = () => {
     const [hours, minutes] = selectedTime.split(':');
     let cronExpression = '* * * * *';
+    
 
     // 繰り返し設定に基づいてCron式を生成
     if (repeatSettings) {
@@ -169,9 +194,13 @@ export const RegisterMessage = ({ onClose, onCreateRegisterMessage }: Props) => 
     return cronExpression;
   };
 
-  const handleSaveRepeatSettings = (data: any) => {
-    setRepeatSettings(data);
-    setIsModalOpen(false); // モーダルを閉じる
+   const handleDayToggle = (day: string) => {
+    setRepeatSettings((prev) => ({
+      ...prev,
+      selectedDays: prev.selectedDays.includes(day)
+        ? prev.selectedDays.filter((d) => d !== day)
+        : [...prev.selectedDays, day],
+    }));
   };
 
   return (
@@ -188,7 +217,6 @@ export const RegisterMessage = ({ onClose, onCreateRegisterMessage }: Props) => 
         value={body}
         onChange={(e) => setBody(e.target.value)}
       />
-
       <FrequencyContainer>
         <Label>開始日程:</Label>
         <DateInput
@@ -203,26 +231,70 @@ export const RegisterMessage = ({ onClose, onCreateRegisterMessage }: Props) => 
           onChange={(e) => setSelectedTime(e.target.value)}
         />
       </FrequencyContainer>
-
-      {isModalOpen && (
-        <RepeatModal
-          onClose={() => setIsModalOpen(false)}
-          onSave={handleSaveRepeatSettings}
-        />
-      )}
+      <FrequencyContainer> 
+        <FlexContainer>
+        <Label>繰り返し間隔: 毎</Label>
+        <SelectField
+          value={repeatSettings.repeatType}
+          onChange={(e) =>
+            setRepeatSettings((prev) => ({
+              ...prev,
+              repeatType: e.target.value,
+            }))
+          }
+        >
+          <option value="daily">日</option>
+          <option value="weekly">週</option>
+          <option value="monthly">月</option>
+          </SelectField>
+        </FlexContainer>
+        </FrequencyContainer>
+      <FrequencyContainer>
+        {repeatSettings.repeatType === 'weekly' && (
+          <div>
+            <Label>曜日を選択:</Label>
+            {daysOfWeek.map((day) => (
+              <label key={day}>
+                <input
+                  type="checkbox"
+                  checked={repeatSettings.selectedDays.includes(day)}
+                  onChange={() => handleDayToggle(day)}
+                />
+                {day}
+              </label>
+            ))}
+          </div>
+        )}
+      </FrequencyContainer>
+      <Label>グループチャット:</Label>
+      <SelectField
+        onLoad={() => {setGroupChatId(groupChats[0].id);}}
+        onChange={(e) => {
+          setGroupChatId(e.target.value)
+        }}
+      >
+        {groupChats.map((groupChat) => (
+          <option value={groupChat.id}>{groupChat.name}</option>
+        ))}
+      </SelectField>
 
       <ActionButtonContainer>
         <TextButton
           buttonType="danger"
           text="登録"
           onClick={() => {
+            if(!groupChatId) {
+              alert("送信先のグループチャットが選択されていません。");
+              return;
+            }
+
+            console.log(groupChatId);
+
             onCreateRegisterMessage(
               title,
               body,
-              buildCronExpression(),
-              startDate,
-              'repeat',
-              selectedTime
+              groupChatId,
+              buildCronExpression()
             );
             onClose();
           }}
