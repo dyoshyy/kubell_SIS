@@ -11,7 +11,7 @@ interface QueryContext {
 class RegisteredMessageQueryResolver {
   private readonly logger: Logger<ILogObj> = new Logger();
 
-  @Query(() => RegisteredMessageOutput)
+  @Query(() => [RegisteredMessageOutput])
   async getRegisteredMessages(
     @Ctx() { prisma }: QueryContext,
   ): Promise<RegisteredMessageOutput[]> {

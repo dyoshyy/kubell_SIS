@@ -8,4 +8,4 @@ export const RegisteredMessagesFragment = gql(`
     }
 `);
 
-export type MaskedRegisteredMessage = FragmentType<typeof RegisteredMessagesFragment>;
+export type MaskedRegisteredMessages = FragmentType<typeof RegisteredMessagesFragment>;
