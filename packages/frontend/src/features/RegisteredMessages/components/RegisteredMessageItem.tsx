@@ -19,6 +19,13 @@ const MessageContainer = styled.div`
 const MessageContent = styled.div`
   margin-bottom: 10px;
   cursor: pointer;
+  transition: background-color 0.3s, box-shadow 0.3s; 
+  
+  &:hover {
+    background-color: #f0f0f0; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    border-radius: 4px; 
+  }
 `;
 
 const MetaData = styled.div`

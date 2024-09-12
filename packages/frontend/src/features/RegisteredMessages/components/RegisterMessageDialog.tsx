@@ -144,8 +144,13 @@ export const RegisterMessage = ({ onClose, onCreateRegisterMessage }: Props) => 
   const [body, setBody] = useState('');
   const [selectedTime, setSelectedTime] = useState(''); // デフォルトを空に設定
   const [startDate, setStartDate] = useState('');
-  const [groupChatId, setGroupChatId] = useState<string|null>(null);
   const { id: myID } = useSignedInUser();
+
+  const { data, loading, error } = useQuery(GetGroupChatsQuery, {
+    variables: { accountId: myID },
+  });
+
+
   const [repeatSettings, setRepeatSettings] = useState({
     repeatInterval: 1,
     repeatType: 'daily',
@@ -154,9 +159,7 @@ export const RegisterMessage = ({ onClose, onCreateRegisterMessage }: Props) => 
 
    const daysOfWeek = ['日', '月', '火', '水', '木', '金', '土'];
 
-  const { data, loading, error } = useQuery(GetGroupChatsQuery, {
-    variables: { accountId: myID },
-  });
+
 
   if (error) return <p>Error Happened</p>;
 
@@ -166,7 +169,8 @@ export const RegisterMessage = ({ onClose, onCreateRegisterMessage }: Props) => 
     useFragment(GroupChatsFragment, groupChatsFragment);
 
   const groupChats = data.getGroupChats.map(useGroupChatsFragment);
-  
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const [groupChatId, setGroupChatId] = useState<string|null>(groupChats[0].id);
 
   const buildCronExpression = () => {
     const [hours, minutes] = selectedTime.split(':');
