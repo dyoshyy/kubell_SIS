@@ -2,6 +2,8 @@ import { Aggregate } from "event-store-adapter-js";
 import { RegisteredMessageBody } from "./registered-message-body";
 import { RegisteredMessageCreated, RegisteredMessageEvent } from "./registered-message-events";
 import { convertJSONToRegisteredMessageId, RegisteredMessageId } from "./registered-message-id";
+import { convertJSONToRegisteredMessageBody } from "./registered-message-body"
+import { convertJSONToRegisteredMessageTitle } from "./registered-message-title"
 import { RegisteredMessageTitle } from "./registered-message-title";
 
 const RegisteredMessageTypeSymbol = Symbol('RegisteredMessage');
@@ -104,10 +106,13 @@ class RegisteredMessage implements Aggregate<RegisteredMessage, RegisteredMessag
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function convertJSONToRegisteredMessage(json: any): RegisteredMessage {
   const id = convertJSONToRegisteredMessageId(json.data.id);
+  const title = convertJSONToRegisteredMessageTitle(json.data.title);
+  const body = convertJSONToRegisteredMessageBody(json.data.body);
+
   return RegisteredMessage.of({
     id,
-    title: json.data.title,
-    body: json.data.body,
+    title,
+    body,
     sequenceNumber: json.data.sequenceNumber,
     version: json.data.version,
   });

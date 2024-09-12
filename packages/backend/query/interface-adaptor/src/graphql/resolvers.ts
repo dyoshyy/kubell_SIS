@@ -1,10 +1,32 @@
 import { PrismaClient } from "@prisma/client";
 import { ILogObj, Logger } from "tslog";
 import { Arg, Ctx, Query, Resolver } from "type-graphql";
-import { GroupChatOutput, MemberOutput, MessageOutput, ProjectOutput } from "./outputs";
+import { GroupChatOutput, MemberOutput, MessageOutput, ProjectOutput, RegisteredMessageOutput } from "./outputs";
 
 interface QueryContext {
   prisma: PrismaClient;
+}
+
+@Resolver()
+class RegisteredMessageQueryResolver {
+  private readonly logger: Logger<ILogObj> = new Logger();
+
+  @Query(() => [RegisteredMessageOutput])
+  async getRegisteredMessages(
+    @Ctx() { prisma }: QueryContext,
+  ): Promise<RegisteredMessageOutput[]> {
+    const registeredMessages: RegisteredMessageOutput[] = await prisma.$queryRaw<RegisteredMessageOutput[]>`
+        SELECT
+            rm.id as id,
+            rm.title as title,
+            rm.body as body,
+            rm.created_at as createdAt,
+            rm.updated_at as updatedAt
+        FROM
+            registered_messages AS rm`;
+    this.logger.debug("getRegisteredMessages:", registeredMessages);
+    return registeredMessages;
+  }
 }
 
 @Resolver()
@@ -227,5 +249,5 @@ class GroupChatQueryResolver {
   }
 }
 
-export { GroupChatQueryResolver, ProjectQueryResolver, QueryContext };
+export { GroupChatQueryResolver, ProjectQueryResolver, QueryContext, RegisteredMessageQueryResolver };
 

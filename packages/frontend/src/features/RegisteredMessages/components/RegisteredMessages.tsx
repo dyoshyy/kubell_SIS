@@ -1,8 +1,12 @@
+import { useFragment } from '__generated__/query';
 import styled from 'styled-components';
+import { RegisteredMessageItem } from './RegisteredMessageItem';
+import { MaskedRegisteredMessages, RegisteredMessagesFragment } from './registeredMessagesFragment.query';
 import { RegisterMessageButton } from './RegisterMessageButton';
 
 
 interface RegisteredMessagesProps {
+    registeredMessagesFragment: MaskedRegisteredMessages[];
     onCreateRegisterMessage: (title: string, body: string) => void;
     onPostMessage: (message: string) => void;
 }
@@ -16,18 +20,23 @@ const Container = styled.div`
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
 `;
 
-export const RegisteredMessages = ({onCreateRegisterMessage, onPostMessage }: RegisteredMessagesProps) => {
+const useRegisteredMessagesFragment = (registeredMessagesFragment: MaskedRegisteredMessages) =>
+    useFragment(RegisteredMessagesFragment, registeredMessagesFragment);
+
+export const RegisteredMessages = ({registeredMessagesFragment, onCreateRegisterMessage, onPostMessage }: RegisteredMessagesProps) => {
+
+    const registeredMessages = registeredMessagesFragment.map(useRegisteredMessagesFragment);
 
     return (
         <div>
             <RegisterMessageButton 
                 onCreateRegisterMessage={onCreateRegisterMessage}>
             </RegisterMessageButton>
-            {/* <Container>
-                {messages.map((message) => (
-                    <RegisteredMessageItem message={message} onPostMessage={onPostMessage}></RegisteredMessageItem>
+            <Container>
+                {registeredMessages.map((registeredMessage) => (
+                    <RegisteredMessageItem message={registeredMessage} handlePostMessage={onPostMessage}></RegisteredMessageItem>
                 ))}
-            </Container> */}
+            </Container>
         </div>
     );
 };

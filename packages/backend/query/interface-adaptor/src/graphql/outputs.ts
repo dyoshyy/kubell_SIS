@@ -1,6 +1,27 @@
 import { Field, ObjectType } from "type-graphql";
 
 @ObjectType()
+class RegisteredMessageOutput {
+  @Field()
+  id!: string;
+
+  // @Field()
+  // userAccountId!: string;
+
+  @Field()
+  title!: string;
+
+  @Field()
+  body!: string;
+
+  @Field()
+  createdAt!: Date;
+
+  @Field()
+  updatedAt!: Date;
+}
+
+@ObjectType()
 class ProjectOutput {
   @Field()
   id!: string;
@@ -78,4 +99,4 @@ class MessageOutput {
   updatedAt!: Date;
 }
 
-export { GroupChatOutput, MemberOutput, MessageOutput, ProjectOutput };
+export { GroupChatOutput, MemberOutput, MessageOutput, ProjectOutput, RegisteredMessageOutput };
