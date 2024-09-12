@@ -59,6 +59,7 @@ model Projects {
 
 model RegisteredMessages {
   id         String @id @db.VarChar(64)
+  ownerId    String @db.VarChar(64) @map("owner_id")
   title      String @db.VarChar(64)
   body       String @db.Text
   createdAt  DateTime @db.DateTime(0) @map("created_at")
