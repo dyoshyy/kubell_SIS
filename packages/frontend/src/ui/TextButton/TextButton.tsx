@@ -15,10 +15,17 @@ const Button = styled.button<{ $buttonType: Props["buttonType"] }>`
   border-width: 1px;
   border-color: ${BLACK};
   color: ${FONTCOLOR_BLACK};
-  box-sizing: border-box;
-  cursor: pointer;
   font-size: ${FONTSIZE_PARAGRAPH};
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
   user-select: none;
+  box-sizing: border-box;
+  transition: opacity 0.2s ease-in-out;
+
+  &:hover {
+    opacity: 0.8;
+  }
 
   &:active {
     opacity: 0.9;

@@ -6,10 +6,10 @@ import {
 } from "@apollo/client";
 
 const commandLink = new HttpLink({
-  uri: "http://localhost:38080/query",
+  uri: "https://stunning-zebra-p4xjpr9r6wpc7xpj-38080.app.github.dev/query",
 });
 const queryLink = new HttpLink({
-  uri: "http://localhost:38082/query",
+  uri: "https://stunning-zebra-p4xjpr9r6wpc7xpj-38082.app.github.dev/query",
 });
 
 export const graphqlClient = new ApolloClient({

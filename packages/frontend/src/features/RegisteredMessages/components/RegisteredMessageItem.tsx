@@ -37,7 +37,7 @@ export const RegisteredMessageItem = ({ message, handlePostMessage }: Registered
             <MessageContent>
                 <div>{message.title}</div>
             </MessageContent>
-            <SendButton onClick={() => {handlePostMessage(message.body)}}>Send</SendButton>
+            <SendButton onClick={() => {handlePostMessage(message.body)}}>送信</SendButton>
         </MessageContainer>
     );
 }

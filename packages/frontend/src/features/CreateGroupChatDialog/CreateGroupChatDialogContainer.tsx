@@ -1,5 +1,6 @@
 import { useMutation } from "@apollo/client";
 import { useCallback, useMemo } from "react";
+import styled from "styled-components";
 
 import { useSignedInUser } from "local-service/auth/hooks";
 import { REGISTERED_USERS } from "mocks/dummy-user";
@@ -61,9 +62,15 @@ export const CreateGroupChatDialogContainer = () => {
     [addMember, createGroupChat, myID],
   );
 
+// TextButton のスタイルを継承して横幅を最大にする
+const FullWidthTextButton = styled(TextButton)`
+  width: 100%; /* 横幅を最大にする */
+  box-sizing: border-box; /* パディングやボーダーを含めて幅を計算 */
+`;
+
   return (
     <>
-      <TextButton
+      <FullWidthTextButton
         buttonType="primary"
         text="グループチャットを作成する"
         onClick={openDialog}

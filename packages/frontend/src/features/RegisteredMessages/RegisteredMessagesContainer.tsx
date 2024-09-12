@@ -55,9 +55,11 @@ export const RegisteredMessagesContainer = ({groupChatId}: RegisteredMessagesCon
     );
 
     return (
+      <div style={{ width: '100%' }}> {}
         <RegisteredMessages 
           onCreateRegisterMessage={handleRegisterMessage} 
           onPostMessage={handlePostMessage}
         />
+    </div>
     )
 }

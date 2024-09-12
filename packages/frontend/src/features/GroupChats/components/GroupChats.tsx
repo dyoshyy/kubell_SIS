@@ -1,7 +1,7 @@
-import styled from "styled-components";
-import { TextButton } from "ui";
-import { gutterBy } from "styles/spaces";
 import { useFragment } from "__generated__/query";
+import styled from "styled-components";
+import { gutterBy } from "styles/spaces";
+import { TextButton } from "ui";
 import {
   GroupChatsFragment,
   MaskedGroupChats,
@@ -27,6 +27,12 @@ const GroupChatItem = styled.li`
 const useGroupChatsFragment = (groupChatsFragment: MaskedGroupChats) =>
   useFragment(GroupChatsFragment, groupChatsFragment);
 
+// TextButton のスタイルを継承して横幅を最大にする
+const FullWidthTextButton = styled(TextButton)`
+  width: 100%; /* 横幅を最大にする */
+  box-sizing: border-box; /* パディングやボーダーを含めて幅を計算 */
+`;
+
 export const GroupChats = ({
   groupChatsFragment,
   onUpdate,
@@ -36,7 +42,7 @@ export const GroupChats = ({
 
   return (
     <>
-      <TextButton
+      <FullWidthTextButton
         buttonType="default"
         text="グループチャット一覧を更新する"
         onClick={onUpdate}
