@@ -1,10 +1,10 @@
 import { GraphQLSchema } from "graphql/type";
 import { buildSchema } from "type-graphql";
-import { GroupChatQueryResolver, ProjectQueryResolver } from "./resolvers";
+import { GroupChatQueryResolver, ProjectQueryResolver, RegisteredMessageQueryResolver } from "./resolvers";
 
 async function createQuerySchema(): Promise<GraphQLSchema> {
   return await buildSchema({
-    resolvers: [GroupChatQueryResolver, ProjectQueryResolver],
+    resolvers: [GroupChatQueryResolver, ProjectQueryResolver, RegisteredMessageQueryResolver],
     validate: false,
   });
 }
