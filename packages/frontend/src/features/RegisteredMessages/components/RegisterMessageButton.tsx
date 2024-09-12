@@ -2,10 +2,10 @@ import { TextButton, useDialog } from "ui";
 import { RegisterMessage } from "./RegisterMessageDialog";
 
 interface Props {
-  handleRegisterMessage: (title: string, body:string) => void;
+  onCreateRegisterMessage: (title: string, body:string) => void;
 }
 
-export const RegisterMessageButton = ({handleRegisterMessage}: Props) => {
+export const RegisterMessageButton = ({onCreateRegisterMessage}: Props) => {
   const [Dialog, openDialog, closeDialog] = useDialog();
 
   return (
@@ -17,7 +17,7 @@ export const RegisterMessageButton = ({handleRegisterMessage}: Props) => {
       />
       <Dialog>
         <RegisterMessage
-          handleRegisterMessage={handleRegisterMessage}
+          onCreateRegisterMessage={onCreateRegisterMessage}
           onClose={closeDialog}
         />
       </Dialog>

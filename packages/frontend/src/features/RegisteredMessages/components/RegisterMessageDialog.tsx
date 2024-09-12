@@ -4,7 +4,7 @@ import { gutterBy } from '../../../styles/spaces';
 import { TextButton } from '../../../ui';
 
 interface Props {
-  handleRegisterMessage: (title: string, body: string) => void;
+  onCreateRegisterMessage: (title: string, body: string) => void;
   onClose: () => void;
 }
 
@@ -91,7 +91,7 @@ const ActionButtonContainer = styled.div`
   }
 `;
 
-export const RegisterMessage = ({ onClose, handleRegisterMessage }: Props) => {
+export const RegisterMessage = ({ onClose, onCreateRegisterMessage }: Props) => {
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
 
@@ -114,7 +114,7 @@ export const RegisterMessage = ({ onClose, handleRegisterMessage }: Props) => {
           buttonType="danger" 
           text="登録" 
           onClick={() => {
-            handleRegisterMessage(title, body)
+            onCreateRegisterMessage(title, body)
             onClose()
           }} />
         <TextButton buttonType="danger" text="キャンセル" onClick={onClose} />

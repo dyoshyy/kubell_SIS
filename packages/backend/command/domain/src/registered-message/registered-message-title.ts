@@ -3,7 +3,6 @@ const RegisteredMessageTitleTypeSymbol = Symbol("RegisteredMessageTitle");
 
 class RegisteredMessageTitle {
   readonly symbol: typeof RegisteredMessageTitleTypeSymbol = RegisteredMessageTitleTypeSymbol;
-
   private constructor(public readonly value: string) {
     if (this.value.length === 0) {
       throw new Error("RegisteredMessage title cannot be empty");
@@ -20,7 +19,7 @@ class RegisteredMessageTitle {
   }
 
   asString() {
-    return this.value;
+    return `${this.value}`;
   }
 
   toString() {

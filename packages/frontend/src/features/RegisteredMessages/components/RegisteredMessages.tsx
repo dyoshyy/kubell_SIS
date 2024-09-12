@@ -1,13 +1,10 @@
 import styled from 'styled-components';
-import { RegisteredMessage } from '../types';
-import { RegisteredMessageItem } from './RegisteredMessageItem';
 import { RegisterMessageButton } from './RegisterMessageButton';
 
 
 interface RegisteredMessagesProps {
-    messages: RegisteredMessage[];
-    handleRegisterMessage: (title: string, body: string) => void;
-    handlePostMessage: (message: string) => void;
+    onCreateRegisterMessage: (title: string, body: string) => void;
+    onPostMessage: (message: string) => void;
 }
 
 const Container = styled.div`
@@ -19,16 +16,18 @@ const Container = styled.div`
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
 `;
 
-export const RegisteredMessages = ({messages, handleRegisterMessage, handlePostMessage }: RegisteredMessagesProps) => {
+export const RegisteredMessages = ({onCreateRegisterMessage, onPostMessage }: RegisteredMessagesProps) => {
 
     return (
         <div>
-            <RegisterMessageButton handleRegisterMessage={handleRegisterMessage}></RegisterMessageButton>
-            <Container>
+            <RegisterMessageButton 
+                onCreateRegisterMessage={onCreateRegisterMessage}>
+            </RegisterMessageButton>
+            {/* <Container>
                 {messages.map((message) => (
-                    <RegisteredMessageItem message={message} handlePostMessage={handlePostMessage}></RegisteredMessageItem>
+                    <RegisteredMessageItem message={message} onPostMessage={onPostMessage}></RegisteredMessageItem>
                 ))}
-            </Container>
+            </Container> */}
         </div>
     );
 };
