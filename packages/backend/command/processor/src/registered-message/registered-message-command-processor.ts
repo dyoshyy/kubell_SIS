@@ -1,5 +1,6 @@
 import {
   GroupChatDeleteError,
+  GroupChatId,
   RegisteredMessage,
   RegisteredMessageBody,
   RegisteredMessageEvent,
@@ -24,10 +25,12 @@ createRegisteredMessage(
   title: RegisteredMessageTitle,
   body: RegisteredMessageBody,
   ownerId: UserAccountId,
+  groupChatId: GroupChatId,
+  cronFormular: string,
 ): TE.TaskEither<ProcessError, RegisteredMessageEvent> {
   return pipe(
     TE.right(RegisteredMessageId.generate()),
-    TE.chain((id) => TE.right(RegisteredMessage.create(id, title, body, ownerId))),
+    TE.chain((id) => TE.right(RegisteredMessage.create(id, title, body, ownerId, groupChatId, cronFormular))),
     TE.chain(([registeredMessage, registeredMessageCreated]) =>
       pipe(
         this.registeredMessageRepository.store(registeredMessageCreated, registeredMessage),

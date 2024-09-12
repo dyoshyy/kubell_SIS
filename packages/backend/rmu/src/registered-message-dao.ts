@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { RegisteredMessageBody, RegisteredMessageId, RegisteredMessageTitle, UserAccountId } from "cqrs-es-example-js-command-domain";
+import { GroupChatId, RegisteredMessageBody, RegisteredMessageId, RegisteredMessageTitle, UserAccountId } from "cqrs-es-example-js-command-domain";
 
 
 class RegisteredMessageDao {
@@ -10,6 +10,8 @@ class RegisteredMessageDao {
     ownerId: UserAccountId,
     title: RegisteredMessageTitle,
     body: RegisteredMessageBody,
+    groupChatId: GroupChatId,
+    cronFormular: string,
     createdAt: Date,
   ) {
     return await this.prismaClient.$transaction(async (_prismaClient) => {
@@ -19,6 +21,8 @@ class RegisteredMessageDao {
           ownerId: ownerId.asString(),
           title: title.asString(),
           body: body.asString(),
+          groupChatId: groupChatId.asString(),
+          cronFormular: cronFormular,
           createdAt: createdAt,
           updatedAt: createdAt,
         },

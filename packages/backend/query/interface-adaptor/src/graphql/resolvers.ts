@@ -21,6 +21,8 @@ class RegisteredMessageQueryResolver {
             rm.id as id,
             rm.title as title,
             rm.body as body,
+            rm.group_chat_id as groupChatId,
+            rm.cron_formular as cronFormular,
             rm.created_at as createdAt,
             rm.updated_at as updatedAt
         FROM

@@ -1,5 +1,6 @@
 import * as Infrastructure from "cqrs-es-example-js-infrastructure";
 import { Event } from "event-store-adapter-js";
+import { convertJSONToGroupChatId, GroupChatId } from "../group-chat";
 import { convertJSONToUserAccountId, UserAccountId } from "../user-account";
 import { convertJSONToRegisteredMessageBody, RegisteredMessageBody } from "./registered-message-body";
 import { convertJSONToRegisteredMessageId, RegisteredMessageId } from "./registered-message-id";
@@ -26,6 +27,8 @@ class RegisteredMessageCreated implements RegisteredMessageEvent {
     public readonly title: RegisteredMessageTitle,
     public readonly body: RegisteredMessageBody,
     public readonly ownerId: UserAccountId,
+    public readonly groupChatId: GroupChatId,
+    public readonly cronFormular: string,
     public readonly sequenceNumber: number,
     public readonly occurredAt: Date,
   ) {}
@@ -41,6 +44,8 @@ class RegisteredMessageCreated implements RegisteredMessageEvent {
     title: RegisteredMessageTitle,
     body: RegisteredMessageBody,
     ownerId: UserAccountId,
+    groupChatId: GroupChatId,
+    cronFormular: string,
     sequenceNumber: number,
   ): RegisteredMessageCreated {
     return new RegisteredMessageCreated(
@@ -49,6 +54,8 @@ class RegisteredMessageCreated implements RegisteredMessageEvent {
       title,
       body,
       ownerId,
+      groupChatId,
+      cronFormular,
       sequenceNumber,
       new Date(),
     );
@@ -61,6 +68,8 @@ function convertJSONToRegisteredMessageEvent(json: any): RegisteredMessageEvent 
   const title = convertJSONToRegisteredMessageTitle(json.data.title);
   const body = convertJSONToRegisteredMessageBody(json.data.body);
   const ownerId = convertJSONToUserAccountId(json.data.ownerId);
+  const groupChatId = convertJSONToGroupChatId(json.data.groupChatId);
+  const cronFormular = json.data.cronFormular;
 
   switch (json.type) {
     case "RegisteredMessageCreated": {
@@ -69,6 +78,8 @@ function convertJSONToRegisteredMessageEvent(json: any): RegisteredMessageEvent 
         title,
         body,
         ownerId,
+        groupChatId,
+        cronFormular,
         json.data.sequenceNumber,
       );
     }

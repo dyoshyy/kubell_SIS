@@ -104,6 +104,12 @@ class CreateRegisteredMessageInput {
 
   @Field()
   ownerId!: string;
+
+  @Field()
+  groupChatId!: string;
+
+  @Field()
+  cronFormular!: string;
 }
 
 export { AddMemberInput, CreateGroupChatInput, CreateProjectInput, CreateRegisteredMessageInput, DeleteGroupChatInput, DeleteMessageInput, PostMessageInput, RemoveMemberInput, RenameGroupChatInput };
