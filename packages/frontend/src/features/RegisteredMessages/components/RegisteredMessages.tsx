@@ -1,11 +1,14 @@
-import styled from "styled-components";
-import { RegisteredMessage } from "../types";
-import { RegisterMessageButton } from "./RegisterMessageButton";
-import { RegisteredMessageItem } from "./RegisteredMessageItem";
+import { useFragment } from '__generated__/query';
+import styled from 'styled-components';
+import { RegisteredMessageItem } from './RegisteredMessageItem';
+import { MaskedRegisteredMessages, RegisteredMessagesFragment } from './registeredMessagesFragment.query';
+import { RegisterMessageButton } from './RegisterMessageButton';
+
 
 interface RegisteredMessagesProps {
-  onCreateRegisterMessage: (title: string, body: string) => void;
-  onPostMessage: (message: string) => void;
+    registeredMessagesFragment: MaskedRegisteredMessages[];
+    onCreateRegisterMessage: (title: string, body: string) => void;
+    onPostMessage: (message: string) => void;
 }
 
 const Container = styled.div`
@@ -24,42 +27,23 @@ const ButtonWrapper = styled.div`
   margin-bottom: 16px;
 `;
 
-const messages: RegisteredMessage[] = [
-  {
-    id: "1",
-    title: "Meeting Reminder",
-    body: "Don't forget about the team meeting tomorrow at 10 AM. Please prepare your reports.",
-  },
-  {
-    id: "2",
-    title: "Project Update",
-    body: "The new project has been approved. We will start planning next Monday. Make sure to review the initial proposal.",
-  },
-  {
-    id: "3",
-    title: "Holiday Schedule",
-    body: "The office will be closed next Friday for the public holiday. Enjoy the long weekend!",
-  },
-];
+const useRegisteredMessagesFragment = (registeredMessagesFragment: MaskedRegisteredMessages) =>
+    useFragment(RegisteredMessagesFragment, registeredMessagesFragment);
 
-export const RegisteredMessages = ({
-  onCreateRegisterMessage,
-  onPostMessage,
-}: RegisteredMessagesProps) => {
-  return (
-    <div>
-      <ButtonWrapper>
-        <RegisterMessageButton onCreateRegisterMessage={onCreateRegisterMessage} />
-      </ButtonWrapper>
-      <Container>
-        {messages.map((message) => (
-          <RegisteredMessageItem
-            key={message.id}
-            message={message}
-            onPostMessage={onPostMessage}
-          />
-        ))}
-      </Container>
-    </div>
-  );
+export const RegisteredMessages = ({registeredMessagesFragment, onCreateRegisterMessage, onPostMessage }: RegisteredMessagesProps) => {
+
+    const registeredMessages = registeredMessagesFragment.map(useRegisteredMessagesFragment);
+
+    return (
+        <div>
+            <RegisterMessageButton 
+                onCreateRegisterMessage={onCreateRegisterMessage}>
+            </RegisterMessageButton>
+            <Container>
+                {registeredMessages.map((registeredMessage) => (
+                    <RegisteredMessageItem message={registeredMessage} handlePostMessage={onPostMessage}></RegisteredMessageItem>
+                ))}
+            </Container>
+        </div>
+    );
 };

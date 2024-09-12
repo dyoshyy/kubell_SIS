@@ -14,7 +14,6 @@ import {
   AttributeValue as LambdaAttributeValue,
 } from "aws-lambda";
 import { GroupChatDao, ReadModelUpdater, RegisteredMessageDao } from "cqrs-es-example-js-rmu";
-import { ProjectDao } from "cqrs-es-example-js-rmu/src/project-dao";
 import { logger } from "./index";
 
 async function localRmuMain() {
@@ -96,11 +95,9 @@ async function localRmuMain() {
     logger.info("Duration: " + e.duration + "ms");
   });
   const groupChatDao = GroupChatDao.of(prisma);
-  const projectDao = ProjectDao.of(prisma);
   const registeredMessageDao = RegisteredMessageDao.of(prisma);
   const readModelUpdater = ReadModelUpdater.of(
     groupChatDao,
-    projectDao,
     registeredMessageDao,
   );
 

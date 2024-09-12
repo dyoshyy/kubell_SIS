@@ -2,6 +2,8 @@ import * as Infrastructure from "cqrs-es-example-js-infrastructure";
 import { Event } from "event-store-adapter-js";
 import { RegisteredMessageBody } from "./registered-message-body";
 import { convertJSONToRegisteredMessageId, RegisteredMessageId } from "./registered-message-id";
+import { convertJSONToRegisteredMessageBody } from "./registered-message-body"
+import { convertJSONToRegisteredMessageTitle } from "./registered-message-title"
 import { RegisteredMessageTitle } from "./registered-message-title";
 
 type RegisteredMessageEventTypeSymbol =
@@ -54,12 +56,15 @@ class RegisteredMessageCreated implements RegisteredMessageEvent {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function convertJSONToRegisteredMessageEvent(json: any): RegisteredMessageEvent {
   const id = convertJSONToRegisteredMessageId(json.data.aggregateId);
+  const title = convertJSONToRegisteredMessageTitle(json.data.title);
+  const body = convertJSONToRegisteredMessageBody(json.data.body);
+
   switch (json.type) {
     case "RegisteredMessageCreated": {
       return RegisteredMessageCreated.of(
         id,
-        RegisteredMessageTitle.of(json.data.title),
-        RegisteredMessageBody.of(json.data.body),
+        title,
+        body,
         json.data.sequenceNumber,
       );
     }
