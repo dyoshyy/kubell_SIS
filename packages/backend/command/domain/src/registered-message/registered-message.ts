@@ -1,10 +1,9 @@
 import { Aggregate } from "event-store-adapter-js";
-import { RegisteredMessageBody } from "./registered-message-body";
+import { convertJSONToUserAccountId, UserAccountId } from "../user-account";
+import { convertJSONToRegisteredMessageBody, RegisteredMessageBody } from "./registered-message-body";
 import { RegisteredMessageCreated, RegisteredMessageEvent } from "./registered-message-events";
 import { convertJSONToRegisteredMessageId, RegisteredMessageId } from "./registered-message-id";
-import { convertJSONToRegisteredMessageBody } from "./registered-message-body"
-import { convertJSONToRegisteredMessageTitle } from "./registered-message-title"
-import { RegisteredMessageTitle } from "./registered-message-title";
+import { convertJSONToRegisteredMessageTitle, RegisteredMessageTitle } from "./registered-message-title";
 
 const RegisteredMessageTypeSymbol = Symbol('RegisteredMessage');
 
@@ -13,6 +12,7 @@ export interface RegisteredMessageParams {
   id: RegisteredMessageId;
   title: RegisteredMessageTitle;
   body: RegisteredMessageBody;
+  owner_id: UserAccountId;
   sequenceNumber: number;
   version: number;
 }
@@ -24,6 +24,7 @@ class RegisteredMessage implements Aggregate<RegisteredMessage, RegisteredMessag
   public readonly id: RegisteredMessageId;
   public readonly title: RegisteredMessageTitle;
   public readonly body: RegisteredMessageBody;
+  public readonly owner_id: UserAccountId;
   public readonly sequenceNumber: number;
   public readonly version: number;
 
@@ -31,6 +32,7 @@ class RegisteredMessage implements Aggregate<RegisteredMessage, RegisteredMessag
     this.id = params.id;
     this.title = params.title;
     this.body = params.body;
+    this.owner_id = params.owner_id;
     this.sequenceNumber = params.sequenceNumber;
     this.version = params.version;
   }
@@ -40,6 +42,7 @@ class RegisteredMessage implements Aggregate<RegisteredMessage, RegisteredMessag
       id: this.id.toJSON(),
       title: this.title,
       body: this.body,
+      owner_id: this.owner_id,
     };
   }
 
@@ -63,6 +66,7 @@ class RegisteredMessage implements Aggregate<RegisteredMessage, RegisteredMessag
     id: RegisteredMessageId,
     title: RegisteredMessageTitle,
     body: RegisteredMessageBody,
+    owner_id: UserAccountId,
   ): [RegisteredMessage, RegisteredMessageCreated] {
     const sequenceNumber = 1;
     const version = 1;
@@ -71,6 +75,7 @@ class RegisteredMessage implements Aggregate<RegisteredMessage, RegisteredMessag
         id,
         title,
         body,
+        owner_id,
         sequenceNumber,
         version,
       }),
@@ -78,6 +83,7 @@ class RegisteredMessage implements Aggregate<RegisteredMessage, RegisteredMessag
         id,
         title, 
         body,
+        owner_id,
         version
       ),
     ];
@@ -108,11 +114,13 @@ function convertJSONToRegisteredMessage(json: any): RegisteredMessage {
   const id = convertJSONToRegisteredMessageId(json.data.id);
   const title = convertJSONToRegisteredMessageTitle(json.data.title);
   const body = convertJSONToRegisteredMessageBody(json.data.body);
+  const owner_id = convertJSONToUserAccountId(json.data.owner_id);
 
   return RegisteredMessage.of({
     id,
     title,
     body,
+    owner_id,
     sequenceNumber: json.data.sequenceNumber,
     version: json.data.version,
   });

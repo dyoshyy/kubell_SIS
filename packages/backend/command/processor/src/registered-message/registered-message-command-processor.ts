@@ -5,6 +5,7 @@ import {
   RegisteredMessageEvent,
   RegisteredMessageId,
   RegisteredMessageTitle,
+  UserAccountId,
 } from "cqrs-es-example-js-command-domain";
 import {
   RegisteredMessageRepository,
@@ -22,10 +23,11 @@ private constructor(
 createRegisteredMessage(
   title: RegisteredMessageTitle,
   body: RegisteredMessageBody,
+  owner_id: UserAccountId,
 ): TE.TaskEither<ProcessError, RegisteredMessageEvent> {
   return pipe(
     TE.right(RegisteredMessageId.generate()),
-    TE.chain((id) => TE.right(RegisteredMessage.create(id, title, body))),
+    TE.chain((id) => TE.right(RegisteredMessage.create(id, title, body, owner_id))),
     TE.chain(([registeredMessage, registeredMessageCreated]) =>
       pipe(
         this.registeredMessageRepository.store(registeredMessageCreated, registeredMessage),
