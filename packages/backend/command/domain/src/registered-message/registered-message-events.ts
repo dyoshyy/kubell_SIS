@@ -1,6 +1,6 @@
 import * as Infrastructure from "cqrs-es-example-js-infrastructure";
 import { Event } from "event-store-adapter-js";
-import { UserAccountId } from "../user-account";
+import { convertJSONToUserAccountId, UserAccountId } from "../user-account";
 import { convertJSONToRegisteredMessageBody, RegisteredMessageBody } from "./registered-message-body";
 import { convertJSONToRegisteredMessageId, RegisteredMessageId } from "./registered-message-id";
 import { convertJSONToRegisteredMessageTitle, RegisteredMessageTitle } from "./registered-message-title";
@@ -40,7 +40,7 @@ class RegisteredMessageCreated implements RegisteredMessageEvent {
     aggregateId: RegisteredMessageId,
     title: RegisteredMessageTitle,
     body: RegisteredMessageBody,
-    owner_id: UserAccountId,
+    ownerId: UserAccountId,
     sequenceNumber: number,
   ): RegisteredMessageCreated {
     return new RegisteredMessageCreated(
@@ -48,7 +48,7 @@ class RegisteredMessageCreated implements RegisteredMessageEvent {
       aggregateId,
       title,
       body,
-      owner_id,
+      ownerId,
       sequenceNumber,
       new Date(),
     );
@@ -60,7 +60,7 @@ function convertJSONToRegisteredMessageEvent(json: any): RegisteredMessageEvent 
   const id = convertJSONToRegisteredMessageId(json.data.aggregateId);
   const title = convertJSONToRegisteredMessageTitle(json.data.title);
   const body = convertJSONToRegisteredMessageBody(json.data.body);
-  const owner_id = json.data.owner_id;
+  const ownerId = convertJSONToUserAccountId(json.data.ownerId);
 
   switch (json.type) {
     case "RegisteredMessageCreated": {
@@ -68,7 +68,7 @@ function convertJSONToRegisteredMessageEvent(json: any): RegisteredMessageEvent 
         id,
         title,
         body,
-        owner_id,
+        ownerId,
         json.data.sequenceNumber,
       );
     }

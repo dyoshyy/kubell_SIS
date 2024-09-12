@@ -23,11 +23,11 @@ private constructor(
 createRegisteredMessage(
   title: RegisteredMessageTitle,
   body: RegisteredMessageBody,
-  owner_id: UserAccountId,
+  ownerId: UserAccountId,
 ): TE.TaskEither<ProcessError, RegisteredMessageEvent> {
   return pipe(
     TE.right(RegisteredMessageId.generate()),
-    TE.chain((id) => TE.right(RegisteredMessage.create(id, title, body, owner_id))),
+    TE.chain((id) => TE.right(RegisteredMessage.create(id, title, body, ownerId))),
     TE.chain(([registeredMessage, registeredMessageCreated]) =>
       pipe(
         this.registeredMessageRepository.store(registeredMessageCreated, registeredMessage),

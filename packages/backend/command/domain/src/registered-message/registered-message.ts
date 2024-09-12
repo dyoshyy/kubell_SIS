@@ -12,7 +12,7 @@ export interface RegisteredMessageParams {
   id: RegisteredMessageId;
   title: RegisteredMessageTitle;
   body: RegisteredMessageBody;
-  owner_id: UserAccountId;
+  ownerId: UserAccountId;
   sequenceNumber: number;
   version: number;
 }
@@ -24,7 +24,7 @@ class RegisteredMessage implements Aggregate<RegisteredMessage, RegisteredMessag
   public readonly id: RegisteredMessageId;
   public readonly title: RegisteredMessageTitle;
   public readonly body: RegisteredMessageBody;
-  public readonly owner_id: UserAccountId;
+  public readonly ownerId: UserAccountId;
   public readonly sequenceNumber: number;
   public readonly version: number;
 
@@ -32,7 +32,7 @@ class RegisteredMessage implements Aggregate<RegisteredMessage, RegisteredMessag
     this.id = params.id;
     this.title = params.title;
     this.body = params.body;
-    this.owner_id = params.owner_id;
+    this.ownerId = params.ownerId;
     this.sequenceNumber = params.sequenceNumber;
     this.version = params.version;
   }
@@ -42,7 +42,7 @@ class RegisteredMessage implements Aggregate<RegisteredMessage, RegisteredMessag
       id: this.id.toJSON(),
       title: this.title,
       body: this.body,
-      owner_id: this.owner_id,
+      ownerId: this.ownerId,
     };
   }
 
@@ -66,7 +66,7 @@ class RegisteredMessage implements Aggregate<RegisteredMessage, RegisteredMessag
     id: RegisteredMessageId,
     title: RegisteredMessageTitle,
     body: RegisteredMessageBody,
-    owner_id: UserAccountId,
+    ownerId: UserAccountId,
   ): [RegisteredMessage, RegisteredMessageCreated] {
     const sequenceNumber = 1;
     const version = 1;
@@ -75,7 +75,7 @@ class RegisteredMessage implements Aggregate<RegisteredMessage, RegisteredMessag
         id,
         title,
         body,
-        owner_id,
+        ownerId,
         sequenceNumber,
         version,
       }),
@@ -83,7 +83,7 @@ class RegisteredMessage implements Aggregate<RegisteredMessage, RegisteredMessag
         id,
         title, 
         body,
-        owner_id,
+        ownerId,
         version
       ),
     ];
@@ -114,13 +114,13 @@ function convertJSONToRegisteredMessage(json: any): RegisteredMessage {
   const id = convertJSONToRegisteredMessageId(json.data.id);
   const title = convertJSONToRegisteredMessageTitle(json.data.title);
   const body = convertJSONToRegisteredMessageBody(json.data.body);
-  const owner_id = convertJSONToUserAccountId(json.data.owner_id);
+  const ownerId = convertJSONToUserAccountId(json.data.ownerId);
 
   return RegisteredMessage.of({
     id,
     title,
     body,
-    owner_id,
+    ownerId,
     sequenceNumber: json.data.sequenceNumber,
     version: json.data.version,
   });
