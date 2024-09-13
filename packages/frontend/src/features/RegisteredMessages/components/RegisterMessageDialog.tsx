@@ -150,7 +150,16 @@ export const RegisterMessage = ({ onClose, onCreateRegisterMessage }: Props) => 
     selectedDays: [] as string[],
   });
 
-   const daysOfWeek = ['日', '月', '火', '水', '木', '金', '土'];
+  const daysOfWeek = ['日', '月', '火', '水', '木', '金', '土'];
+  const daysOfWeekToNumber: { [key: string]: string } = {
+  '日': '0',
+  '月': '1',
+  '火': '2',
+  '水': '3',
+  '木': '4',
+  '金': '5',
+  '土': '6',
+  }
 
   const useGroupChatsFragment = (groupChatsFragment: MaskedGroupChats) => 
     useFragment(GroupChatsFragment, groupChatsFragment);
@@ -177,10 +186,10 @@ export const RegisterMessage = ({ onClose, onCreateRegisterMessage }: Props) => 
           cronExpression = `${minutes} ${hours} * * *`;
           break;
         case 'weekly':
-          cronExpression = `${minutes} ${hours} * * ${selectedDays.join(',')}`;
+          cronExpression = `${minutes} ${hours} * * ${daysOfWeekToNumber[selectedDays.join(',')]}`;
           break;
         case 'monthly':
-          cronExpression = `${minutes} ${hours}  ${selectedDayOfMonth} * *`;
+          cronExpression = `${minutes} ${hours} ${selectedDayOfMonth} * *`;
           break;
         default:
           cronExpression = '* * * * *';
@@ -305,14 +314,13 @@ export const RegisterMessage = ({ onClose, onCreateRegisterMessage }: Props) => 
               return;
             }
 
-            console.log(groupChatId);
-
             onCreateRegisterMessage(
               title,
               body,
               groupChatId,
               buildCronExpression()
             );
+            console.log(groupChatId);
             onClose();
           }}
         />
