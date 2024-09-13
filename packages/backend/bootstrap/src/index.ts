@@ -11,6 +11,7 @@ async function main() {
     .command("writeApi", "write api server")
     .command("readApi", "read api server")
     .command("localRmu", "local read model updater")
+    .command("scheduler", "scheduler")
     .demandCommand(1)
     .help()
     .parseSync();

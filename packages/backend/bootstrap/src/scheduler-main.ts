@@ -2,9 +2,9 @@ import cron, { ScheduledTask } from 'node-cron';
 import { REGISTERED_USERS } from "./mocks/dummy-user";
 
 // APIエンドポイントのURL
-const readApiUrl = "http://localhost:38080/query";
-const writeApiUrl = "http://localhost:38082/query";
-const EXECUTOR_BOT_ID = "UserAccountId-REGISTERED_MESSAGE_BOT";
+const readApiUrl = "http://localhost:38082/query";
+const writeApiUrl = "http://localhost:38080/query";
+// const EXECUTOR_BOT_ID = "UserAccountId-REGISTERED_MESSAGE_BOT";
 
 // cronジョブのインターフェース
 interface RegisteredMessageOutput {
@@ -71,11 +71,15 @@ async function fetchRegisteredMessages(ownerId: string): Promise<RegisteredMessa
       query: getRegisteredMessagesQuery,
       variables: { ownerId },
     }),
-  });
+  }).catch((error) => {
+    console.error("Failed to fetch registered messages", error);
+    throw new Error("Failed to fetch registered messages");
+  } );
+
 
   // GraphQLのレスポンスを明示的に型キャスト
   const result = await response.json() as GraphQLResponse<{ getRegisteredMessages: RegisteredMessageOutput[] }>;
-  console.log(result)
+  console.log("Scheduler fetchRegisteredMessages result:")
   if (result.errors) {
     console.error("GraphQL query failed", result.errors);
     throw new Error("Failed to fetch registered messages");
@@ -102,6 +106,7 @@ async function postMessage(input: PostMessageInput): Promise<MessageOutput> {
 
   if (result.errors) {
     console.error("GraphQL mutation failed", result.errors);
+    
     throw new Error("Failed to post message");
   }
 
@@ -112,17 +117,21 @@ async function postMessage(input: PostMessageInput): Promise<MessageOutput> {
 export async function schedulerMain() {
   // 1分ごとに実行
   setInterval(async () => {
+    console.log("SchedulerMain is running");
     try {
       // メッセージを取得
       let registeredMessages : RegisteredMessageOutput[] = [];
-      REGISTERED_USERS.forEach(async (user) => {
+      // REGISTERED_USERS.forEach(async (user) => {
+      for (const user of REGISTERED_USERS) {
+        console.log(`Fetching messages for user: ${user.id}`);
         const messages = await fetchRegisteredMessages(user.id);
-        registeredMessages = registeredMessages.concat(messages);
+        registeredMessages = [...registeredMessages, ...messages];
       }
-      );
+      console.log("scheduler messages:", registeredMessages)
 
       // 取得したメッセージごとにスケジューリング
       registeredMessages.forEach(message => {
+        console.log("for Each start")
         // 既に同じメッセージIDのジョブがスケジュールされているか確認
         if (cronJobMap[message.id]) {
           console.log(`Message ID: ${message.id} is already scheduled. Skipping.`);
@@ -131,12 +140,13 @@ export async function schedulerMain() {
 
         // message.cronFormularに基づいてスケジュールをセット
         const cronJob = cron.schedule(message.cronFormular, async () => {
+
           console.log(`Executing job for message ID: ${message.id}`);
 
           // メッセージ送信処理
           const input: PostMessageInput = {
             content: message.body,
-            executorId: EXECUTOR_BOT_ID,
+            executorId: REGISTERED_USERS[0].id,
             groupChatId: message.groupChatId,
           };
 
@@ -150,11 +160,12 @@ export async function schedulerMain() {
 
         // ジョブをマップに登録して重複を防止
         cronJobMap[message.id] = cronJob;
+        console.log("cronJobMap:", cronJobMap)
 
         console.log(`Scheduled message ID: ${message.id} with cron: ${message.cronFormular}`);
       });
     } catch (error) {
       console.error("Error in schedulerMain:", error);
     }
-  }, 60000); // 1分（60,000ミリ秒）ごとに実行
+  }, 3000); // 1分（60,000ミリ秒）ごとに実行
 }

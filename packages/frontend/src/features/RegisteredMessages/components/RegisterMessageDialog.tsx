@@ -164,14 +164,13 @@ export const RegisterMessage = ({ onClose, onCreateRegisterMessage }: Props) => 
   const useGroupChatsFragment = (groupChatsFragment: MaskedGroupChats) => 
     useFragment(GroupChatsFragment, groupChatsFragment);
 
-  const groupChats = data.getGroupChats.map(useGroupChatsFragment);
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const [groupChatId, setGroupChatId] = useState<string>('');
-  
 
   if (error) return <p>Error Happened</p>;
 
   if (loading || data?.getGroupChats === undefined) return <></>;
+  const groupChats = data.getGroupChats.map(useGroupChatsFragment);
 
   const buildCronExpression = () => {
     const [hours, minutes] = selectedTime.split(':');
