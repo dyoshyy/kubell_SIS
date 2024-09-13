@@ -110,11 +110,9 @@ export const RegisteredMessageItem = ({ registeredMessage, groupChatId, handlePo
     } else if (dayOfMonth === '*') {
       const days = ['日', '月', '火', '水', '木', '金', '土'];
       dayPart = `毎週${days[parseInt(dayOfWeek, 10)]}曜日`;
-    } else {
-      dayPart = `毎月${dayOfMonth}日`;
     }
 
-    return `${dayPart}の${timePart}`;
+    return `${dayPart} ${timePart}`;
   } 
 
     return (
