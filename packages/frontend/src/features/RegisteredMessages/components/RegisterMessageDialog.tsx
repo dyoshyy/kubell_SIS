@@ -105,7 +105,7 @@ const SelectField = styled.select`
 const TimeInput = styled.input`
   padding: ${gutterBy(1)};
   font-size: 16px;
-  width: 100%; /* 幅を最大にする */
+  width: 55%; /* 幅を最大にする */
   text-align: center;
   border-radius: 4px;
   border: 1px solid #ccc;
@@ -150,7 +150,16 @@ export const RegisterMessage = ({ onClose, onCreateRegisterMessage }: Props) => 
     selectedDays: [] as string[],
   });
 
-   const daysOfWeek = ['日', '月', '火', '水', '木', '金', '土'];
+  const daysOfWeek = ['日', '月', '火', '水', '木', '金', '土'];
+  const daysOfWeekToNumber: { [key: string]: string } = {
+  '日': '0',
+  '月': '1',
+  '火': '2',
+  '水': '3',
+  '木': '4',
+  '金': '5',
+  '土': '6',
+  }
 
   const useGroupChatsFragment = (groupChatsFragment: MaskedGroupChats) => 
     useFragment(GroupChatsFragment, groupChatsFragment);
@@ -177,10 +186,10 @@ export const RegisterMessage = ({ onClose, onCreateRegisterMessage }: Props) => 
           cronExpression = `${minutes} ${hours} * * *`;
           break;
         case 'weekly':
-          cronExpression = `${minutes} ${hours} * * ${selectedDays.join(',')}`;
+          cronExpression = `${minutes} ${hours} * * ${daysOfWeekToNumber[selectedDays.join(',')]}`;
           break;
         case 'monthly':
-          cronExpression = `${minutes} ${hours}  ${selectedDayOfMonth} * *`;
+          cronExpression = `${minutes} ${hours} ${selectedDayOfMonth} * *`;
           break;
         default:
           cronExpression = '* * * * *';
@@ -217,17 +226,9 @@ export const RegisterMessage = ({ onClose, onCreateRegisterMessage }: Props) => 
           />
         </div>
         <div>
-      <FrequencyContainer>
-        <Label>開始時刻:</Label>
-        <TimeInput
-          type="time"
-          value={selectedTime}
-          onChange={(e) => setSelectedTime(e.target.value)}
-        />
-      </FrequencyContainer>
-      <FrequencyContainer> 
-        <FlexContainer>
-        <Label>繰り返し間隔: 毎</Label>
+          <FrequencyContainer> 
+            <div>
+        <Label>繰り返し間隔: </Label></div>
         <SelectField
           value={repeatSettings.repeatType}
           onChange={(e) =>
@@ -237,16 +238,17 @@ export const RegisterMessage = ({ onClose, onCreateRegisterMessage }: Props) => 
             }))
           }
         >
-          <option value="daily">日</option>
-          <option value="weekly">週</option>
-          <option value="monthly">月</option>
-          </SelectField>
-        </FlexContainer>
+          <option value="daily">毎日</option>
+          <option value="weekly">毎週</option>
+          <option value="monthly">毎月</option>
+              </SelectField>
+              
         </FrequencyContainer>
       <FrequencyContainer>
         {repeatSettings.repeatType === 'weekly' && (
-          <div>
-            <Label>曜日を選択:</Label>
+              <div>
+                <div>
+            <Label>曜日を選択:</Label></div>
             {daysOfWeek.map((day) => (
               <label key={day}>
                 <input
@@ -261,8 +263,9 @@ export const RegisterMessage = ({ onClose, onCreateRegisterMessage }: Props) => 
         )}
         
         {repeatSettings.repeatType === 'monthly' && (
-          <div>
-            <Label>何日かを選択:</Label>
+              <div>
+                <div>
+            <Label>何日かを選択:</Label></div>
             <SelectField
               value={selectedDayOfMonth}
               onChange={(e) => setSelectedDayOfMonth(e.target.value)}
@@ -275,6 +278,15 @@ export const RegisterMessage = ({ onClose, onCreateRegisterMessage }: Props) => 
             </SelectField>
           </div>
         )}
+          </FrequencyContainer>
+          <FrequencyContainer>
+            <div>
+        <Label>開始時刻:</Label></div>
+        <TimeInput
+          type="time"
+          value={selectedTime}
+          onChange={(e) => setSelectedTime(e.target.value)}
+        />
       </FrequencyContainer>
       <Label>送信するグループチャット:</Label>
       <SelectField
@@ -292,7 +304,8 @@ export const RegisterMessage = ({ onClose, onCreateRegisterMessage }: Props) => 
         </FlexContainer>
 
       <ActionButtonContainer>
-        <TextButton
+        <TextButton buttonType="danger" text="キャンセル" onClick={onClose} />
+         <TextButton
           buttonType="primary"
           text="登録"
           onClick={() => {
@@ -301,18 +314,16 @@ export const RegisterMessage = ({ onClose, onCreateRegisterMessage }: Props) => 
               return;
             }
 
-            console.log(groupChatId);
-
             onCreateRegisterMessage(
               title,
               body,
               groupChatId,
               buildCronExpression()
             );
+            console.log(groupChatId);
             onClose();
           }}
         />
-        <TextButton buttonType="danger" text="キャンセル" onClick={onClose} />
       </ActionButtonContainer>
     </Container>
   );
