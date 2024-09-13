@@ -92,13 +92,6 @@ const FlexContainer = styled.div`
   justify-content: space-between; /* フォーム内要素を左右に配置 */
   width: 100%; /* 横幅を最大に設定 */
 `;
-
-const InputGroup = styled.div`
-  width: 100%; /* 横幅を均等に設定 */
-  display: flex;
-  flex-direction: column;
-`;
-
 const SelectField = styled.select`
   padding: ${gutterBy(1)};
   font-size: 16px;
@@ -233,7 +226,7 @@ export const RegisterMessage = ({ onClose, onCreateRegisterMessage }: Props) => 
         />
       </FrequencyContainer>
       <FrequencyContainer> 
-        <FlexSetContainer>
+        <FlexContainer>
         <Label>繰り返し間隔: 毎</Label>
         <SelectField
           value={repeatSettings.repeatType}
@@ -248,7 +241,7 @@ export const RegisterMessage = ({ onClose, onCreateRegisterMessage }: Props) => 
           <option value="weekly">週</option>
           <option value="monthly">月</option>
           </SelectField>
-        </FlexSetContainer>
+        </FlexContainer>
         </FrequencyContainer>
       <FrequencyContainer>
         {repeatSettings.repeatType === 'weekly' && (
