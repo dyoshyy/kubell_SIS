@@ -159,18 +159,17 @@ export const RegisterMessage = ({ onClose, onCreateRegisterMessage }: Props) => 
 
    const daysOfWeek = ['日', '月', '火', '水', '木', '金', '土'];
 
-
-
-  if (error) return <p>Error Happened</p>;
-
-  if (loading || data?.getGroupChats === undefined) return <></>;
-
   const useGroupChatsFragment = (groupChatsFragment: MaskedGroupChats) => 
     useFragment(GroupChatsFragment, groupChatsFragment);
 
   const groupChats = data.getGroupChats.map(useGroupChatsFragment);
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  const [groupChatId, setGroupChatId] = useState<string|null>(groupChats[0].id);
+  const [groupChatId, setGroupChatId] = useState<string>('');
+  
+
+  if (error) return <p>Error Happened</p>;
+
+  if (loading || data?.getGroupChats === undefined) return <></>;
 
   const buildCronExpression = () => {
     const [hours, minutes] = selectedTime.split(':');
@@ -277,6 +276,7 @@ export const RegisterMessage = ({ onClose, onCreateRegisterMessage }: Props) => 
           setGroupChatId(e.target.value)
         }}
       >
+        <option value=''>送信してください</option>
         {groupChats.map((groupChat) => (
           <option value={groupChat.id}>{groupChat.name}</option>
         ))}
