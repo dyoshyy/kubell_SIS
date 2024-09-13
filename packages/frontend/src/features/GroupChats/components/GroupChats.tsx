@@ -22,6 +22,7 @@ const GroupChatList = styled.ul`
 
 const GroupChatItem = styled.li`
   padding: ${gutterBy(1)} 0;
+  width: 100%;
 `;
 
 const useGroupChatsFragment = (groupChatsFragment: MaskedGroupChats) =>
@@ -55,8 +56,8 @@ export const GroupChats = ({
             role="listitem"
             aria-label={groupChat.name}
           >
-            <TextButton
-              buttonType="none"
+            <FullWidthTextButton
+              buttonType="default"
               text={groupChat.name}
               onClick={() => onChangeGroupChat(groupChat.id)}
             />
