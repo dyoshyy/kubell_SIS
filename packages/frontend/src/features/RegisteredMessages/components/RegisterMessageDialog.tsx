@@ -284,7 +284,7 @@ export const RegisterMessage = ({ onClose, onCreateRegisterMessage }: Props) => 
 
       <ActionButtonContainer>
         <TextButton
-          buttonType="danger"
+          buttonType="primary"
           text="登録"
           onClick={() => {
             if(!groupChatId) {
