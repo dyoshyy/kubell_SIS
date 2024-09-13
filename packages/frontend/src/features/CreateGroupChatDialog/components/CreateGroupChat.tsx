@@ -25,7 +25,6 @@ const ContentContainer = styled.div`
   display: flex;
   flex-direction: column;
   padding: 24px;
-  overflow-y: auto;
 `;
 
 const Title = styled.h2`
@@ -41,7 +40,6 @@ const Caption = styled.p`
 `;
 
 const TextField = styled.input`
-  width: 100%;
   padding: 12px;
   font-size: 16px;
   border: 1px solid #bdc3c7;
