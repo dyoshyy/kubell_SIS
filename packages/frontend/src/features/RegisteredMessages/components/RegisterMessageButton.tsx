@@ -9,7 +9,7 @@ interface Props {
 // TextButton を引き継いだ RegisterButton コンポーネントを作成
 const RegisterButton = styled(TextButton)`
   padding: 10px 20px;  /* 適切なパディングを追加 */
-  width: 300px;    /* 最大幅を指定（オプション） */
+  width: 100%;
   display: inline-block; /* 横長のボタンにする */
   text-align: center;   /* テキストの中央揃え */
 `;
