@@ -1,3 +1,8 @@
+import { useQuery } from '@apollo/client';
+import { useFragment } from '__generated__/query';
+import { GetGroupChatWithMessagesQuery } from 'features/GroupChat/apis/getGroupChatWithMessages.query';
+import { GroupChatFragment } from 'features/GroupChat/components/groupChatFragment.query';
+import { useSignedInUser } from 'local-service/auth/hooks';
 import { useState } from 'react';
 import styled from 'styled-components';
 import { RegisteredMessage } from '../types';
@@ -79,6 +84,16 @@ const CloseButton = styled.button`
 
 export const RegisteredMessageItem = ({ registeredMessage, groupChatId, handlePostMessage }: RegisteredMessageItemProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { id: myID } = useSignedInUser();
+
+  const { data } = useQuery(GetGroupChatWithMessagesQuery, {
+    variables: {
+      groupChatId: registeredMessage.groupChatId,
+      userAccountId: myID,
+    },
+  });
+
+  const groupChat = useFragment(GroupChatFragment, data ? data.getGroupChat: undefined);
   
   const cronToTime = (cronFormular: string) => {
     const [minute, hour, dayOfMonth, month, dayOfWeek] = cronFormular.split(' ').map(part => part.trim());
@@ -95,11 +110,9 @@ export const RegisteredMessageItem = ({ registeredMessage, groupChatId, handlePo
     } else if (dayOfMonth === '*') {
       const days = ['日', '月', '火', '水', '木', '金', '土'];
       dayPart = `毎週${days[parseInt(dayOfWeek, 10)]}曜日`;
-    } else {
-      dayPart = `毎月${dayOfMonth}日`;
     }
 
-    return `${dayPart}の${timePart}`;
+    return `${dayPart} ${timePart}`;
   } 
 
     return (
@@ -110,6 +123,7 @@ export const RegisteredMessageItem = ({ registeredMessage, groupChatId, handlePo
             </MessageContent>
             <MetaData>
                 <div>投稿日: {cronToTime(registeredMessage.cronFormular)}</div>
+                <div>投稿先: {groupChat ? groupChat.name : ''}</div>
             </MetaData>
             {groupChatId &&
               <SendButton onClick={() => {handlePostMessage(
