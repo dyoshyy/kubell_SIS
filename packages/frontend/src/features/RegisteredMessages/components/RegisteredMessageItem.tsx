@@ -5,7 +5,7 @@ import { RegisteredMessage } from '../types';
 interface RegisteredMessageItemProps {
     registeredMessage: RegisteredMessage;
     groupChatId: string;
-    handlePostMessage: (registeredMessage: string) => void;
+    handlePostMessage: (registeredMessage: string, groupChatId: string) => void;
 }
 
 const MessageContainer = styled.div`
@@ -112,7 +112,10 @@ export const RegisteredMessageItem = ({ registeredMessage, groupChatId, handlePo
                 <div>投稿日: {cronToTime(registeredMessage.cronFormular)}</div>
             </MetaData>
             {groupChatId &&
-              <SendButton onClick={() => {handlePostMessage(registeredMessage.body)}}>送信</SendButton>
+              <SendButton onClick={() => {handlePostMessage(
+                registeredMessage.body, 
+                registeredMessage.groupChatId,
+              )}}>送信</SendButton>
             }
             
       </MessageContainer>

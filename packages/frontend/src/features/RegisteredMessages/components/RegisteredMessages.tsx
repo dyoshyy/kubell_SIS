@@ -9,7 +9,7 @@ interface RegisteredMessagesProps {
     groupChatId: string;
     registeredMessagesFragment: MaskedRegisteredMessages[];
     onCreateRegisterMessage: (title: string, body: string, groupChatId: string, cronFormular:string ) => void;
-    onPostMessage: (message: string) => void;
+    onPostMessage: (message: string, groupChatId: string) => void;
 }
 
 const Container = styled.div`

@@ -35,18 +35,18 @@ export const RegisteredMessagesContainer = ({groupChatId}: RegisteredMessagesCon
     });
 
     const handlePostMessage = useCallback(
-      (message: string) => {
+      (message: string, groupChatId: string) => {
         postMessage({
           variables: {
             input: {
-              groupChatId,
+              groupChatId: groupChatId,
               executorId: myID,
               content: message,
             },
           },
         });
       },
-      [groupChatId, postMessage, myID],
+      [postMessage, myID],
     );
 
     const handleRegisterMessage = useCallback(
