@@ -15,7 +15,7 @@ const HeaderActions = styled.div`
 export const Header = () => {
   return (
     <>
-      <Logo>ミートパイ</Logo>
+      <Logo>ミートパイチャット</Logo>
       <HeaderActions>
         {/* <ProjectManagementContainer /> */}
       </HeaderActions>

@@ -167,5 +167,5 @@ export async function schedulerMain() {
     } catch (error) {
       console.error("Error in schedulerMain:", error);
     }
-  }, 3000); // 1分（60,000ミリ秒）ごとに実行
+  }, 30000); // 1分（60,000ミリ秒）ごとに実行
 }
