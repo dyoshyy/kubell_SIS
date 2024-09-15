@@ -79,7 +79,6 @@ async function fetchRegisteredMessages(ownerId: string): Promise<RegisteredMessa
 
   // GraphQLのレスポンスを明示的に型キャスト
   const result = await response.json() as GraphQLResponse<{ getRegisteredMessages: RegisteredMessageOutput[] }>;
-  console.log("Scheduler fetchRegisteredMessages result:")
   if (result.errors) {
     console.error("GraphQL query failed", result.errors);
     throw new Error("Failed to fetch registered messages");
@@ -123,11 +122,9 @@ export async function schedulerMain() {
       let registeredMessages : RegisteredMessageOutput[] = [];
       // REGISTERED_USERS.forEach(async (user) => {
       for (const user of REGISTERED_USERS) {
-        console.log(`Fetching messages for user: ${user.id}`);
         const messages = await fetchRegisteredMessages(user.id);
         registeredMessages = [...registeredMessages, ...messages];
       }
-      console.log("scheduler messages:", registeredMessages)
 
       // 取得したメッセージごとにスケジューリング
       registeredMessages.forEach(message => {
