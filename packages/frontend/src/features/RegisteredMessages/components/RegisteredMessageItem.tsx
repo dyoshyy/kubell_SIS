@@ -3,16 +3,18 @@ import { useFragment } from '__generated__/query';
 import { GetGroupChatWithMessagesQuery } from 'features/GroupChat/apis/getGroupChatWithMessages.query';
 import { GroupChatFragment } from 'features/GroupChat/components/groupChatFragment.query';
 import { useSignedInUser } from 'local-service/auth/hooks';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { RegisteredMessage } from '../types';
 
+// Types
 interface RegisteredMessageItemProps {
     registeredMessage: RegisteredMessage;
     groupChatId: string;
     handlePostMessage: (registeredMessage: string, groupChatId: string) => void;
 }
 
+// Styled Components
 const MessageContainer = styled.div`
   border: 1px solid #ccc;
   padding: 10px;
@@ -24,12 +26,12 @@ const MessageContainer = styled.div`
 const MessageContent = styled.div`
   margin-bottom: 10px;
   cursor: pointer;
-  transition: background-color 0.3s, box-shadow 0.3s; 
+  transition: background-color 0.3s, box-shadow 0.3s;
   
   &:hover {
-    background-color: #f0f0f0; 
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
-    border-radius: 4px; 
+    background-color: #f0f0f0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
   }
 `;
 
@@ -49,6 +51,20 @@ const SendButton = styled.button`
     background-color: #0056b3;
   }
 `;
+
+// Modal Components
+const Modal: React.FC<{ isOpen: boolean; onClose: () => void; children: React.ReactNode }> = ({ isOpen, onClose, children }) => {
+  if (!isOpen) return null;
+
+  return (
+    <ModalOverlay>
+      <ModalContent>
+        <CloseButton onClick={onClose}>✕</CloseButton>
+        {children}
+      </ModalContent>
+    </ModalOverlay>
+  );
+};
 
 const ModalOverlay = styled.div`
   position: fixed;
@@ -82,7 +98,24 @@ const CloseButton = styled.button`
   right: 10px;
 `;
 
-export const RegisteredMessageItem = ({ registeredMessage, groupChatId, handlePostMessage }: RegisteredMessageItemProps) => {
+// Utility Functions
+const cronToTime = (cronFormular: string): string => {
+  const [minute, hour, dayOfMonth, , dayOfWeek] = cronFormular.split(' ').map(part => part.trim());
+  const timePart = `${hour.padStart(2, '0')}:${minute.padStart(2, '0')}`;
+  let dayPart = '';
+
+  if (dayOfWeek === '*') {
+    dayPart = dayOfMonth === '*' ? '毎日' : `毎月${dayOfMonth}日`;
+  } else if (dayOfMonth === '*') {
+    const days = ['日', '月', '火', '水', '木', '金', '土'];
+    dayPart = `毎週${days[parseInt(dayOfWeek, 10)]}曜日`;
+  }
+
+  return `${dayPart} ${timePart}`;
+};
+
+// Main Component
+export const RegisteredMessageItem: React.FC<RegisteredMessageItemProps> = ({ registeredMessage, groupChatId, handlePostMessage }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { id: myID } = useSignedInUser();
 
@@ -93,55 +126,28 @@ export const RegisteredMessageItem = ({ registeredMessage, groupChatId, handlePo
     },
   });
 
-  const groupChat = useFragment(GroupChatFragment, data ? data.getGroupChat: undefined);
+  const groupChat = useFragment(GroupChatFragment, data?.getGroupChat);
   
-  const cronToTime = (cronFormular: string) => {
-    const [minute, hour, dayOfMonth, month, dayOfWeek] = cronFormular.split(' ').map(part => part.trim());
-    console.log(month)
-    const timePart = `${hour.padStart(2, '0')}:${minute.padStart(2, '0')}`;
-    let dayPart = '';
-
-    if(dayOfWeek === '*') {
-      if(dayOfMonth === '*') {
-        dayPart = '毎日';
-      } else {
-        dayPart = `毎月${dayOfMonth}日`;
-      }
-    } else if (dayOfMonth === '*') {
-      const days = ['日', '月', '火', '水', '木', '金', '土'];
-      dayPart = `毎週${days[parseInt(dayOfWeek, 10)]}曜日`;
-    }
-
-    return `${dayPart} ${timePart}`;
-  } 
-
-    return (
-      <>
-        <MessageContainer>
-            <MessageContent onClick={() => setIsModalOpen(true)}>
-                <div><strong>タイトル:</strong> {registeredMessage.title}</div>
-            </MessageContent>
-            <MetaData>
-                <div>投稿日: {cronToTime(registeredMessage.cronFormular)}</div>
-                <div>投稿先: {groupChat ? groupChat.name : ''}</div>
-            </MetaData>
-            {groupChatId &&
-              <SendButton onClick={() => {handlePostMessage(
-                registeredMessage.body, 
-                registeredMessage.groupChatId,
-              )}}>送信</SendButton>
-            }
-            
+  return (
+    <>
+      <MessageContainer>
+        <MessageContent onClick={() => setIsModalOpen(true)}>
+          <div><strong>タイトル:</strong> {registeredMessage.title}</div>
+        </MessageContent>
+        <MetaData>
+          <div>投稿日: {cronToTime(registeredMessage.cronFormular)}</div>
+          <div>投稿先: {groupChat?.name || ''}</div>
+        </MetaData>
+        {groupChatId && (
+          <SendButton onClick={() => handlePostMessage(registeredMessage.body, registeredMessage.groupChatId)}>
+            送信
+          </SendButton>
+        )}
       </MessageContainer>
-      {isModalOpen && (
-        <ModalOverlay>
-          <ModalContent>
-            <CloseButton onClick={() => setIsModalOpen(false)}>✕</CloseButton>
-            <h3>タイトル: {registeredMessage.title}</h3>
-            <p><strong>本文: </strong>{registeredMessage.body}</p>
-          </ModalContent>
-        </ModalOverlay>
-      )}
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+        <h3>タイトル: {registeredMessage.title}</h3>
+        <p><strong>本文: </strong>{registeredMessage.body}</p>
+      </Modal>
     </>
-    );
+  );
 };

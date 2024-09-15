@@ -117,7 +117,6 @@ async function postMessage(input: PostMessageInput): Promise<MessageOutput> {
 export async function schedulerMain() {
   // 1分ごとに実行
   setInterval(async () => {
-    logger.info("SchedulerMain is running");
     try {
       // メッセージを取得
       let registeredMessages : RegisteredMessageOutput[] = [];
@@ -129,7 +128,6 @@ export async function schedulerMain() {
 
       // 取得したメッセージごとにスケジューリング
       registeredMessages.forEach(message => {
-        logger.info("for Each start")
         // 既に同じメッセージIDのジョブがスケジュールされているか確認
         if (cronJobMap[message.id]) {
           logger.info(`Message ID: ${message.id} is already scheduled. Skipping.`);
@@ -138,7 +136,6 @@ export async function schedulerMain() {
 
         // message.cronFormularに基づいてスケジュールをセット
         const cronJob = cron.schedule(message.cronFormular, async () => {
-
           logger.info(`Executing job for message ID: ${message.id}`);
 
           // メッセージ送信処理
@@ -154,6 +151,9 @@ export async function schedulerMain() {
           } catch (error) {
             console.error(`Failed to post message for ID: ${message.id}`, error);
           }
+        }, {
+          scheduled: true,
+          timezone: "Asia/Tokyo" // Set timezone to Tokyo
         });
 
         // ジョブをマップに登録して重複を防止
