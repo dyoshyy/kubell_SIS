@@ -74,7 +74,7 @@ export const SingleProject = ({ project, onClose }: Props) => {
         </SidebarContainer>
       </ContentContainer>
       <ActionButtonContainer>
-        <TextButton buttontype="danger" text="閉じる" onClick={onClose} />
+        <TextButton buttonType="danger" text="閉じる" onClick={onClose} />
       </ActionButtonContainer>
     </ProjectContainer>
   );

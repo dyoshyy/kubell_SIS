@@ -97,7 +97,7 @@ export const RegisteredMessageItem = ({ registeredMessage, groupChatId, handlePo
   
   const cronToTime = (cronFormular: string) => {
     const [minute, hour, dayOfMonth, month, dayOfWeek] = cronFormular.split(' ').map(part => part.trim());
-
+    console.log(month)
     const timePart = `${hour.padStart(2, '0')}:${minute.padStart(2, '0')}`;
     let dayPart = '';
 

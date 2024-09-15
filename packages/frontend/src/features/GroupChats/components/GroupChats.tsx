@@ -40,7 +40,6 @@ export const GroupChats = ({
   onChangeGroupChat,
 }: Props) => {
   const groupChats = groupChatsFragment.map(useGroupChatsFragment);
-
   return (
     <>
       <FullWidthTextButton

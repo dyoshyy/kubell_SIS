@@ -9,23 +9,30 @@ interface Props {
 }
 
 export const GroupChatsContainer = ({ handleChangeGroupChat }: Props) => {
+  console.log("GroupChatsContainer");
   const { id: myID } = useSignedInUser();
 
   const { data, loading, error, refetch } = useQuery(GetGroupChatsQuery, {
     variables: { accountId: myID },
+    fetchPolicy: 'network-only',
   });
+  console.log("GroupChatsContainer1");
 
   const handleUpdate = () => refetch();
 
   if (error) return <p>Error Happened</p>;
+  console.log(data, error, loading);
 
   if (loading || data?.getGroupChats === undefined) return <></>;
 
   return (
+    <>
     <GroupChats
       groupChatsFragment={data.getGroupChats}
       onUpdate={handleUpdate}
       onChangeGroupChat={handleChangeGroupChat}
     />
+    </>
+
   );
 };

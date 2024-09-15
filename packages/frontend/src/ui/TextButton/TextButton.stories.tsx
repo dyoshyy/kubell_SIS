@@ -32,6 +32,6 @@ export const Danger: Story = {
 
 export const None: Story = {
   args: {
-    buttonType: "none",
+    buttonType: "default",
   },
 };
