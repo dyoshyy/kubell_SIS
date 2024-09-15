@@ -1,4 +1,5 @@
 import cron, { ScheduledTask } from 'node-cron';
+import { logger } from '.';
 import { REGISTERED_USERS } from "./mocks/dummy-user";
 
 // APIエンドポイントのURL
@@ -116,7 +117,7 @@ async function postMessage(input: PostMessageInput): Promise<MessageOutput> {
 export async function schedulerMain() {
   // 1分ごとに実行
   setInterval(async () => {
-    console.log("SchedulerMain is running");
+    logger.info("SchedulerMain is running");
     try {
       // メッセージを取得
       let registeredMessages : RegisteredMessageOutput[] = [];
@@ -128,17 +129,17 @@ export async function schedulerMain() {
 
       // 取得したメッセージごとにスケジューリング
       registeredMessages.forEach(message => {
-        console.log("for Each start")
+        logger.info("for Each start")
         // 既に同じメッセージIDのジョブがスケジュールされているか確認
         if (cronJobMap[message.id]) {
-          console.log(`Message ID: ${message.id} is already scheduled. Skipping.`);
+          logger.info(`Message ID: ${message.id} is already scheduled. Skipping.`);
           return; // 既にスケジュールされている場合はスキップ
         }
 
         // message.cronFormularに基づいてスケジュールをセット
         const cronJob = cron.schedule(message.cronFormular, async () => {
 
-          console.log(`Executing job for message ID: ${message.id}`);
+          logger.info(`Executing job for message ID: ${message.id}`);
 
           // メッセージ送信処理
           const input: PostMessageInput = {
@@ -149,7 +150,7 @@ export async function schedulerMain() {
 
           try {
             const result = await postMessage(input);
-            console.log(`Message posted successfully: ${result.messageId} to group ${result.groupChatId}`);
+            logger.info(`Message posted successfully: ${result.messageId} to group ${result.groupChatId}`);
           } catch (error) {
             console.error(`Failed to post message for ID: ${message.id}`, error);
           }
@@ -157,12 +158,12 @@ export async function schedulerMain() {
 
         // ジョブをマップに登録して重複を防止
         cronJobMap[message.id] = cronJob;
-        console.log("cronJobMap:", cronJobMap)
+        logger.info("cronJobMap:", cronJobMap)
 
-        console.log(`Scheduled message ID: ${message.id} with cron: ${message.cronFormular}`);
+        logger.info(`Scheduled message ID: ${message.id} with cron: ${message.cronFormular}`);
       });
     } catch (error) {
       console.error("Error in schedulerMain:", error);
     }
-  }, 30000); // 1分（60,000ミリ秒）ごとに実行
+  }, 30000); // 30秒ごとに実行
 }
